@@ -1,0 +1,16 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "mean test app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: unrecognised script\" && exit 1",
+    "start":"node app"
+  },
+  "dependencies":{
+    "express":"*",
+    "mongoose":"*"
+  },
+  "author": "Matthew Fitzpatrick",
+  "license": "GPL"
+}
