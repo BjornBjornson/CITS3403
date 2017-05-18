@@ -33,17 +33,14 @@
 				}
 			}
 			if(valid){
-				var text = '{ "UPE": "'+document.getElementById("Email").value+'", "AUTHC": "'+document.getElementById("Password").value+'" }'; //UPE => User primary email, AUTHC => Authorisation Code
+				var text = 'UPE='+document.getElementById("Email").value+'&AUTHC='+document.getElementById("Password").value; //UPE => User primary email, AUTHC => Authorisation Code
 				alert(text);
-				var x = new XMLHttpRequest();
-				alert("handshake initiating"); //diagnostic
-				x.open("post", "http://localhost:3000"); //TODO: change to HTTPS in the near future
-				//x.setRequestHeader("Content-type", "application/json");  //something wrong with this bit, server failed to receive it.
-				x.send(text); //sends request
-				x.close();
-				alert("Connection severed"); //diagnostic
-				sessionStorage.setItem("longString", "0"); // stand in for authorisation token
-				alert("saved"); //diagnostic
+				var http = new XMLHttpRequest();
+				http.open("POST", "http://localhost:3000/login", true); //currently a-synchronous iirc
+				http.setRequestHeader("content-type", "application/x-www-form-urlencoded"); 
+				http.setRequestHeader("Content-length", text.length);
+				http.setRequestHeader("Connection", "close");
+				http.send(text); //the http object should store the response. can check it and redirect from that.
 				window.location = "Home.html"; //should redirect to page. currently does not work for provided HTML page.
 			}
 			else{

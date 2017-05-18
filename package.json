@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "mean test app",
   "main": "app.js",
+  "private": "true",
   "scripts": {
     "test": "echo \"Error: unrecognised script\" && exit 1",
     "start":"node app"
