@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+   Home.html
+   
+   Copyright 2017 Bjorn <Bjorn@BERTHA>
+   work it through more?
+-->
+
+<head>
+	<meta charset="utf-8" />
+	<title>"I'm a login page"</title>
+	<meta name="HomePage" content="Information" />
+	<link rel="stylesheet" href="Style1.css" />
+	
+	
+	<script type="text/javascript"> 
+		<!--
+		function validate(){
+			var Pass = document.getElementById("Password").value;
+			var mail = document.getElementById("Email").value;
+			var valid = true;
+			if( Pass.length < 7 ){
+				alert("Your Password must be at least 7 characters long");
+				valid = false;
+			}
+			else{
+				var locA = mail.indexOf("@");
+				var locD = mail.lastIndexOf(".");
+				if ( (locA < 1) || ( locD - locA < 2 ) ) {
+					alert("Enter a valid email address");
+				valid = false;
+				}
+			}
+			if(valid){
+				var text = "thisIsATest";
+				var x = new XMLHttpRequest();
+				x.open("post", "http://localhost:3000");
+				var response = x.send(text);
+				alert("hello");
+				alert("goodbye");
+				sessionStorage.setItem("longString", "0");
+				alert("saved");
+				window.location = "Home.html";
+			}
+			else{
+				return valid;
+			}
+		}
+		function toLoad(){
+			if(sessionStorage.getItem('longString') == "0"){
+				document.getElementById('logoutLink').innerHTML = 'Logout';
+			}
+			var time = new Date();
+			document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "    Last updated on: 10/4/17" ;
+		}
+      //-->
+	</script>
+</head>
+<body onload='toLoad();'>
+	<div id="menu">
+		<table id="quickLinks">
+			<tr>
+				<td><a class='header' href="Home.html">Home</a>  </td>
+				<td><a class='header' href="groupSearch.html">MatchMaker</a>  </td>
+				<td><a class='header' href="about.html">About us</a>	</td>	
+				<td id="login">
+					<table id="subtable">
+						<tr> <td><a class="sign" href="login.html">login</a></td></tr>
+						<tr> <td> <a class="sign" href="newUser.html" >sign up</a></td></tr> 
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<HR>
+	<h1> LOG IN <br /> <br /></h1>
+	
+	<table id="loginbox">
+		<form onsubmit="http://localhost:3000" id="LogIn" method="post"> <!-- change this to post -->
+			<tr> 
+				<td>
+					<input type="text" id="Email" name="Email" placeholder="Your Email">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="text" id="Password" name="Password" placeholder="Password">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input class="submit" type="submit" value="Sign in" onclick="validate();">
+				</td>
+			</tr>
+		</form>
+		<tr>
+			<td>
+				<form name="SignUp" action="newUser.html"> <input class="submit"  type="submit" value="Sign Up"></form>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<a class='littletext' href="newUser.html">Forgot your password? </a>
+			</td>
+		</tr>
+	</table>
+		
+	<footer>
+		<div>
+			<a href='Logout.html' id='logoutLink'></a>
+			Written by <a href='mailto:mfitzay@gmail.com'> Matthew Fitzpatrick</a>.<br>
+			Student number/Email: <a href='mailto:21297239@student.uwa.edu.au'>21297239</a>
+			<p id='footTime'></p>
+		</div>
+	</footer>
+	
+
+</body>
+</html>

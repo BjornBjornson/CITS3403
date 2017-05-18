@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<!--
+   Home.html
+   
+   Copyright 2017 Bjorn <Bjorn@BERTHA>
+   
+-->
+
+<!--
+Planned JS insert area functionality:
+1) construct rest of table if returns value
+2) Use links if there's groups returned
+3) offer create new group too.
+-->
+<head>
+	<meta charset="utf-8" />
+	<title>"I'm a search page"</title>
+	<meta name="HomePage" content="Information" />
+	<link rel="stylesheet" href="Style1.css" />
+	
+	<script type="text/javascript">
+	<!--
+	function toGroupPage(group){
+		var whereTo ="groupPage.html?"+group;
+		alert(whereTo);
+		window.location = whereTo;
+	}
+	//populates the mygroups window
+	function fetchMyTeams(){
+		var myArray = ["this is a team", "this is a different team", "third team here", "the womble's official Auz Team", "genereal purpose team stand-in", "the WHO", "the WHAT", "the WHERE"	];
+		var myTable = "<table class='tablePrint' id='groupList'>";
+		for(var a=0; a<myArray.length;a++){
+			myTable +="<tr class='collapsedRow'><td class='searchReturn'><a class='buttonInterior' href='groupPage.html?groupName="+myArray[a]+"'>"+myArray[a]+"</a></td></tr>";
+		}
+		myTable+="</table>";
+		document.getElementById('myGroups').innerHTML = myTable;
+		
+	}
+	//creates the table from theoretical data returned from the database
+	function createTable(){
+		//Just a catch in case they've not logged in.
+		if(sessionStorage.getItem('longString') != "0"){
+			document.getElementById('tablePrint').innerHTML = 'Login to see more!';
+			return false;
+		}
+		var myArray = ["thestring", "represents", "a returned output Array", "from the database", "based on a query", "on the values selected"] ;
+		var myTable= "";
+		for(var a=0; a<myArray.length; a++){
+			myTable +="<tr><td class='searchReturn'>"+myArray[a]+"</td> <td class='searchReturn'><button type='button' onclick='toGroupPage("+'"groupName='+myArray[a]+'"'+");'>Join Group</button></td></tr>";
+		}
+		document.getElementById('tablePrint').innerHTML = myTable;
+	}
+	//For if they don't log in
+	function goLogin(){
+		document.getElementById('myGroups').innerHTML = 'Login to see more!';
+	}
+	//on page load
+	function toLoad(){
+		
+		var time = new Date();
+		document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "    Last updated on: 10/4/17" ;
+		if(sessionStorage.getItem('longString') == "0"){
+			document.getElementById('logoutLink').innerHTML = 'Logout';
+			fetchMyTeams();
+		}
+		else{
+			goLogin();
+		}
+	}
+	-->
+	</script>
+</head>
+<body onload='toLoad();'>
+	
+	<div id="menu">
+		<table id="quickLinks">
+			<tr>
+				<td><a class='header' href="Home.html">Home</a>  </td>
+				<td><a class='header' href="groupSearch.html">MatchMaker</a>  </td>
+				<td><a class='header' href="about.html">About us</a>	</td>	
+				<td id="login">
+					<table id="subtable">
+						<tr> <td><a class="sign" href="login.html">login</a></td></tr>
+						<tr> <td> <a class="sign" href="newUser.html" >sign up</a></td></tr> 
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<HR>
+	<h1> Find a Team <br /> <br /></h1>
+	
+	<form> <!-- to the correct node spot -->
+		<table id="MMsearch">
+			<tr> 
+				<td>
+					<label for="Game">Game</label>
+					<select id="Game" name="Game">
+						<option value="Dota2">DOTA 2</option>
+						<option value="League">League of Legends</option>
+						<option value="Heroes">Heroes of the Storm</option>
+					</select>
+					<label for="role"> Lane/Role</label>
+					<select id="role" name="role">
+						<option value="Fil"> Fill/Any</option>
+						<option value="Top"> Top</option>
+						<option value="Mid"> Mid</option>
+						<option value="Sup"> Support</option>
+						<option value="ADC"> ADC</option>
+						<option value="Jun"> Jungler</option>
+					</select>
+					<!-- possible to refine down to character level, would have to have a search/term thing going down, 
+					ugh... would look like a string with no strange characters, I suppose.-->
+				</td>
+			<tr>
+				<td>
+					<input id="MatchMakerSearch" class="submit" type="submit" value="Get Started!" onclick="createTable(); return false;">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table class='tablePrint' id="tablePrint"></table>
+				</td>
+			</tr><!---->
+		</table>
+		
+	</form>
+	<div>
+		
+	<div id='myGroups'><!-- Yes, this should be an empty header, I'm going to fill it on page load --></div>
+		<!-- 
+			Put in a table window of sorts. defined size, eventually with scroll option?
+			populated by database query.
+		-->
+	
+	</div>
+	<footer>
+		<div>
+			<a href='Logout.html' id='logoutLink'></a>
+			Written by <a href='mailto:mfitzay@gmail.com'> Matthew Fitzpatrick</a>.<br>
+			Student number/Email: <a href='mailto:21297239@student.uwa.edu.au'>21297239</a>
+			<p id='footTime'></p>
+		</div>
+	</footer>
+</body>
+
+</html>
+
