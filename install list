@@ -1,0 +1,6 @@
+//because git's allergic to uploading the NPM structure, list any npm install commands required to run the server/database here.
+
+
+npm install -express
+npm install -body-parser
+npm install -
