@@ -10,7 +10,8 @@
   },
   "dependencies":{
     "express":"*",
-    "mongoose":"*"
+    "mongoose":"*",
+    "body-parser":"*"
   },
   "author": "Matthew Fitzpatrick",
   "license": "GPL"

@@ -1,6 +1,5 @@
 //because git's allergic to uploading the NPM structure, list any npm install commands required to run the server/database here.
 
+npm install
 
-npm install -express
-npm install -body-parser
-npm install -
+//when adding a new dependency use npm install example --save, this will automatically add it to the package.json file
