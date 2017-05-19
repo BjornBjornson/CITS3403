@@ -2,6 +2,8 @@ const express = require("express");
 const db = require('./db.js')
 var bodyParser = require('body-parser');
 const app = express();
+
+
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({ extended: true })); //someone figure out what the extended refers to.
 
@@ -10,7 +12,9 @@ app.get('/', (req, res)=>{
 	console.log(req.url);
 	console.log(req.query);
 	console.log("that's another one");
-	res.send("Hello World");
+	
+
+
 });
 app.post('/', (req, res)=>{
 	console.log(req.url);
