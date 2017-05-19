@@ -2,8 +2,6 @@ const express = require("express");
 const db = require('./db.js')
 var bodyParser = require('body-parser');
 const app = express();
-
-
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({ extended: true })); //someone figure out what the extended refers to.
 const port = 3000;
@@ -30,17 +28,22 @@ function validateLogin(object){ //Basic format for making sure all the fields ar
 		console.log(Pass);
 		console.log("Looks ok");
 		console.log("Check the database here");
+		var postThing = { //undebugged. Might have to make a string, then run JSON.parse(thingy) on it.
+			Email: mail,
+			Password: Pass
+		};
+		standInForDBInterpreter(postThing, 'User');
 		return "<this is an auth token>"; //placeholder for login confirmation.
 	}
 };
-
+function standInForDBInterpreter(value, table){
+	console.log("putting thing in database");
+};
 app.get('/', (req, res)=>{
 	console.log(req.url);
 	console.log(req.query);
 	console.log("that's another one");
-	
-
-
+	res.send("Hello World");
 });
 app.post('/', (req, res)=>{
 	console.log(req.url);
