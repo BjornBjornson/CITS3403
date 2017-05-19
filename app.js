@@ -28,10 +28,17 @@ function validateLogin(object){ //Basic format for making sure all the fields ar
 		console.log(Pass);
 		console.log("Looks ok");
 		console.log("Check the database here");
+		var postThing = { //undebugged. Might have to make a string, then run JSON.parse(thingy) on it.
+			Email: mail,
+			Password: Pass
+		};
+		standInForDBInterpreter(postThing, 'User');
 		return "<this is an auth token>"; //placeholder for login confirmation.
 	}
 };
-
+function standInForDBInterpreter(value, table){
+	console.log("putting thing in database");
+};
 app.get('/', (req, res)=>{
 	console.log(req.url);
 	console.log(req.query);
