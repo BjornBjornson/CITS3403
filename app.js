@@ -51,14 +51,17 @@ app.post('/', (req, res)=>{
 	console.log("that's another post");
 	res.send("Hello World");
 });
-app.post('/login', (req, res)=>{ // Actions for login attempt
+app.post('/login', (req, res)=>{
 	console.log(req.headers)
 	console.log(req.url);
 	console.log(req.body);
-	console.log("that's a login attempt");
-	res.set('Content-Type', 'text/plain'); //theoretically sets the content type header.
-	res.send(validateLogin(req.body)); // I think this *should* work. having trouble getting a response back to the HTML. not sure what the deal is there.
-	
+	console.log("that's another login");
+	res.ContentType =('text/plain');
+	res.status = 200;
+	var tosend = validateLogin(req.body);
+	res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.send(tosend);
 });
 app.listen(port, () => {
   console.log('Server start on port ' +port);
