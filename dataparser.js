@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
+//CRUD
+
 //example of parseRequest
 
     /*
@@ -21,7 +23,7 @@ var User = mongoose.model('User');
  * @param requestType - the request type, either 'Put' or 'Post'
  * @param model - the model for the data to be put into 
  */
-function parseRequest(data, requestType, modelName){
+function createEntry(data, requestType, modelName){
 	//if new entry
 	if(requestType == "POST"){
 		//the model variable
@@ -38,12 +40,63 @@ function parseRequest(data, requestType, modelName){
 			}
 		});
 	}
-	//if updating an entry
-	else if (requestType == "PUT"){
-		//todo
-	}
-
+	
 
 }
+ //returns json of entry of id
+function readEntry(id,modelName){
+	mod = mongoose.model(modelName);
+	mod.findById(req, function(err, result){
+		if(err){
+			console.log(err);
+		}
+		if(result){
+			return result;
+		}
+		else{
+			return "No result found with that ID";
+
+		}
+	});
+}
+//returns every document
+function findEntry(modelName){
+	mod = mongoose.model(modelName);
+	mod.find(function (err,result){
+		if(err){
+			console.log(err);
+		}
+		if(result){
+			return result;
+		}else{
+			return "No entries";
+		}
+	})
+}
+
+
+//finds entry based on data json paramaters
+function findEntry(data,modelName){
+	mod = mongoose.model(modelName);
+	mod.find(data,function(err,result){
+		if (err){
+			
+		}
+	}
+
+}
+
+/** deletes an entry from the table
+deletes entry based on json object from a model
+**/
+
+function deleteEntry(data,modelName){
+	var mod = mongoose.model(modelName);
+	mod.findByIdAndRemove();
+
+}
+
+
+
 
 module.exports = parseRequest;
