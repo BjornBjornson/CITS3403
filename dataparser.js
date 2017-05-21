@@ -96,7 +96,32 @@ function deleteEntry(data,modelName){
 
 }
 
+function editEntry(req, modelName) {
+	var mod = mongoose.model(modelName)
+	var id = req.params.id
+	mod.findById(id, function (err, object) {
+		if(err) {
+			console.error(err)
+			//res.status(500).send(err)
+		} else if(object) {
+			mod.schema.eachPath(function (field) {
+				if(req.body[field] !== undefined) {
+					object[field] = req.body[field]
+				}
+			})
 
+			object.save(function (err) {
+				if(err) {
+					console.error(err)
+					//res.status(500).send(err)
+				}
+			})
+		} else {
+			//res.status(404).send(err)
+			console.error(err)
+		}
+	})
+}
 
 
 module.exports = parseRequest;
