@@ -51,6 +51,18 @@ app.post('/', (req, res)=>{
 	console.log("that's another post");
 	res.send("Hello World");
 });
+app.post('/users', (req, res)=>{
+	console.log(req.headers)
+	console.log(req.url);
+	console.log(req.body);
+	console.log("that's a new user");
+	res.ContentType =('text/plain');
+	res.status = 200;
+	var tosend = validateLogin(req.body);
+	res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.send(tosend);
+});
 app.post('/login', (req, res)=>{
 	console.log(req.headers)
 	console.log(req.url);
