@@ -12,7 +12,7 @@ var userSchema = new Schema(
         blacklist: [{ type: Schema.ObjectId, ref: 'User' }]
     }
 )
-
+var 
 var groupSchema = new Schema(
     {
         name: { type: String, required: true, unique: true },
@@ -27,7 +27,7 @@ var groupSchema = new Schema(
 var mailSchema = new Schema(
     {
         from: { type: Schema.ObjectId, ref: 'User' },
-        to: { type: Schema.ObjectId, ref: 'User' },
+        to: [{ type: Schema.ObjectId, ref: 'User' }], //Turning this into an array should allow for groupchat.
         message: String,
         timestamp: Date
     }

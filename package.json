@@ -13,7 +13,8 @@
     "mongoose":"*",
     "body-parser":"*",
 	"passport":"*",
-	"passport-local":"*"
+	"passport-local":"*",
+	"cookie-parser": "~1.0.1", 
   },
   "author": "Matthew Fitzpatrick",
   "license": "GPL"

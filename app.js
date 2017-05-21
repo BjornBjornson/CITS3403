@@ -1,10 +1,46 @@
 const express = require("express");
+var expressSession = require('express-session');
 const db = require('./db.js')
-var bodyParser = require('body-parser');
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const app = express();
-app.use(bodyParser.text());
-app.use(bodyParser.urlencoded({ extended: true })); //someone figure out what the extended refers to.
 const port = 3000;
+var mongoose = require('mongoose');
+var User = mongoose.model('User');
+
+app.use(bodyParser.urlencoded({ extended: true })); //someone figure out what the extended refers to.
+app.use(expressSession({secret: '<Put a secret key here>'}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+//Passport 
+passport.use(new LocalStrategy( //how to handle login routines
+  function(UPE, password, done) {
+    User.findOne({ email: UPE }, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
 
 function validateLogin(object){ //Basic format for making sure all the fields are correctly formed.
 	console.log(object);
