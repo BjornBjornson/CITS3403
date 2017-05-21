@@ -40,9 +40,27 @@
 			}
 		}
 		if(valid){
-			alert("Put in something that finds out whether usercreate success. If success,redircet to home or somesuch.");
+			var text = 'UPE='+document.getElementById("Email").value+'&AUTHC='+document.getElementById("Password").value; //UPE => User primary email, AUTHC => Authorisation Code
+			text += '&UNAME='+document.getElementById("Username")+'&Server='+document.getElementById("Country");
+			alert(text);
+			http = new XMLHttpRequest();
+			http.onreadystatechange = processRequest;
+			http.open("POST", "http://localhost:3000/login", true); //currently a-synchronous iirc
+			http.setRequestHeader("content-type", "application/x-www-form-urlencoded"); 
+			//http.setRequestHeader("Content-Length", text.length);
+			http.send(text); //the http object should store the response. can check it and redirect from that.
+			alert("Message Sent");
+			//window.location = "Home.html"; //should redirect to page. currently does not work for provided HTML page.
+			//alert("Put in something that finds out whether usercreate success. If success,redircet to home or somesuch.");
 		}
 		return valid;
+	}
+	function processRequest(){
+		if (http.readyState==4) {
+			alert(http.responseText);
+			alert(http.getResponseHeader());
+			alert(http);
+		}
 	}
 	function toLoad(){
 		if(sessionStorage.getItem('longString') == "0"){
