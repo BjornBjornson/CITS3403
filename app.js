@@ -66,9 +66,16 @@ passport.deserializeUser(function(id, done) {
     done(err, user);
   });
 });
-
-app.get('/', (req, res)=>{
+app.get('/login', (req, res)=>{
+	res.render("login");
+	console.log("Hello There");
+});
+app.get('/newUser', (req, res)=>{
 	res.render("Home");
+	console.log("Hello There");
+});
+app.get('/groupSearch', (req, res)=>{
+	res.render("groupSearch");
 	console.log("Hello There");
 });
 app.post('/', (req, res)=>{
@@ -77,21 +84,14 @@ app.post('/', (req, res)=>{
 	console.log("that's another post");
 	res.send("Hello World");
 });
-app.post('/signup', (req, res)=>{
-	console.log(req.headers)
-	console.log(req.url);
-	console.log(req.body);
-	console.log("that's a new user");
-	res.ContentType =('text/plain');
-	res.status = 200;
-	var tosend = validateLogin(req.body);
-	res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	res.send(tosend);
+
+app.post('/signup', passport.authenticate('newUser', {
+	successRedirect: '/Home',
+	failureRedirect: '/newUser'
 });
 app.post('/login', passport.authenticate('login', {
-	successRedirect: '/home',
-	failureRedirect: '/'
+	successRedirect: '/Home',
+	failureRedirect: '/login'
 }));
 /*(req, res)=>{ //hold onto this. might not be useful for login, but might be useful for other functions.
 	console.log(req.headers)
