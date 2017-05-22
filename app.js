@@ -7,8 +7,6 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
 var dbConnect = ('./dataparser.js')
 app.use(bodyParser.urlencoded({ extended: true })); //someone figure out what the extended refers to.
 app.use(expressSession({secret: '<Put a secret key here>'}));
@@ -17,25 +15,45 @@ app.use(passport.session());
 
 
 //Passport 
-passport.use(new LocalStrategy( //how to handle login routines
-  function(UPE, password, done) {
-    User.findOne({ email: UPE }, function(err, user) {
-      if (err) { return done(err); }
-      if (!user) {
+passport.use('login', new LocalStrategy({ //how to handle login routines
+    passReqToCallback : true //To pass the request to this function
+  }, 
+  function(req, UPE, password, done) { //remember to encrypt the password at some point
+    user = dbConnect.findEntry({ 'email': UPE }, 'User');
+    if (err) { return done(err); }
+    if (user == "No entry found") {
         return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
+    }
+    if (!user.password != password) {
+      return done(null, false, { message: 'Incorrect password.' });
+    }
+    return done(null, user);
     });
   }
 ));
 
+passport.use('newUser', new LocalStrategy({ //how to handle login routines
+// possibly not even neccessary to use passport for this, note: still in psuedocode.
+    passReqToCallback : true //To pass the request to this function
+  }, 
+	function(req, done); //oh this is sooo wrong, going to have to either split this into different parts, and roll it beforehand, or integrate the done code. Currently just doing a first waft of a plan.
+	if (dbConnect.findEntry(req.username, "User")!= "No entry found"){
+		console.log("username exists");
+		return "UName taken";
+	}
+	else if(dbConnect.findEntry(req.email, "User")!= "No entry found"){
+		console.log("Email already in use");
+		return "Email taken";
+	}
+	else{
+		dbConnect.createEntry(req.body, "User");
+	});
+));
+
+
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
-
 passport.deserializeUser(function(id, done) {
   User.findById(id, function(err, user) {
     done(err, user);
@@ -69,6 +87,7 @@ function validateLogin(object){ //Basic format for making sure all the fields ar
 			Password: Pass
 		};
 		standInForDBInterpreter(postThing, 'User');
+		//passport.authenticate('login',(mail, Pass)); //this is wrong, but considering whether the rest of the checks are redundant, will just call on login hit.
 		return "<this is an auth token>"; //placeholder for login confirmation.
 	}
 };
@@ -107,9 +126,9 @@ app.post('/login', (req, res)=>{
 	res.ContentType =('text/plain');
 	res.status = 200;
 	var tosend = validateLogin(req.body);
-	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	res.send(tosend);
+	res.send(tosend); //must institure some variety of redirect on success/failure.
 });
 app.listen(port, () => {
   console.log('Server start on port ' +port);
