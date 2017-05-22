@@ -29,7 +29,7 @@ Planned JS insert area functionality:
 	}
 	//populates the mygroups window
 	function fetchMyTeams(){
-		http = new XMLHttpRequest();
+		var http = new XMLHttpRequest();
 		http.onreadystatechange = showTeams(this); //will need to debug before posting.
 		http.open("GET", "http://localhost:3000/users?groups", true); //currently a-synchronous iirc
 		http.send();
@@ -54,6 +54,11 @@ Planned JS insert area functionality:
 			document.getElementById('tablePrint').innerHTML = 'Login to see more!';
 			return false;
 		}
+		//var http = new XMLHttpRequest();
+		//http.onreadystatechange = showTeams(this); //will need to debug before posting.
+		//http.open("GET", "http://localhost:3000/groups?game="+getElementById+", true); //currently a-synchronous iirc
+		//http.send();
+		//document.getElementById('myGroups').innerHTML = "<table><tr><td>'This could take a moment, please wait'</td></tr></table>";
 		var myArray = ["thestring", "represents", "a returned output Array", "from the database", "based on a query", "on the values selected"] ;
 		var myTable= "";
 		for(var a=0; a<myArray.length; a++){
