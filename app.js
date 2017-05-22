@@ -90,12 +90,11 @@ app.post('/login', passport.authenticate('login', {
 	successRedirect: '/home';
 	failureRedirect: '/';
 }));
-/*(req, res)=>{
+/*(req, res)=>{ //hold onto this. might not be useful for login, but might be useful for other functions.
 	console.log(req.headers)
 	console.log(req.url);
 	console.log(req.body);
 	console.log("that's another login");
-	passport
 	res.ContentType =('text/plain');
 	res.status = 200;
 	var tosend = validateLogin(req.body);
@@ -103,7 +102,7 @@ app.post('/login', passport.authenticate('login', {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	res.send(tosend); //must institure some variety of redirect on success/failure.
 	
-});
+});*/
 app.listen(port, () => {
   console.log('Server start on port ' +port);
 });
