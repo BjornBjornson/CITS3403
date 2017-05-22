@@ -9,12 +9,13 @@
     "start": "node app"
   },
   "dependencies": {
+    "body-parser": "*",
+    "cookie-parser": "~1.0.1",
+    "ejs": "^2.5.6",
     "express": "*",
     "mongoose": "*",
-    "body-parser": "*",
     "passport": "*",
-    "passport-local": "*",
-    "cookie-parser": "~1.0.1"
+    "passport-local": "*"
   },
   "author": "Matthew Fitzpatrick",
   "license": "GPL",

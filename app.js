@@ -1,6 +1,7 @@
 const express = require("express");
 var expressSession = require('express-session');
-const db = require('./db.js')
+const db = require('./db.js');
+var ejs = require('ejs');
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
@@ -12,7 +13,9 @@ app.use(bodyParser.urlencoded({ extended: true })); //someone figure out what th
 app.use(expressSession({secret: '<Put a secret key here>'}));
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.engine('html', ejs.renderFile);
+app.set('views', path.join(__dirname,'UI'));
+app.set('view engine', 'html');
 
 //Passport 
 passport.use('login', new LocalStrategy({ //how to handle login routines
@@ -63,10 +66,8 @@ passport.deserializeUser(function(id, done) {
 });
 
 app.get('/', (req, res)=>{
-	console.log(req.url);
-	console.log(req.query);
-	console.log("that's another one");
-	res.send("Hello World");
+	res.render("Home");
+	console.log("Hello There");
 });
 app.post('/', (req, res)=>{
 	console.log(req.url);
