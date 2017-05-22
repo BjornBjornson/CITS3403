@@ -5,7 +5,7 @@
   "main": "app.js",
   "private": "true",
   "scripts": {
-    "test": "echo \"Error: unrecognised script\" && exit 1",
+    "test": "SET NODE_ENV=TEST & mocha tests --recursive",
     "start": "node app"
   },
   "dependencies": {

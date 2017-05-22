@@ -30,7 +30,7 @@ function createEntry(data,modelName){
 	//save object to database
 	object.save(function (err){
 		if (err){
-			console.log(err);
+			//console.log(err);
 		}else{
 			console.log("Saved object" + JSON.stringify(data) +
 				"\nto collection:" + modelName);
@@ -43,15 +43,17 @@ function createEntry(data,modelName){
  //returns json of entry of id
 function readEntry(id,modelName){
 	mod = mongoose.model(modelName);
-	mod.findById(req, function(err, result){
+	mod.findById(id, function(err, result){
 		if(err){
 			console.log(err);
 		}
 		if(result){
+			console.log(result);
 			return result;
 		}
 		else{
-			return "No result found with that ID";
+			console.log('null');
+			return null;
 
 		}
 	});
@@ -127,6 +129,7 @@ function editEntry(req, modelName) {
 
 
 module.exports = {
-	createEntry
+	createEntry,
+	readEntry
 
 };
