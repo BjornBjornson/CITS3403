@@ -24,13 +24,14 @@ var mongoose = require('mongoose');
  */
 function createEntry(data,modelName){
 	//the model variable
+
 	var mod = mongoose.model(modelName);
 	//assign the data to a new model
 	var object = new mod(data);
 	//save object to database
 	object.save(function (err){
 		if (err){
-			//console.log(err);
+			console.log(err);
 		}else{
 			console.log("Saved object" + JSON.stringify(data) +
 				"\nto collection:" + modelName);
@@ -53,7 +54,7 @@ function readEntry(id,modelName){
 		}
 		else{
 			console.log('null');
-			return null;
+			return result;
 
 		}
 	});

@@ -5,6 +5,4 @@ https://codeutopia.net/blog/2016/06/10/mongoose-models-and-unit-tests-the-defini
 
 If you want to run test you must install these modules and returns
 
-mocha tests --recursive
-
-unsure if watch is really needed at this point
+npm test
