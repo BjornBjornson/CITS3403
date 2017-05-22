@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true })); //someone figure out what th
 app.use(expressSession({secret: '<Put a secret key here>'}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static(__dirname + '/Front-end'));
 app.engine('html', ejs.renderFile);
 app.set('views', path.join(__dirname,'Front-end'));
 app.set('view engine', 'html');
