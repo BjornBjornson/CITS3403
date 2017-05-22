@@ -2,6 +2,7 @@ const express = require("express");
 var expressSession = require('express-session');
 const db = require('./db.js');
 var ejs = require('ejs');
+var path = require('path');
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
