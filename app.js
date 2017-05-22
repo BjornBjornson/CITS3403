@@ -11,13 +11,13 @@ const app = express();
 const port = 3000;
 var dbConnect = ('./dataparser.js')
 app.use(bodyParser.urlencoded({ extended: true })); //someone figure out what the extended refers to.
-app.use(expressSession({secret: '<Put a secret key here>'}));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(express.static(__dirname + '/Front-end'));
-app.engine('html', ejs.renderFile);
-app.set('views', path.join(__dirname,'Front-end'));
-app.set('view engine', 'html');
+app.use(expressSession({secret: '<Put a secret key here>'})); //setting up a secret key, also setting up express' session library.
+app.use(passport.initialize());  
+app.use(passport.session()); //passport piggybacks off express' library, adding the ability to quietly append session tokens.
+app.use(express.static(__dirname + '/Front-end')); //telling express to treat all public files as if 'Front-end' were their root directory.
+app.engine('html', ejs.renderFile); //defining the an engine I'm calling 'html' to use the ejs middleware
+app.set('views', path.join(__dirname,'Front-end')); //telling it where to find the html files
+app.set('view engine', 'html'); //telling it to use the tool I defined two lines above
 
 //Passport 
 passport.use('login', new LocalStrategy({ //how to handle login routines
