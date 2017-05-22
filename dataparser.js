@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var User = mongoose.model('User');
 
 //CRUD
 
@@ -23,23 +22,21 @@ var User = mongoose.model('User');
  * @param requestType - the request type, either 'Put' or 'Post'
  * @param model - the model for the data to be put into
  */
-function createEntry(data, requestType, modelName){
-	//if new entry
-	if(requestType == "POST"){
-		//the model variable
-		var mod = mongoose.model(modelName);
-		//assign the data to a new model
-		var object = new mod(data);
-		//save object to database
-		object.save(function (err){
-			if (err){
-				console.log(err);
-			}else{
-				console.log("Saved object" + JSON.stringify(data) +
-					"\nto collection:" + modelName);
-			}
-		});
-	}
+function createEntry(data,modelName){
+	//the model variable
+	var mod = mongoose.model(modelName);
+	//assign the data to a new model
+	var object = new mod(data);
+	//save object to database
+	object.save(function (err){
+		if (err){
+			console.log(err);
+		}else{
+			console.log("Saved object" + JSON.stringify(data) +
+				"\nto collection:" + modelName);
+		}
+	});
+
 
 
 }
