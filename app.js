@@ -88,8 +88,8 @@ app.post('/signup', (req, res)=>{
 	res.send(tosend);
 });
 app.post('/login', passport.authenticate('login', {
-	successRedirect: '/home';
-	failureRedirect: '/';
+	successRedirect: '/home',
+	failureRedirect: '/'
 }));
 /*(req, res)=>{ //hold onto this. might not be useful for login, but might be useful for other functions.
 	console.log(req.headers)
