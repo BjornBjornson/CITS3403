@@ -21,7 +21,7 @@ var groupSchema = new Schema(
         mode: { type: String, enum: ['Ranked','Casual','Both'], required: true },
         region: { type: String, enum: ['NA','LA','EU','CK','OCE'], required: true },
         players: [{ type: Schema.ObjectId, ref: 'User' }],
-        roles: { type: Array, required: true, 'default': [] }
+        roles: { type: Array, default: [] }
     }
 )
 
@@ -39,4 +39,8 @@ mongoose.model('Group', groupSchema)
 mongoose.model('Mail', mailSchema)
 
 //exporting for testing purpose
-module.exports = mongoose.model('User',userSchema)
+module.exports = {
+  User : mongoose.model('User',userSchema),
+  Group : mongoose.model('Group',groupSchema),
+  Mail : mongoose.model('Mail',mailSchema)
+}
