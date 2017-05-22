@@ -14,7 +14,7 @@ app.use(expressSession({secret: '<Put a secret key here>'}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.engine('html', ejs.renderFile);
-app.set('views', path.join(__dirname,'UI'));
+app.set('views', path.join(__dirname,'Front-end'));
 app.set('view engine', 'html');
 
 //Passport 
