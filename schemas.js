@@ -13,7 +13,7 @@ var userSchema = new Schema(
         blacklist: [{ type: Schema.ObjectId, ref: 'User' }]
     }
 )
-var 
+
 var groupSchema = new Schema(
     {
         name: { type: String, required: true, unique: true },
@@ -21,7 +21,7 @@ var groupSchema = new Schema(
         mode: { type: String, enum: ['Ranked','Casual','Both'], required: true },
         region: { type: String, enum: ['NA','LA','EU','CK','OCE'], required: true },
         players: [{ type: Schema.ObjectId, ref: 'User' }],
-        roles: { type: Array, required: true, 'default': [] }  
+        roles: { type: Array, required: true, 'default': [] }
     }
 )
 
@@ -37,3 +37,6 @@ var mailSchema = new Schema(
 mongoose.model('User', userSchema)
 mongoose.model('Group', groupSchema)
 mongoose.model('Mail', mailSchema)
+
+//exporting for testing purpose
+module.exports = mongoose.model('User',userSchema)
