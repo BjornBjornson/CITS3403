@@ -18,10 +18,10 @@ var User = mongoose.model('User');
 	*/
 /**
  * Accepts a json object of data and puts it into the database
- * 
+ *
  * @param data - the data to be parsed
  * @param requestType - the request type, either 'Put' or 'Post'
- * @param model - the model for the data to be put into 
+ * @param model - the model for the data to be put into
  */
 function createEntry(data, requestType, modelName){
 	//if new entry
@@ -35,12 +35,12 @@ function createEntry(data, requestType, modelName){
 			if (err){
 				console.log(err);
 			}else{
-				console.log("Saved object" + JSON.stringify(data) + 
+				console.log("Saved object" + JSON.stringify(data) +
 					"\nto collection:" + modelName);
 			}
 		});
 	}
-	
+
 
 }
  //returns json of entry of id
@@ -79,10 +79,15 @@ function findEntry(modelName){
 function findEntry(data,modelName){
 	mod = mongoose.model(modelName);
 	mod.find(data,function(err,result){
-		if (err){
-			
+		if(err){
+			console.error(err);
+		}if(result){
+			return result;
+		}else{
+			//happens when nothing is found,unsure what to return
+			console.log("No Result for " + data);
 		}
-	}
+	});
 
 }
 
@@ -124,4 +129,7 @@ function editEntry(req, modelName) {
 }
 
 
-module.exports = parseRequest;
+module.exports = {
+	createEntry
+
+};

@@ -6,16 +6,19 @@
   "private": "true",
   "scripts": {
     "test": "echo \"Error: unrecognised script\" && exit 1",
-    "start":"node app"
+    "start": "node app"
   },
-  "dependencies":{
-    "express":"*",
-    "mongoose":"*",
-    "body-parser":"*",
-	"passport":"*",
-	"passport-local":"*",
-	"cookie-parser": "~1.0.1", 
+  "dependencies": {
+    "express": "*",
+    "mongoose": "*",
+    "body-parser": "*",
+    "passport": "*",
+    "passport-local": "*",
+    "cookie-parser": "~1.0.1"
   },
   "author": "Matthew Fitzpatrick",
-  "license": "GPL"
+  "license": "GPL",
+  "devDependencies": {
+    "chai": "^3.5.0"
+  }
 }
