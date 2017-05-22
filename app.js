@@ -37,7 +37,8 @@ passport.use('login', new LocalStrategy({ //how to handle login routines
 passport.use('newUser', new LocalStrategy({ //how to handle login routines
     passReqToCallback : true //To pass the request to this function
   }, 
-	function(req, username, email, done){ //oh this is sooo wrong, going to have to either split this into different parts, and roll it beforehand, or integrate the done code. Currently just doing a first waft of a plan.
+	function(req, username, email, done){ //
+	
 	if (dbConnect.findEntry(username, "User")!= "No entry found"){
 		console.log("username exists");
 		return done(null, false, { message: 'Username taken'};
@@ -51,7 +52,6 @@ passport.use('newUser', new LocalStrategy({ //how to handle login routines
 		return done(null, user);
 	});
 	)});
-
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);

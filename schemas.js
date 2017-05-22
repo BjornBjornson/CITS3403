@@ -9,6 +9,7 @@ var userSchema = new Schema(
         region: { type: String, enum: ['NA','LA','EU','CK','OCE'], required: true },
         ageGroup: { type: String, enum: ['13-18','19-24','25-30','30+'], required: true },
         active: { type: String, enum: ['Morning','Afternoon','Night','Nocturnal'], required: true },
+		grouplist: [{type: Schema.ObjectId, ref:'Group' }],
         blacklist: [{ type: Schema.ObjectId, ref: 'User' }]
     }
 )
