@@ -19,9 +19,9 @@ app.set('view engine', 'html');
 
 //Passport 
 passport.use('login', new LocalStrategy({ //how to handle login routines
-    passReqToCallback : true //To pass the request to this function
 	usernameField : 'UPE',
     passwordField : 'AUTHC',
+	passReqToCallback : true //To pass the request to this function
   }, 
   function(req, UPE, AUTHC, done) { //remember to encrypt the password at some point
     var user = dbConnect.findEntry({ 'email': UPE }, 'User');
@@ -32,29 +32,29 @@ passport.use('login', new LocalStrategy({ //how to handle login routines
     if (!user.password != AUTHC) { //add in some sort of hashing function here.
       return done(null, false, { message: 'Incorrect password.' });
     }
-    return done(null, user);
-    });
+    return done(null, user);  
   }
-));
+ ));
 
 passport.use('newUser', new LocalStrategy({ //how to handle login routines
     passReqToCallback : true //To pass the request to this function
   }, 
 	function(req, username, email, done){ //
-	
-	if (dbConnect.findEntry(username, "User")!= "No entry found"){
-		console.log("username exists");
-		return done(null, false, { message: 'Username taken'};
+		
+		if (dbConnect.findEntry(username, "User")!= "No entry found"){
+			console.log("username exists");
+			return done(null, false, { message: 'Username taken'});
+		}
+		else if(dbConnect.findEntry(email, "User")!= "No entry found"){
+			console.log("Email already in use");
+			return done(null, false, { message: 'Email taken'});
+		}
+		else{
+			var user = dbConnect.createEntry(req.body, "User");
+			return done(null, user);
+		}
 	}
-	else if(dbConnect.findEntry(email, "User")!= "No entry found"){
-		console.log("Email already in use");
-		return done(null, false, { message: 'Email taken'};
-	}
-	else{
-		var user = dbConnect.createEntry(req.body, "User");
-		return done(null, user);
-	});
-	)});
+));
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
