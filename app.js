@@ -2,6 +2,7 @@ const express = require("express");
 var expressSession = require('express-session');
 const db = require('./db.js');
 var ejs = require('ejs');
+var path = require('path');
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
@@ -10,12 +11,13 @@ const app = express();
 const port = 3000;
 var dbConnect = ('./dataparser.js')
 app.use(bodyParser.urlencoded({ extended: true })); //someone figure out what the extended refers to.
-app.use(expressSession({secret: '<Put a secret key here>'}));
-app.use(passport.initialize());
-app.use(passport.session());
-app.engine('html', ejs.renderFile);
-app.set('views', path.join(__dirname,'Front-end'));
-app.set('view engine', 'html');
+app.use(expressSession({secret: '<Put a secret key here>'})); //setting up a secret key, also setting up express' session library.
+app.use(passport.initialize());  
+app.use(passport.session()); //passport piggybacks off express' library, adding the ability to quietly append session tokens.
+app.use(express.static(__dirname + '/Front-end')); //telling express to treat all public files as if 'Front-end' were their root directory.
+app.engine('html', ejs.renderFile); //defining the an engine I'm calling 'html' to use the ejs middleware
+app.set('views', path.join(__dirname,'Front-end')); //telling it where to find the html files
+app.set('view engine', 'html'); //telling it to use the tool I defined two lines above
 
 //Passport 
 passport.use('login', new LocalStrategy({ //how to handle login routines
@@ -64,9 +66,16 @@ passport.deserializeUser(function(id, done) {
     done(err, user);
   });
 });
-
-app.get('/', (req, res)=>{
+app.get('/login', (req, res)=>{
+	res.render("login");
+	console.log("Hello There");
+});
+app.get('/newUser', (req, res)=>{
 	res.render("Home");
+	console.log("Hello There");
+});
+app.get('/groupSearch', (req, res)=>{
+	res.render("groupSearch");
 	console.log("Hello There");
 });
 app.post('/', (req, res)=>{
@@ -75,21 +84,14 @@ app.post('/', (req, res)=>{
 	console.log("that's another post");
 	res.send("Hello World");
 });
-app.post('/signup', (req, res)=>{
-	console.log(req.headers)
-	console.log(req.url);
-	console.log(req.body);
-	console.log("that's a new user");
-	res.ContentType =('text/plain');
-	res.status = 200;
-	var tosend = validateLogin(req.body);
-	res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	res.send(tosend);
+
+app.post('/signup', passport.authenticate('newUser', {
+	successRedirect: '/Home',
+	failureRedirect: '/newUser'
 });
 app.post('/login', passport.authenticate('login', {
-	successRedirect: '/home',
-	failureRedirect: '/'
+	successRedirect: '/Home',
+	failureRedirect: '/login'
 }));
 /*(req, res)=>{ //hold onto this. might not be useful for login, but might be useful for other functions.
 	console.log(req.headers)
