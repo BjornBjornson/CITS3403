@@ -112,6 +112,20 @@ describe('Group',function(){
       done();
     })
   })
+  //more mail logic needs to be done
+  describe('Mail',function(){
+    Mail = schema.Mail;
+    it('Should return invalid when wrong type is passed through',function(done){
+      mail = new Mail({
+        'from':'test_username'
+      });
+      mail.validate(function(err){
+        expect(err.errors.from).to.exist;
+        done();
+      });
+    });
+
+  });
 
 
 });
