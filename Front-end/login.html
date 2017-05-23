@@ -34,27 +34,11 @@
 				}
 			}
 			if(valid){
-				var text = 'email='+document.getElementById("Email").value+'&password='+document.getElementById("Password").value; //UPE => User primary email, AUTHC => Authorisation Code
-				alert(text);
-				http = new XMLHttpRequest();
-				http.onreadystatechange = processRequest;
-				http.open("POST", "http://localhost:3000/login", true); //currently a-synchronous iirc
-				http.setRequestHeader("content-type", "application/x-www-form-urlencoded"); 
-				//http.setRequestHeader("Content-Length", text.length);
-				http.send(text); //the http object should store the response. can check it and redirect from that.
-				alert("Message Sent");
-				//window.location = "Home.html"; //should redirect to page. currently does not work for provided HTML page.
+				document.getElementById('myForm').submit();
 			}
 			else{
 				return valid;
 			}	
-		}
-		function processRequest(){
-			if (http.readyState==4) {
-				alert(http.responseText);
-				alert(http.getResponseHeader());
-				alert(http);
-			}
 		}
 		function toLoad(){
 			if(sessionStorage.getItem('longString') == "0"){
@@ -90,12 +74,12 @@
 		<form onsubmit="http://localhost:3000" id="LogIn" method="post"> <!-- change this to post -->
 			<tr> 
 				<td>
-					<input type="text" id="Email" name="Email" placeholder="Your Email">
+					<input type="text" id="Email" name="email" placeholder="Your Email">
 				</td>
 			</tr>
 			<tr>s
 				<td>
-					<input type="password" id="Password" name="Password" placeholder="Password">
+					<input type="password" id="Password" name="password" placeholder="Password">
 				</td>
 			</tr>
 			<tr>

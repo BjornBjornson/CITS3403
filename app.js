@@ -29,11 +29,11 @@ passport.use('login', new LocalStrategy({ //how to handle login routines
   }, 
   function(req, email, password, done) { //remember to encrypt the password at some point
     User.findOne({'email': email},function(err, user) {
-		if (err) { return done(err); }
+		if (err) { throw(err); }
 		if (!user) { //add in some sort of hashing function here.
-			return done(null, false);
+			throw(err);
 		}
-		if (user.password != AUTHC) { //add in some sort of hashing function here.
+		if (user.password != password) { //add in some sort of hashing function here.
 			return done(null, false);
 		}
 		return done(null, user);
