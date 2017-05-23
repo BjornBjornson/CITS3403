@@ -66,6 +66,21 @@ passport.deserializeUser(function(id, done) {
     done(err, user);
   });
 });
+/*
+above requires mongoose. Considering popping passport verification into a different file.
+passport.deserializeUser(function(id, done) {
+  var user = readEntry(id, 'User');
+  if(err){
+	  done(err, user, {message: 'An error occurred in user verification'});  
+  }
+  else if(user){
+	  done(null, user);
+  }
+  else{
+	  done(err, user, {message: 'An error occurred in user verification'});
+  }
+});
+*/
 app.get('/login', (req, res)=>{
 	res.render("login");
 	console.log("Login There");
@@ -78,10 +93,20 @@ app.get('/groupSearch', (req, res)=>{
 	res.render("groupSearch");
 	console.log("GroupSearch There");
 });
+app.get('/groupPage', (req, res)=>{
+	res.render("groupPage");
+	console.log("GrouPage There");
+});
+app.get('/', (req, res)=>{
+	res.render("Home");
+	console.log("GroupSearch There");
+});
+app.get('/Home', (req, res)=>{
+	res.render("Home");
+	console.log("Home There");
+});
 app.post('/', (req, res)=>{
 	console.log(req.url);
-	console.log(req.body);
-	console.log("that's another post");
 	res.send("Hello World");
 });
 app.post('/signup', passport.authenticate('newUser', {
