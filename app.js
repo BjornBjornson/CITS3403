@@ -23,8 +23,8 @@ app.set('view engine', 'html'); //telling it to use the tool I defined two lines
 
 //Passport 
 passport.use('login', new LocalStrategy({ //how to handle login routines
-	usernameField : 'UPE',
-    passwordField : 'AUTHC',
+	usernameField : 'email',
+    passwordField : 'password',
 	passReqToCallback : true //To pass the request to this function
   }, 
   function(req, UPE, AUTHC, done) { //remember to encrypt the password at some point

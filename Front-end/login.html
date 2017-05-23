@@ -34,7 +34,7 @@
 				}
 			}
 			if(valid){
-				var text = 'UPE='+document.getElementById("Email").value+'&AUTHC='+document.getElementById("Password").value; //UPE => User primary email, AUTHC => Authorisation Code
+				var text = 'email='+document.getElementById("Email").value+'&password='+document.getElementById("Password").value; //UPE => User primary email, AUTHC => Authorisation Code
 				alert(text);
 				http = new XMLHttpRequest();
 				http.onreadystatechange = processRequest;
