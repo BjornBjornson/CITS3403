@@ -9,8 +9,8 @@ var userSchema = new Schema(
         region: { type: String, enum: ['NA','LA','EU','CK','OCE'], required: true },
         ageGroup: { type: String, enum: ['13-18','19-24','25-30','30+'], required: true },
         active: { type: String, enum: ['Morning','Afternoon','Night','Nocturnal'], required: true },
-		grouplist: [{type: Schema.ObjectId, ref:'Group' }],
-        blacklist: [{ type: Schema.ObjectId, ref: 'User' }]
+		grouplist: [{type: Schema.ObjectId, ref:'groups' }],
+        blacklist: [{ type: Schema.ObjectId, ref: 'users' }]
     }
 )
 
@@ -20,27 +20,27 @@ var groupSchema = new Schema(
         game: { type: String, enum: ['LOL','DOTA','HOTS'], required: true },
         mode: { type: String, enum: ['Ranked','Casual','Both'], required: true },
         region: { type: String, enum: ['NA','LA','EU','CK','OCE'], required: true },
-        players: [{ type: Schema.ObjectId, ref: 'User' }],
+        players: [{ type: Schema.ObjectId, ref: 'users' }],
         roles: { type: Array, default: [] }
     }
 )
 
 var mailSchema = new Schema(
     {
-        from: { type: Schema.ObjectId, ref: 'User' },
-        to: [{ type: Schema.ObjectId, ref: 'User' }], //Turning this into an array should allow for groupchat.
+        from: { type: Schema.ObjectId, ref: 'users' },
+        to: [{ type: Schema.ObjectId, ref: 'users' }], //Turning this into an array should allow for groupchat.
         message: String,
         timestamp: Date
     }
 )
 
-mongoose.model('User', userSchema)
-mongoose.model('Group', groupSchema)
-mongoose.model('Mail', mailSchema)
+mongoose.model('users', userSchema)
+mongoose.model('groups', groupSchema)
+mongoose.model('mails', mailSchema)
 
 //exporting for testing purpose
 module.exports = {
-  User : mongoose.model('User',userSchema),
-  Group : mongoose.model('Group',groupSchema),
-  Mail : mongoose.model('Mail',mailSchema)
+  User : mongoose.model('users',userSchema),
+  Group : mongoose.model('groups',groupSchema),
+  Mail : mongoose.model('mails',mailSchema)
 }
