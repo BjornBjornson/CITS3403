@@ -68,15 +68,15 @@ passport.deserializeUser(function(id, done) {
 });
 app.get('/login', (req, res)=>{
 	res.render("login");
-	console.log("Hello There");
+	console.log("Login There");
 });
 app.get('/newUser', (req, res)=>{
-	res.render("Home");
-	console.log("Hello There");
+	res.render("newUser");
+	console.log("NewUser There");
 });
 app.get('/groupSearch', (req, res)=>{
 	res.render("groupSearch");
-	console.log("Hello There");
+	console.log("GroupSearch There");
 });
 app.post('/', (req, res)=>{
 	console.log(req.url);
@@ -84,7 +84,6 @@ app.post('/', (req, res)=>{
 	console.log("that's another post");
 	res.send("Hello World");
 });
-
 app.post('/signup', passport.authenticate('newUser', {
 	successRedirect: '/Home',
 	failureRedirect: '/newUser'
