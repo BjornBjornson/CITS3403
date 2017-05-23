@@ -88,12 +88,12 @@ var SSOcheck = function(req, res, next){
 	if (req.isAuthenticated()){
 		return next();
 	}
-	return null;
+	return null; //might want to make iterations for this, so that various pages/requests can have their own response to un-signed in individuals.
 }
 
-app.get('/login', (req, res)=>{ //Login page display.
-	res.render("login");
-	console.log("Login There");
+app.get('/login', (req, res)=>{ //when a request for the login page is heard:
+	res.render("login"); //show them the login page
+	console.log("Login There"); //tell serveradmin about it.
 });
 app.get('/newUser', (req, res)=>{ // Usercreate page. Holds the forms
 	res.render("newUser");
