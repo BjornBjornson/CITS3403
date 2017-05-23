@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <!--
-   Home.html
+   newUser.html
    
    Copyright 2017 Bjorn <Bjorn@BERTHA>
    
@@ -9,14 +9,14 @@
 
 <head>
 	<meta charset="utf-8" />
-	<title>"I'm a login page"</title>
-	<meta name="HomePage" content="Information" />
+	<title>"I'm a signup page"</title>
+	<meta name="signupPage" content="Information" />
 	<link rel="stylesheet" href="Style1.css" />
 
 
 <script type="text/javascript"> 
 	<!--
-	function validateSignup(){
+	function validateSignup(){ //not getting called anymore.
 		//was getting a wierd glitch when I just used them from a form. If I recall correctly this does a shallow copy.
 		var User= document.getElementById("Username").value;
 		var Pass = document.getElementById("Password").value;
@@ -40,18 +40,7 @@
 			}
 		}
 		if(valid){
-			var text = 'username='+document.getElementById("Email").value+'&password='+document.getElementById("Password").value; //UPE => User primary email, AUTHC => Authorisation Code
-			text += '&username='+document.getElementById("Username").value+'&region='+document.getElementById("country").value;
-			alert(text);
-			http = new XMLHttpRequest();
-			http.onreadystatechange = processRequest;
-			http.open("POST", "http://localhost:3000/signup", true); //currently a-synchronous iirc
-			http.setRequestHeader("content-type", "application/x-www-form-urlencoded"); 
-			//http.setRequestHeader("Content-Length", text.length);
-			http.send(text); //the http object should store the response. can check it and redirect from that.
-			alert("Message Sent");
-			//window.location = "Home.html"; //should redirect to page. currently does not work for provided HTML page.
-			//alert("Put in something that finds out whether usercreate success. If success,redircet to home or somesuch.");
+			document.getElementById('myForm').submit();
 		}
 		return valid;
 	}
@@ -93,24 +82,24 @@
 	</div>
 	<HR>
 	<h1> Sign Up <br /> <br /></h1>
-	<form id='myForm' name='myForm' onsubmit=' return false;'> <!-- to the correct node spot -->
+	<form id='myForm' name='myForm' method='post' onsubmit='validateSignup();'> <!-- to the correct node spot -->
 		<table id="usercreatebox">
 			<tr> 
 				<td>
 					<label for="Email">Email</label>
-					<input type="text" id="Email" name="Email" placeholder="Your Email">
+					<input type="text" id="Email" name="email" placeholder="Your Email">
 				</td>
 			</tr>
 			<tr> 
 				<td>
 					<label for="Username">Username</label>
-					<input type="text" id="Username" placeholder="The name seen by other users">
+					<input type="text" name='username' id="Username" placeholder="The name seen by other users">
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<label for="Password">Password</label>
-					<input type="text" id="Password" placeholder="Password">
+					<input type="password" name='password' id="Password" placeholder="Password">
 				</td>
 			</tr>
 			<tr>
@@ -126,7 +115,7 @@
 				</tr>
 			<tr>
 				<td>
-					<input type="submit" class="submit" value="Submit" onclick='validateSignup();'>
+					<input type="submit" class="submit" value="Submit">
 				</td>
 			</tr>
 		</table>

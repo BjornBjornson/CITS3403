@@ -4,7 +4,7 @@ const db = require('./db.js');
 var ejs = require('ejs');
 var path = require('path');
 var mongoose = require('mongoose');
-//var User = mongoose.model('User');
+var User = mongoose.model('users');
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
@@ -31,10 +31,10 @@ passport.use('login', new LocalStrategy({ //how to handle login routines
     User.findOne({'email': email},function(err, user) {
 		if (err) { return done(err); }
 		if (!user) { //add in some sort of hashing function here.
-			return done(null, false, { message: 'No such user exists' });
+			return done(null, false);
 		}
 		if (user.password != AUTHC) { //add in some sort of hashing function here.
-			return done(null, false, { message: 'Incorrect password.' });
+			return done(null, false);
 		}
 		return done(null, user);
     }
@@ -42,25 +42,37 @@ passport.use('login', new LocalStrategy({ //how to handle login routines
 }));
 
 passport.use('newUser', new LocalStrategy({ //how to handle login routines
-    passReqToCallback : true //To pass the request to this function
+    passReqToCallback : true, //To pass the request to this function
+	usernameField : 'email',
   }, 
-	function(req, done){ //
-		console.log("IT IS HERE");
-		User.findOne({'email': req.email},function(err, user) {
+	function(req, email, password, done){ //
+		//return false;
+		User.findOne({'email': email},function(err, user) {
 			if (err) { return done(err); }
 			if (user) { //add in some sort of hashing function here.
-			return done(null, false, { message: 'Email in use' });
+			return done(null, false);
 			}
 		});
-		User.findOne({'username':	req.username},function(err, user) {
+		/*User.findOne({'username':	username},function(err, user) {
 			if (err) { return done(err); }
 			if (user) { //add in some sort of hashing function here.
 			return done(null, false, { message: 'Username already exists' });
 			}
+		});*/
+		var user = new User();
+		user.username= req.body.username;
+		user.email = email;
+		user.password = password;
+		user.region = 'NA';
+		user.ageGroup='13-18';
+		user.active = 'Morning';
+		user.save(function(err){
+			if(err){
+				throw(err);
+			}
+			return done(null, user);
 		});
 		
-		var user = dbConnect.createEntry(req.body, "User");
-		return done(null, user);
 	}
 ));
 
@@ -115,7 +127,8 @@ app.get('/Home', (req, res)=>{// in case they get tricky, or I want to redirect 
 	res.render("Home");
 	console.log("Home There");
 });
-app.post('/signup', passport.authenticate('newUser', { // endpoint for making a new user
+app.post('/newUser', 
+	passport.authenticate('newUser', { // endpoint for making a new user
 	successRedirect: '/Home',
 	failureRedirect: '/newUser'
 }));
