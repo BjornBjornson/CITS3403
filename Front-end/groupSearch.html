@@ -32,7 +32,7 @@ Planned JS insert area functionality:
 		alert("hello");
 		var http = new XMLHttpRequest();
 		http.onreadystatechange = showTeams(this); //will need to debug before posting.
-		http.open("GET", "http://localhost:3000/groups", true); //currently a-synchronous iirc
+		http.open("GET", "http://localhost:3000/mygroups", true); //currently a-synchronous iirc
 		http.send();
 		document.getElementById('myGroups').innerHTML = "<table><tr><td>'This could take a moment, please wait'</td></tr></table>";
 	}

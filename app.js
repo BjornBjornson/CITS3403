@@ -103,7 +103,8 @@ app.get('/groupSearch', (req, res)=>{ // for searching for groups
 	res.render("groupSearch");
 	console.log("GroupSearch There");
 });
-app.get('/groupPage', (req, res)=>{ // group Page template, will service interactions with specific groups. 
+app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will service interactions with specific groups.
+	
 	res.render("groupPage");
 	console.log("GrouPage There");
 });
@@ -115,9 +116,19 @@ app.get('/', (req, res)=>{  //landing home page
 	res.render("Home");
 	console.log("Homepage There");
 });
-app.get('/groups', SSOcheck, function(req, res){  //landing home page
-	console.log(req.user);
-	res.send(req.user.grouplist);
+app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
+	var theUser = req.user;
+	console.log(theUser);
+	if(theUser.grouplist==[]){res.send(["you have no groups"]);}
+	else{
+		var groups =theUser.grouplist;
+		var sendList = [];
+		for(var i=0; i<groups.length; i++){
+			var out = mongoose.model('groups').findById(groups[i]);
+			sendlist.append(out.name);
+		}
+		res.send(sendlist);
+	}
 	console.log("Homepage There");
 });
 app.get('/Home', (req, res)=>{// in case they get tricky, or I want to redirect them
