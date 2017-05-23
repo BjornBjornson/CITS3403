@@ -29,6 +29,7 @@ function createEntry(data,modelName){
 	//assign the data to a new model
 	var object = new mod(data);
 	//save object to database
+
 	object.save(function (err){
 		if (err){
 			console.log(err);
@@ -41,96 +42,6 @@ function createEntry(data,modelName){
 
 
 }
- //returns json of entry of id
-function readEntry(id,modelName){
-	mod = mongoose.model(modelName);
-	mod.findById(id, function(err, result){
-		if(err){
-			console.log(err);
-		}
-		if(result){
-			console.log(result);
-			return result;
-		}
-		else{
-			console.log('null');
-			return result;
-
-		}
-	});
-}
-//returns every document
-function findEntry(modelName){
-	mod = mongoose.model(modelName);
-	mod.find(function (err,result){
-		if(err){
-			console.log(err);
-		}
-		if(result){
-			return result;
-		}else{
-			return "No entries";
-		}
-	})
-}
 
 
-//finds entry based on data json paramaters
-function findEntry(data,modelName){
-	mod = mongoose.model(modelName);
-	mod.find(data,function(err,result){
-		if(err){
-			console.error(err);
-		}if(result){
-			return result;
-		}else{
-			//happens when nothing is found,unsure what to return
-			console.log("No Result for " + data);
-		}
-	});
-
-}
-
-/** deletes an entry from the table
-deletes entry based on json object from a model
-**/
-
-function deleteEntry(data,modelName){
-	var mod = mongoose.model(modelName);
-	mod.findByIdAndRemove();
-
-}
-
-function editEntry(req, modelName) {
-	var mod = mongoose.model(modelName);
-	var id = req.params.id;
-	mod.findById(id, function (err, object) {
-		if(err) {
-			console.error(err);
-			//res.status(500).send(err)
-		} else if(object) {
-			mod.schema.eachPath(function (field) {
-				if(req.body[field] !== undefined) {
-					object[field] = req.body[field];
-				}
-			});
-
-			object.save(function (err) {
-				if(err) {
-					console.error(err);
-					//res.status(500).send(err)
-				}
-			});
-		} else {
-			//res.status(404).send(err)
-			console.error(err);
-		}
-	});
-}
-
-
-module.exports = {
-	createEntry,
-	readEntry
-
-};
+module.exports = createEntry
