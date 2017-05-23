@@ -30,7 +30,7 @@ Planned JS insert area functionality:
 	}
 	//populates the mygroups window
 	function fetchMyTeams(){
-		//alert("hello");
+		
 		http = new XMLHttpRequest();
 		http.onreadystatechange = showTeams; //will need to debug before posting.
 		http.open("GET", "http://localhost:3000/mygroups", true); //currently a-synchronous iirc
@@ -38,10 +38,9 @@ Planned JS insert area functionality:
 		//document.getElementById('myGroups').innerHTML = "<table><tr><td>'This could take a moment, please wait'</td></tr></table>";
 	}
 	function showTeams(){
-		//alert("here");
-		console.log(http);
 		if (http.readyState==4) {
 			var myArray = JSON.parse(http.responseText);
+			console.log(myArray);
 			var myTable = "<table class='tablePrint' id='groupList'>";
 			for(var a=0; a<myArray.length;a++){
 				console.log(myArray[a]);
@@ -52,22 +51,14 @@ Planned JS insert area functionality:
 			}
 			myTable+="</table>";
 			document.getElementById('myGroups').innerHTML = myTable;
-			//document.load()
-			//might need to put in a command to refresh the page.
 		}
 	}
 	//creates the table from theoretical data returned from the database
 	function createTable(){
 		//Just a catch in case they've not logged in. Probably going to be replaced with serverside redirects using passport's session storage.
-		if(sessionStorage.getItem('longString') != "0"){
-			document.getElementById('tablePrint').innerHTML = 'Login to see more!';
-			return false;
-		}
-		//var http = new XMLHttpRequest();
-		//http.onreadystatechange = showTeams(this); //will need to debug before posting.
-		//http.open("GET", "http://localhost:3000/groups?game="+getElementById+", true); //currently a-synchronous iirc
-		//http.send();
-		//document.getElementById('myGroups').innerHTML = "<table><tr><td>'This could take a moment, please wait'</td></tr></table>";
+		
+		document.getElementById('tablePrint').innerHTML = 'Login to see more!';
+		
 		var myArray = ["thestring", "represents", "a returned output Array", "from the database", "based on a query", "on the values selected"] ;
 		var myTable= "";
 		for(var a=0; a<myArray.length; a++){
