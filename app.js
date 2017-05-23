@@ -102,6 +102,10 @@ app.get('/groupPage', (req, res)=>{ // group Page template, will service interac
 	res.render("groupPage");
 	console.log("GrouPage There");
 });
+app.get('/about', (req, res)=>{  //landing home page
+	res.render("about");
+	console.log("aboutpage There");
+});
 app.get('/', (req, res)=>{  //landing home page
 	res.render("Home");
 	console.log("Homepage There");

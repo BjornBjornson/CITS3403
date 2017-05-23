@@ -40,12 +40,12 @@
 			}
 		}
 		if(valid){
-			var text = 'UPE='+document.getElementById("Email").value+'&AUTHC='+document.getElementById("Password").value; //UPE => User primary email, AUTHC => Authorisation Code
-			text += '&UNAME='+document.getElementById("Username")+'&Server='+document.getElementById("Country");
+			var text = 'username='+document.getElementById("Email").value+'&password='+document.getElementById("Password").value; //UPE => User primary email, AUTHC => Authorisation Code
+			text += '&username='+document.getElementById("Username").value+'&region='+document.getElementById("country").value;
 			alert(text);
 			http = new XMLHttpRequest();
 			http.onreadystatechange = processRequest;
-			http.open("POST", "http://localhost:3000/users", true); //currently a-synchronous iirc
+			http.open("POST", "http://localhost:3000/signup", true); //currently a-synchronous iirc
 			http.setRequestHeader("content-type", "application/x-www-form-urlencoded"); 
 			//http.setRequestHeader("Content-Length", text.length);
 			http.send(text); //the http object should store the response. can check it and redirect from that.
@@ -79,13 +79,13 @@
 	<div id="menu">
 		<table id="quickLinks">
 			<tr>
-				<td><a class='header' href="Home.html">Home</a>  </td>
-				<td><a class='header' href="groupSearch.html">MatchMaker</a>  </td>
-				<td><a class='header' href="about.html">About us</a>	</td>	
+				<td><a class='header' href="Home">Home</a>  </td>
+				<td><a class='header' href="groupSearch">MatchMaker</a>  </td>
+				<td><a class='header' href="about">About us</a>	</td>	
 				<td id="login">
 					<table id="subtable">
-						<tr> <td><a class="sign" href="login.html">login</a></td></tr>
-						<tr> <td> <a class="sign" href="newUser.html" >sign up</a></td></tr> 
+						<tr> <td><a class="sign" href="login">login</a></td></tr>
+						<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr> 
 					</table>
 				</td>
 			</tr>
@@ -117,10 +117,10 @@
 				<td>
 					<label for="country">Country</label>
 					<select id="country" name="country">
-						<option value="australia">Australia</option>
-						<option value="canada">Canada</option>
-						<option value="usa">USA</option>
-						<option value="uki">UK or Ireland</option>
+						<option value="OCE">Australia</option>
+						<option value="NA">Canada</option>
+						<option value="NA">USA</option>
+						<option value="EU">UK or Ireland</option>
 					</select>
 				</td>
 				</tr>
@@ -135,7 +135,7 @@
 	
 	<footer>
 		<div>
-			<a href='Logout.html' id='logoutLink'></a>
+			<a href='Logout' id='logoutLink'></a>
 			Written by <a href='mailto:mfitzay@gmail.com'> Matthew Fitzpatrick</a>.<br>
 			Student number/Email: <a href='mailto:21297239@student.uwa.edu.au'>21297239</a>
 			<p id='footTime'></p>
