@@ -119,14 +119,19 @@ app.get('/', (req, res)=>{  //landing home page
 app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 	var theUser = req.user;
 	console.log(theUser);
-	if(theUser.grouplist==[]){res.send(["you have no groups"]);}
+	res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.ContentType =('application/json');
+	res.status = 200;
+	if(theUser.grouplist.length==0){res.send([{'message': 'you have no groups'}]);}
 	else{
 		var groups =theUser.grouplist;
-		var sendList = [];
+		var sendlist = [];
 		for(var i=0; i<groups.length; i++){
 			var out = mongoose.model('groups').findById(groups[i]);
 			sendlist.append(out.name);
 		}
+		
 		res.send(sendlist);
 	}
 	console.log("Homepage There");

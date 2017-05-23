@@ -22,6 +22,7 @@ Planned JS insert area functionality:
 	
 	<script type="text/javascript">
 	<!--
+	var http = null;
 	function toGroupPage(group){
 		var whereTo ="groupPage.html?"+group;
 		alert(whereTo);
@@ -29,22 +30,29 @@ Planned JS insert area functionality:
 	}
 	//populates the mygroups window
 	function fetchMyTeams(){
-		alert("hello");
-		var http = new XMLHttpRequest();
-		http.onreadystatechange = showTeams(this); //will need to debug before posting.
+		//alert("hello");
+		http = new XMLHttpRequest();
+		http.onreadystatechange = showTeams; //will need to debug before posting.
 		http.open("GET", "http://localhost:3000/mygroups", true); //currently a-synchronous iirc
 		http.send();
-		document.getElementById('myGroups').innerHTML = "<table><tr><td>'This could take a moment, please wait'</td></tr></table>";
+		//document.getElementById('myGroups').innerHTML = "<table><tr><td>'This could take a moment, please wait'</td></tr></table>";
 	}
-	function showTeams(http){
+	function showTeams(){
+		//alert("here");
+		console.log(http);
 		if (http.readyState==4) {
-			var myArray = JSON.parse(http.getResponseText);
+			var myArray = JSON.parse(http.responseText);
 			var myTable = "<table class='tablePrint' id='groupList'>";
 			for(var a=0; a<myArray.length;a++){
-				myTable +="<tr class='collapsedRow'><td class='searchReturn'><a class='buttonInterior' href='groupPage.html?groupName="+myArray[a]+"'>"+myArray[a]+"</a></td></tr>";
+				console.log(myArray[a]);
+				for(var key in myArray[a]){
+					console.log(myArray[a][key]);
+					myTable +="<tr class='collapsedRow'><td class='searchReturn'><a class='buttonInterior' href='groupPage?groupName="+myArray[a][key]+"'>"+myArray[a][key]+"</a></td></tr>";
+				}
 			}
 			myTable+="</table>";
 			document.getElementById('myGroups').innerHTML = myTable;
+			//document.load()
 			//might need to put in a command to refresh the page.
 		}
 	}
@@ -76,13 +84,11 @@ Planned JS insert area functionality:
 		fetchMyTeams();
 		var time = new Date();
 		document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "    Last updated on: 10/4/17" ;
-		if(sessionStorage.getItem('longString') == "0"){
-			document.getElementById('logoutLink').innerHTML = 'Logout';
+		
+		document.getElementById('logoutLink').innerHTML = 'Logout';
 			
-		}
-		else{
-			goLogin();
-		}
+		
+		
 	}
 	-->
 	</script>
@@ -145,7 +151,7 @@ Planned JS insert area functionality:
 	</form>
 	<div>
 		
-	<div id='myGroups'><!-- Yes, this should be an empty header, I'm going to fill it on page load --></div>
+	<div id='myGroups'></div>
 		<!-- 
 			Put in a table window of sorts. defined size, eventually with scroll option?
 			populated by database query.
