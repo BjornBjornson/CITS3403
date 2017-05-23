@@ -112,7 +112,7 @@ app.post('/', (req, res)=>{
 app.post('/signup', passport.authenticate('newUser', {
 	successRedirect: '/Home',
 	failureRedirect: '/newUser'
-});
+}));
 app.post('/login', passport.authenticate('login', {
 	successRedirect: '/Home',
 	failureRedirect: '/login'
