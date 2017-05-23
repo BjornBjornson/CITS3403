@@ -1,5 +1,6 @@
 const express = require("express");
-var 
+var mongoose = require('mongoose');
+var User = mongoose.model('users');
 var expressSession = require('express-session');
 const db = require('./db.js');
 var ejs = require('ejs');
