@@ -1,4 +1,5 @@
 const express = require("express");
+var 
 var expressSession = require('express-session');
 const db = require('./db.js');
 var ejs = require('ejs');
@@ -81,39 +82,35 @@ passport.deserializeUser(function(id, done) {
   }
 });
 */
-app.get('/login', (req, res)=>{
+app.get('/login', (req, res)=>{ //Login page display.
 	res.render("login");
 	console.log("Login There");
 });
-app.get('/newUser', (req, res)=>{
+app.get('/newUser', (req, res)=>{ // Usercreate page. Holds the forms
 	res.render("newUser");
 	console.log("NewUser There");
 });
-app.get('/groupSearch', (req, res)=>{
+app.get('/groupSearch', (req, res)=>{ // for searching for groups
 	res.render("groupSearch");
 	console.log("GroupSearch There");
 });
-app.get('/groupPage', (req, res)=>{
+app.get('/groupPage', (req, res)=>{ // group Page template, will service interactions with specific groups. 
 	res.render("groupPage");
 	console.log("GrouPage There");
 });
-app.get('/', (req, res)=>{
+app.get('/', (req, res)=>{  //landing home page
 	res.render("Home");
-	console.log("GroupSearch There");
+	console.log("Homepage There");
 });
-app.get('/Home', (req, res)=>{
+app.get('/Home', (req, res)=>{// in case they get tricky, or I want to redirect them
 	res.render("Home");
 	console.log("Home There");
 });
-app.post('/', (req, res)=>{
-	console.log(req.url);
-	res.send("Hello World");
-});
-app.post('/signup', passport.authenticate('newUser', {
+app.post('/signup', passport.authenticate('newUser', { // endpoint for making a new user
 	successRedirect: '/Home',
 	failureRedirect: '/newUser'
 }));
-app.post('/login', passport.authenticate('login', {
+app.post('/login', passport.authenticate('login', { //login attempt here
 	successRedirect: '/Home',
 	failureRedirect: '/login'
 }));
