@@ -29,9 +29,10 @@ Planned JS insert area functionality:
 	}
 	//populates the mygroups window
 	function fetchMyTeams(){
+		alert("hello");
 		var http = new XMLHttpRequest();
 		http.onreadystatechange = showTeams(this); //will need to debug before posting.
-		http.open("GET", "http://localhost:3000/users?groups", true); //currently a-synchronous iirc
+		http.open("GET", "http://localhost:3000/groups", true); //currently a-synchronous iirc
 		http.send();
 		document.getElementById('myGroups').innerHTML = "<table><tr><td>'This could take a moment, please wait'</td></tr></table>";
 	}
@@ -72,12 +73,12 @@ Planned JS insert area functionality:
 	}
 	//on page load
 	function toLoad(){
-		
+		fetchMyTeams();
 		var time = new Date();
 		document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "    Last updated on: 10/4/17" ;
 		if(sessionStorage.getItem('longString') == "0"){
 			document.getElementById('logoutLink').innerHTML = 'Logout';
-			fetchMyTeams();
+			
 		}
 		else{
 			goLogin();
