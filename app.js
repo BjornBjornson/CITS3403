@@ -27,8 +27,8 @@ passport.use('login', new LocalStrategy({ //how to handle login routines
     passwordField : 'password',
 	passReqToCallback : true //To pass the request to this function
   }, 
-  function(req, UPE, AUTHC, done) { //remember to encrypt the password at some point
-    User.findOne({'email': UPE},function(err, user) {
+  function(req, email, password, done) { //remember to encrypt the password at some point
+    User.findOne({'email': email},function(err, user) {
 		if (err) { return done(err); }
 		if (!user) { //add in some sort of hashing function here.
 			return done(null, false, { message: 'No such user exists' });
@@ -44,14 +44,15 @@ passport.use('login', new LocalStrategy({ //how to handle login routines
 passport.use('newUser', new LocalStrategy({ //how to handle login routines
     passReqToCallback : true //To pass the request to this function
   }, 
-	function(req, username, email, done){ //
-		User.findOne({'email': email},function(err, user) {
+	function(req, done){ //
+		console.log("IT IS HERE");
+		User.findOne({'email': req.email},function(err, user) {
 			if (err) { return done(err); }
 			if (user) { //add in some sort of hashing function here.
 			return done(null, false, { message: 'Email in use' });
 			}
 		});
-		User.findOne({'username':	username},function(err, user) {
+		User.findOne({'username':	req.username},function(err, user) {
 			if (err) { return done(err); }
 			if (user) { //add in some sort of hashing function here.
 			return done(null, false, { message: 'Username already exists' });
