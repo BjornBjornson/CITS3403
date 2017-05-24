@@ -5,6 +5,7 @@ var ejs = require('ejs');
 var path = require('path');
 var mongoose = require('mongoose');
 var User = mongoose.model('users');
+var Group = mongoose.model('groups');
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
@@ -95,16 +96,43 @@ app.get('/login', (req, res)=>{ //when a request for the login page is heard:
 	res.render("login"); //show them the login page
 	console.log("Login There"); //tell serveradmin about it.
 });
+app.post('/login', passport.authenticate('login', { //login attempt here
+	successRedirect: '/Home',
+	failureRedirect: '/login'
+}));
 app.get('/newUser', (req, res)=>{ // Usercreate page. Holds the forms
 	res.render("newUser");
 	console.log("NewUser There");
 });
+app.post('/newUser', 
+	passport.authenticate('newUser', { // endpoint for making a new user
+	successRedirect: '/Home',
+	failureRedirect: '/newUser'
+}));
 app.get('/groupSearch', (req, res)=>{ // for searching for groups
 	res.render("groupSearch");
 	console.log("GroupSearch There");
 });
+app.post('/groupSearch',
+	SSOcheck,
+	(req, res)=>{ // for searching for groups
+	var groupreturn = Group.find({
+		game: req.game,
+		region: req.user.region,
+		players: {$not: {$size: 5}, $ne: req.user._id},
+		roles: {$ne: req.role},
+		mode: {$in: req.mode}
+	},'name');
+	if(groupreturn.length==0){
+		groupreturn=["message": "No results found for that search"];
+	}
+	res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.ContentType =('application/json');
+	res.status = 200;
+	res.send(groupreturn);
+});
 app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will service interactions with specific groups.
-	
 	res.render("groupPage");
 	console.log("GrouPage There");
 });
@@ -128,7 +156,7 @@ app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 		var groups =theUser.grouplist;
 		var sendlist = [];
 		for(var i=0; i<groups.length; i++){
-			var out = mongoose.model('groups').findById(groups[i]);
+			var out = Group.findById(groups[i]);
 			sendlist.append(out.name);
 		}
 		
@@ -140,15 +168,8 @@ app.get('/Home', (req, res)=>{// in case they get tricky, or I want to redirect 
 	res.render("Home"),
 	console.log("Home There");
 });
-app.post('/newUser', 
-	passport.authenticate('newUser', { // endpoint for making a new user
-	successRedirect: '/Home',
-	failureRedirect: '/newUser'
-}));
-app.post('/login', passport.authenticate('login', { //login attempt here
-	successRedirect: '/Home',
-	failureRedirect: '/login'
-}));
+
+
 /*(req, res)=>{ //hold onto this. might not be useful for login, but might be useful for other functions.
 	console.log(req.headers)
 	console.log(req.url);

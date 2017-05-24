@@ -102,12 +102,12 @@ Planned JS insert area functionality:
 	<HR>
 	<h1> Find a Team <br /> <br /></h1>
 	
-	<form> <!-- to the correct node spot -->
+	<form id='MMS'> <!-- to the correct node spot -->
 		<table id="MMsearch">
 			<tr> 
 				<td>
 					<label for="Game">Game</label>
-					<select id="Game" name="Game">
+					<select id="Game" name="game">
 						<option value="Dota2">DOTA 2</option>
 						<option value="League">League of Legends</option>
 						<option value="Heroes">Heroes of the Storm</option>
@@ -120,6 +120,13 @@ Planned JS insert area functionality:
 						<option value="Sup"> Support</option>
 						<option value="ADC"> ADC</option>
 						<option value="Jun"> Jungler</option>
+					</select>
+					<label for='mode'>Mode</label>
+					<select name='mode' id='mode'>
+						<option value=["Ranked", "Casual", "Both"]>Either</option>
+						<option value=["Ranked"]>Ranked</option>
+						<option value=["Casual"]>Casual</option>
+						<option value=["Both"]>Both</option>
 					</select>
 					<!-- possible to refine down to character level, would have to have a search/term thing going down, 
 					ugh... would look like a string with no strange characters, I suppose.-->
