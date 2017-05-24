@@ -65,9 +65,9 @@ passport.use('newUser', new LocalStrategy({ //how to handle login routines
 		user.username= req.body.username;
 		user.email = email;
 		user.password = password;
-		user.region = req.country;
+		user.region = req.body.country;
 		user.ageGroup='13-18';
-		user.active = req.active;
+		user.active = req.body.active;
 		user.save(function(err){
 			if(err){
 				throw(err);
