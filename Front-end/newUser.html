@@ -52,9 +52,6 @@
 		}
 	}
 	function toLoad(){
-		if(sessionStorage.getItem('longString') == "0"){
-			document.getElementById('logoutLink').innerHTML = 'Logout';
-		}
 		var time = new Date();
 		document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "    Last updated on: 10/4/17" ;
 	}
@@ -137,7 +134,7 @@
 	
 	<footer>
 		<div>
-			<a href='Logout' id='logoutLink'></a>
+			
 			Written by <a href='mailto:mfitzay@gmail.com'> Matthew Fitzpatrick</a>.<br>
 			Student number/Email: <a href='mailto:21297239@student.uwa.edu.au'>21297239</a>
 			<p id='footTime'></p>
