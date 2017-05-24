@@ -11,7 +11,7 @@ var passport = require('passport')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 var dbConnect = ('./dataparser.js')
 app.use(bodyParser.urlencoded({ extended: true })); //someone figure out what the extended refers to.
 app.use(expressSession({secret: '<Put a secret key here>'})); //setting up a secret key, also setting up express' session library.
