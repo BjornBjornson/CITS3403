@@ -42,11 +42,12 @@ passport.use('login', new LocalStrategy({ //how to handle login routines
 	);
 }));
 
+
 passport.use('newUser', new LocalStrategy({ //how to handle login routines
     passReqToCallback : true, //To pass the request to this function
 	usernameField : 'email',
   }, 
-	function(req, email, password, done){ //
+  function(req, email, password, done){ //
 		//return false;
 		User.findOne({'email': email},function(err, user) {
 			if (err) { return done(err); }
@@ -64,9 +65,9 @@ passport.use('newUser', new LocalStrategy({ //how to handle login routines
 		user.username= req.body.username;
 		user.email = email;
 		user.password = password;
-		user.region = 'NA';
+		user.region = req.country;
 		user.ageGroup='13-18';
-		user.active = 'Morning';
+		user.active = req.active;
 		user.save(function(err){
 			if(err){
 				throw(err);
@@ -77,14 +78,17 @@ passport.use('newUser', new LocalStrategy({ //how to handle login routines
 	}
 ));
 
+
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
+
 passport.deserializeUser(function(id, done) {
   User.findById(id, function(err, user) {
     done(err, user);
   });
 });
+
 var SSOcheck = function(req, res, next){
 	if (req.isAuthenticated()){
 		return next();
@@ -92,58 +96,90 @@ var SSOcheck = function(req, res, next){
 	return null; //might want to make iterations for this, so that various pages/requests can have their own response to un-signed in individuals.
 }
 
+
 app.get('/login', (req, res)=>{ //when a request for the login page is heard:
 	res.render("login"); //show them the login page
 	console.log("Login There"); //tell serveradmin about it.
 });
+
 app.post('/login', passport.authenticate('login', { //login attempt here
 	successRedirect: '/Home',
 	failureRedirect: '/login'
 }));
+
 app.get('/newUser', (req, res)=>{ // Usercreate page. Holds the forms
 	res.render("newUser");
 	console.log("NewUser There");
 });
+
 app.post('/newUser', 
 	passport.authenticate('newUser', { // endpoint for making a new user
-	successRedirect: '/Home',
-	failureRedirect: '/newUser'
-}));
+		successRedirect: '/Home',
+		failureRedirect: '/newUser'
+	}));
+
 app.get('/groupSearch', (req, res)=>{ // for searching for groups
 	res.render("groupSearch");
 	console.log("GroupSearch There");
 });
-app.post('/groupSearch',
+
+
+app.post('/myGroupSearch',
 	SSOcheck,
-	(req, res)=>{ // for searching for groups
-	var groupreturn = Group.find({
-		game: req.game,
+	function(req, res){ // for searching for groups
+	console.log("Searching for group");
+	Group.find({
+		game: req.body.game,
 		region: req.user.region,
+
+		players: {$ne: req.user.id},
+		roles: {$ne: req.body.role},
+		mode: {$in: req.body.mode}
+	},'name').lean().exec(function(err, doc){
+		res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		res.ContentType =('application/json');
+		res.status = 200;
+		if(err){
+			console.log(err);
+			res.send([{"message": "Sorry, something went wrong. Please try again."}]);
+		}
+		if(doc.length==0){
+			res.send([{"message": "No results found"}]);
+		}
+		else{res.send(doc);}
+	});
+
 		players: {$not: {$size: 5}, $ne: req.user._id},
 		roles: {$ne: req.role},
 		mode: {$in: req.mode}
 	},'name');
 	if(groupreturn.length==0){
-		groupreturn=["message": "No results found for that search"];
+		groupreturn={"message": "No results found for that search"};
 	}
 	res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	res.ContentType =('application/json');
 	res.status = 200;
 	res.send(groupreturn);
+
 });
+
 app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will service interactions with specific groups.
 	res.render("groupPage");
 	console.log("GrouPage There");
 });
+
 app.get('/about', (req, res)=>{  //landing home page
 	res.render("about");
 	console.log("aboutpage There");
 });
+
 app.get('/', (req, res)=>{  //landing home page
 	res.render("Home");
 	console.log("Homepage There");
 });
+
 app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 	var theUser = req.user;
 	console.log(theUser);
@@ -162,8 +198,9 @@ app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 		
 		res.send(sendlist);
 	}
-	console.log("Homepage There");
+	console.log("grouppage There");
 });
+
 app.get('/Home', (req, res)=>{// in case they get tricky, or I want to redirect them
 	res.render("Home"),
 	console.log("Home There");

@@ -9,7 +9,7 @@
 
 <head>
 	<meta charset="utf-8" />
-	<title>"I'm a signup page"</title>
+	<title>Make an Account</title>
 	<meta name="signupPage" content="Information" />
 	<link rel="stylesheet" href="Style1.css" />
 
@@ -83,36 +83,56 @@
 	<HR>
 	<h1> Sign Up <br /> <br /></h1>
 	<form id='myForm' name='myForm' method='post' onsubmit='validateSignup();'> <!-- to the correct node spot -->
-		<table id="usercreatebox">
+		<table id="usercreatebox" class="formBox">
 			<tr> 
 				<td>
 					<label for="Email">Email</label>
-					<input type="text" id="Email" name="email" placeholder="Your Email">
+					<input type="text" id="Email" name="email" class="userInput" placeholder="Your Email">
 				</td>
 			</tr>
 			<tr> 
 				<td>
 					<label for="Username">Username</label>
-					<input type="text" name='username' id="Username" placeholder="The name seen by other users">
+					<input type="text" name='username' id="Username" class="userInput" placeholder="The name seen by other users">
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<label for="Password">Password</label>
-					<input type="password" name='password' id="Password" placeholder="Password">
+					<input type="password" name='password' id="Password" class="userInput" placeholder="Password">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<label for="country">Country</label>
+<<<<<<< HEAD
+					<label for="country">Region</label>
 					<select id="country" name="country">
+						<option value="OCE">Oceana</option>
+						<option value="NA">North America</option>
+						<option value="EU">Europe</option>
+						<option value="LA">Las Angales</option>
+						<option value="CK">China</option>
+=======
+					<label for="country">Country</label>
+					<select id="country" name="country" class="userInput">
 						<option value="OCE">Australia</option>
-						<option value="NA">Canada</option>
-						<option value="NA">USA</option>
+						<option value="NA">USA or Canada</option>
 						<option value="EU">UK or Ireland</option>
+>>>>>>> dd0adb5fdc4a5ee526022bb15aaa273b20366236
 					</select>
 				</td>
 				</tr>
+			<tr>
+				<td>
+					<label for='active'>Prefered gaming period</label>
+					<select id='active' name='active'>
+						<option value="Morning">Morning</option>
+						<option value="Afternoon">Afternoon</option>
+						<option value="Night">Evening</option>
+						<option value="Nocturnal"></option>
+					</select>
+				</td>
+			</tr>
 			<tr>
 				<td>
 					<input type="submit" class="submit" value="Submit">

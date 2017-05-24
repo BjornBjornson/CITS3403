@@ -16,13 +16,14 @@ Planned JS insert area functionality:
 -->
 <head>
 	<meta charset="utf-8" />
-	<title>"I'm a search page"</title>
+	<title>Find a Group</title>
 	<meta name="groupSearch" content="Information" />
 	<link rel="stylesheet" href="Style1.css" />
 	
 	<script type="text/javascript">
-	<!--
+
 	var http = null;
+	var shttp = null;
 	function toGroupPage(group){
 		var whereTo ="groupPage.html?"+group;
 		alert(whereTo);
@@ -56,15 +57,34 @@ Planned JS insert area functionality:
 	//creates the table from theoretical data returned from the database
 	function createTable(){
 		//Just a catch in case they've not logged in. Probably going to be replaced with serverside redirects using passport's session storage.
+		var bod = "game="+document.getElementById('Game').value+"&role="+document.getElementById('role').value+"&mode="+document.getElementById('mode').value;
+		shttp = new XMLHttpRequest();
+		shttp.onreadystatechange = populateTable; //will need to debug before posting.
+		shttp.open("POST", "http://localhost:3000/myGroupSearch", true); //currently a-synchronous iirc
+		shttp.send(bod);
+		//document.getElementById('tablePrint').innerHTML = 'Processing';
+		alert("sent");
+		return false;
 		
-		document.getElementById('tablePrint').innerHTML = 'Login to see more!';
-		
-		var myArray = ["thestring", "represents", "a returned output Array", "from the database", "based on a query", "on the values selected"] ;
-		var myTable= "";
-		for(var a=0; a<myArray.length; a++){
-			myTable +="<tr><td class='searchReturn'>"+myArray[a]+"</td> <td class='searchReturn'><button type='button' onclick='toGroupPage("+'"groupName='+myArray[a]+'"'+");'>Join Group</button></td></tr>";
+	}
+	function populateTable(){
+		if(shttp.readyState==4){
+			var myArray = JSON.parse(shttp.responseText);
+			var myTable= "";
+			for(var b in myArray[0]){	
+				if (myArray[0][b] == "No results found"){
+					myTable = "<tr><td class='searchReturn'>"+myArray[0][b]+"</td></tr>";
+				}
+				else{
+					for(var a=0; a<myArray.length; a++){
+						for(var key in myArray[a]){
+							myTable +="<tr><td class='searchReturn'>"+myArray[a][key]+"</td> <td class='searchReturn'><button type='button' onclick='toGroupPage("+'"groupName='+myArray[a][key]+'"'+");'>View Group</button></td></tr>";
+						}
+					}
+				}
+			document.getElementById('tablePrint').innerHTML = myTable;
+			}
 		}
-		document.getElementById('tablePrint').innerHTML = myTable;
 	}
 	//For if they don't log in
 	function goLogin(){
@@ -102,8 +122,13 @@ Planned JS insert area functionality:
 	<HR>
 	<h1> Find a Team <br /> <br /></h1>
 	
-	<form id='MMS'> <!-- to the correct node spot -->
+<<<<<<< HEAD
+	<form id='MMS' name='myForm' method='post' > <!-- to the correct node spot -->
 		<table id="MMsearch">
+=======
+	<form id='MMS'> <!-- to the correct node spot -->
+		<table id="MMsearch" class="formBox">
+>>>>>>> dd0adb5fdc4a5ee526022bb15aaa273b20366236
 			<tr> 
 				<td>
 					<label for="Game">Game</label>
@@ -114,7 +139,7 @@ Planned JS insert area functionality:
 					</select>
 					<label for="role"> Lane/Role</label>
 					<select id="role" name="role">
-						<option value="Fil"> Fill/Any</option>
+						<option value=""> Fill/Any</option>
 						<option value="Top"> Top</option>
 						<option value="Mid"> Mid</option>
 						<option value="Sup"> Support</option>
@@ -123,7 +148,7 @@ Planned JS insert area functionality:
 					</select>
 					<label for='mode'>Mode</label>
 					<select name='mode' id='mode'>
-						<option value=["Ranked", "Casual", "Both"]>Either</option>
+						<option value=["Ranked", "Casual", "Both"]>Any</option>
 						<option value=["Ranked"]>Ranked</option>
 						<option value=["Casual"]>Casual</option>
 						<option value=["Both"]>Both</option>
@@ -133,7 +158,7 @@ Planned JS insert area functionality:
 				</td>
 			<tr>
 				<td>
-					<input id="MatchMakerSearch" class="submit" type="submit" value="Get Started!" onclick="createTable(); return false;">
+					<input class="submit" type="button" value="Get Started!" onclick='createTable();'>
 				</td>
 			</tr>
 			<tr>

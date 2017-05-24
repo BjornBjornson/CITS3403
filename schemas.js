@@ -6,7 +6,7 @@ var userSchema = new Schema(
         username: { type: String, required: true, unique: true },
         email: { type: String, required: true, unique: true },
         password: {type: String, required: true },
-        region: { type: String, enum: ['NA','LA','EU','CK','OCE'], required: true },
+        region: { type: String, enum: ['AUS','NA','BRIT'], required: true },
         ageGroup: { type: String, enum: ['13-18','19-24','25-30','30+'], required: true },
         active: { type: String, enum: ['Morning','Afternoon','Night','Nocturnal'], required: true },
 		grouplist: [{type: Schema.ObjectId, ref:'groups' }],
@@ -19,7 +19,7 @@ var groupSchema = new Schema(
         name: { type: String, required: true, unique: true },
         game: { type: String, enum: ['LOL','DOTA','HOTS'], required: true },
         mode: { type: String, enum: ['Ranked','Casual','Both'], required: true },
-        region: { type: String, enum: ['NA','LA','EU','CK','OCE'], required: true },
+        region: { type: String, enum: ['AUS','NA','BRIT'], required: true },
         players: [{ type: Schema.ObjectId, ref: 'users' }],
         roles: { type: Array, default: [] }
     }
