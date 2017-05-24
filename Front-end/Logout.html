@@ -15,11 +15,6 @@
 	
 	<script type="text/javascript"> 
 		<!--
-		//logging out
-		function signout(){
-			sessionStorage.removeItem("longString");
-			window.location ="D:/Uni-2017/cits3403/Home.html";
-		}
 		//on load
 		function toLoad(){
 			var time = new Date();
@@ -54,7 +49,7 @@
 	<table id="loginbox">
 		<tr>
 			<td>
-				<button id='generalButton' onclick="signout();"> Sign Out</button>
+				<form method='post'><input class='submit' type='submit' id='generalButton' value='Sign Out'></form>
 			</td>
 		</tr>
 	</table>

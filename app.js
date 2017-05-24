@@ -98,8 +98,14 @@ var SSOcheck = function(req, res, next){
 	res.ContentType=('text/plain');
 	res.send("You're not logged in");
 }
-
-
+app.post('/logout', SSOcheck, function(req, res){
+	req.session.destroy(function(err){
+		res.redirect("/Home");
+	});
+});
+app.get('/logout', function(req, res){
+	res.render("logout");
+});
 app.get('/login', (req, res)=>{ //when a request for the login page is heard:
 	res.render("login"); //show them the login page
 	console.log("Login There"); //tell serveradmin about it.
