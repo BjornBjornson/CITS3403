@@ -131,7 +131,6 @@ app.post('/myGroupSearch',
 	Group.find({
 		game: req.body.game,
 		region: req.user.region,
-
 		players: {$ne: req.user.id},
 		roles: {$ne: req.body.role},
 		mode: {$in: req.body.mode}
@@ -149,19 +148,6 @@ app.post('/myGroupSearch',
 		}
 		else{res.send(doc);}
 	});
-
-		players: {$not: {$size: 5}, $ne: req.user._id},
-		roles: {$ne: req.role},
-		mode: {$in: req.mode}
-	},'name');
-	if(groupreturn.length==0){
-		groupreturn={"message": "No results found for that search"};
-	}
-	res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	res.ContentType =('application/json');
-	res.status = 200;
-	res.send(groupreturn);
 
 });
 
