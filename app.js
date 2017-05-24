@@ -174,7 +174,15 @@ app.get('/', (req, res)=>{  //landing home page
 	res.render("Home");
 	console.log("Homepage There");
 });
-
+app.get('/groupCreate', function(req, res){
+	if(req.isAuthenticated){
+		res.render('groupCreate');
+	}
+	else{
+		res.redirect('login');
+		console.log('someone is being "clever" with groupCreate');
+	}
+}
 app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 	var theUser = req.user;
 	console.log(theUser);
@@ -190,7 +198,6 @@ app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 			var out = Group.findById(groups[i]);
 			sendlist.append(out.name);
 		}
-		
 		res.send(sendlist);
 	}
 	console.log("grouppage There");

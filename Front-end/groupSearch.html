@@ -44,6 +44,7 @@ Planned JS insert area functionality:
 				document.getElementById('myGroups').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>";
 			}
 			else{
+				document.getElementById('logoutLink').innerHTML = 'Logout';
 				var myArray = JSON.parse(http.responseText);
 				console.log(myArray);
 				var myTable = "<table class='tablePrint' id='groupList'>";
@@ -54,7 +55,7 @@ Planned JS insert area functionality:
 						myTable +="<tr class='collapsedRow'><td class='searchReturn'><a class='buttonInterior' href='groupPage?groupName="+myArray[a][key]+"'>"+myArray[a][key]+"</a></td></tr>";
 					}
 				}
-				myTable+="</table>";
+				myTable+="<tr class='collapsedRow'><td class='searchReturn'><a class='buttonInterior' href='groupCreate'>Start a new group</a></td></tr></table>";
 				document.getElementById('myGroups').innerHTML = myTable;
 			}
 		}
@@ -106,8 +107,6 @@ Planned JS insert area functionality:
 		fetchMyTeams();
 		var time = new Date();
 		document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "    Last updated on: 10/4/17" ;
-		
-		document.getElementById('logoutLink').innerHTML = 'Logout';
 	}
 	-->
 	</script>
@@ -147,9 +146,9 @@ Planned JS insert area functionality:
 				<td>
 					<label for="Game">Game</label>
 					<select id="Game" name="game">
-						<option value="Dota2">DOTA 2</option>
-						<option value="League">League of Legends</option>
-						<option value="Heroes">Heroes of the Storm</option>
+						<option value="DOTA">DOTA 2</option>
+						<option value="LOL">League of Legends</option>
+						<option value="HOTS">Heroes of the Storm</option>
 					</select>
 					<label for="role"> Lane/Role</label>
 					<select id="role" name="role">
