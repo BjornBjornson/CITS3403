@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	    <meta charset="utf-8" />
+	    <title>Create Your Own Group</title>
+	    <meta name="HomePage" content="Information" />
+	    <link rel="stylesheet" href="Style1.css" />
+    </head>
+
+    <body>
+
+        <div id="menu">
+	    	<table id="quickLinks">
+	    		<tr>
+	    			<td><a class='header' href="Home.html">Home</a>  </td>
+	    			<td><a class='header' href="groupSearch.html">MatchMaker</a>  </td>
+	    			<td><a class='header' href="about.html">About us</a>	</td>	
+	    			<td id="login">
+	    				<table id="subtable">
+	    					<tr> <td><a class="sign" href="login.html">login</a></td></tr>
+	    					<tr> <td> <a class="sign" href="newUser.html" >sign up</a></td></tr> 
+	    				</table>
+	    			</td>
+	    		</tr>
+	    	</table>
+	    </div>
+
+        <hr>
+        <h1>Create a Group</h1>
+
+        <form id="groupCreate">
+            <table id="groupCreateBox">
+                <tr> 
+			    	<td>
+			    		<label for="groupName">Group Name</label>
+			    		<input type="text" id="groupName" name="groupName" placeholder="Name Your Group">
+			    	</td>
+			    </tr>
+			    <tr>
+				    <td>
+				    	<label for="groupGame">Choose your battlefield</label>
+				    	<select id="groupGame" name="groupGame">
+				    		<option value="LOL">League of Legends</option>
+				    		<option value="DOTA">DotA 2</option>
+				    		<option value="HOTS">Heroes of the Storm</option>
+				    	</select>
+				    </td>
+				</tr>
+                <tr>
+				    <td>
+				    	<label for="groupMode">Select game mode</label>
+				    	<select id="groupMode" name="groupMode">
+				    		<option value="RANK">Ranked</option>
+				    		<option value="NORM">Normal</option>
+				    		<option value="BOTH">Mix of both</option>
+				    	</select>
+				    </td>
+				</tr>
+                <tr>
+				    <td>
+				    	<label for="groupPlace">Group HQ Location</label>
+				    	<select id="groupPlace" name="groupPlace">
+				    		<option value="ANZ">Australia/New Zealand</option>
+				    		<option value="NA">USA/Canada</option>
+				    		<option value="BRIT">UK/Ireland</option>
+				    	</select>
+				    </td>
+				</tr>
+                <tr>
+				    <td>
+					    <input type="submit" class="submit" value="Submit">
+				    </td>
+			    </tr>
+            </table>
+        </form>
+
+        <footer>
+		    <div>
+			    <a href='Logout' id='logoutLink'></a>
+			    Written by <a href='mailto:mfitzay@gmail.com'> Matthew Fitzpatrick</a>.<br>
+			    Student number/Email: <a href='mailto:21297239@student.uwa.edu.au'>21297239</a>
+			    <p id='footTime'></p>
+		    </div>
+	    </footer>
+    </body>
+</html>
