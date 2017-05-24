@@ -182,7 +182,7 @@ app.get('/groupCreate', function(req, res){
 		res.redirect('login');
 		console.log('someone is being "clever" with groupCreate');
 	}
-}
+});
 app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 	var theUser = req.user;
 	console.log(theUser);
