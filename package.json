@@ -6,7 +6,7 @@
   "private": "true",
   "scripts": {
     "test": "SET NODE_ENV=TEST & mocha tests --recursive",
-    "start": "NODE_ENV=PRODUCTION node app"
+    "start": "SET NODE_ENV=PRODUCTION & node app"
   },
   "dependencies": {
     "body-parser": "*",

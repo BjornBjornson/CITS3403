@@ -14,49 +14,7 @@
 	<link rel="stylesheet" href="Style1.css" />
 
 
-<script type="text/javascript"> 
-	<!--
-	function validateSignup(){ //not getting called anymore.
-		//was getting a wierd glitch when I just used them from a form. If I recall correctly this does a shallow copy.
-		var User= document.getElementById("Username").value;
-		var Pass = document.getElementById("Password").value;
-		var mail = document.getElementById("Email").value;
-		var valid = true;
-		//Makes sure the user details are in a close-to-correct shape
-		if( (User == "") || (User.search(/\W/i)!=-1) ) 	{
-			alert( "Please provide a name using only numbers and letters." );
-			valid = false
-		}
-		else if( Pass.length < 7 ){
-			alert("Your Password must be at least 7 characters long");
-			valid = false;
-		}
-		else{
-			var locA = mail.indexOf("@");
-			var locD = mail.lastIndexOf(".");
-			if ( (locA < 1) || ( locD - locA < 2 ) ) {
-				alert("Enter a valid email address");
-				valid = false;
-			}
-		}
-		if(valid){
-			document.getElementById('myForm').submit();
-		}
-		return valid;
-	}
-	function processRequest(){
-		if (http.readyState==4) {
-			alert(http.responseText);
-			alert(http.getResponseHeader());
-			alert(http);
-		}
-	}
-	function toLoad(){
-		var time = new Date();
-		document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "    Last updated on: 10/4/17" ;
-	}
-      -->
-	</script>
+<script src='HTTP-send.js'> </script>
 	
 	
 	
