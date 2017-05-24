@@ -124,7 +124,7 @@ app.post('/groupSearch',
 		mode: {$in: req.mode}
 	},'name');
 	if(groupreturn.length==0){
-		groupreturn=["message": "No results found for that search"];
+		groupreturn={"message": "No results found for that search"};
 	}
 	res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
