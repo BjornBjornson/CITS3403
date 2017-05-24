@@ -83,29 +83,29 @@
 	<HR>
 	<h1> Sign Up <br /> <br /></h1>
 	<form id='myForm' name='myForm' method='post' onsubmit='validateSignup();'> <!-- to the correct node spot -->
-		<table id="usercreatebox">
+		<table id="usercreatebox" class="formBox">
 			<tr> 
 				<td>
 					<label for="Email">Email</label>
-					<input type="text" id="Email" name="email" placeholder="Your Email">
+					<input type="text" id="Email" name="email" class="userInput" placeholder="Your Email">
 				</td>
 			</tr>
 			<tr> 
 				<td>
 					<label for="Username">Username</label>
-					<input type="text" name='username' id="Username" placeholder="The name seen by other users">
+					<input type="text" name='username' id="Username" class="userInput" placeholder="The name seen by other users">
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<label for="Password">Password</label>
-					<input type="password" name='password' id="Password" placeholder="Password">
+					<input type="password" name='password' id="Password" class="userInput" placeholder="Password">
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<label for="country">Country</label>
-					<select id="country" name="country">
+					<select id="country" name="country" class="userInput">
 						<option value="OCE">Australia</option>
 						<option value="NA">USA or Canada</option>
 						<option value="EU">UK or Ireland</option>
