@@ -40,50 +40,61 @@ Planned JS insert area functionality:
 	}
 	function showTeams(){
 		if (http.readyState==4) {
-			var myArray = JSON.parse(http.responseText);
-			console.log(myArray);
-			var myTable = "<table class='tablePrint' id='groupList'>";
-			for(var a=0; a<myArray.length;a++){
-				console.log(myArray[a]);
-				for(var key in myArray[a]){
-					console.log(myArray[a][key]);
-					myTable +="<tr class='collapsedRow'><td class='searchReturn'><a class='buttonInterior' href='groupPage?groupName="+myArray[a][key]+"'>"+myArray[a][key]+"</a></td></tr>";
-				}
+			if(http.responseText=="You're not logged in"){
+				document.getElementById('myGroups').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>";
 			}
-			myTable+="</table>";
-			document.getElementById('myGroups').innerHTML = myTable;
+			else{
+				var myArray = JSON.parse(http.responseText);
+				console.log(myArray);
+				var myTable = "<table class='tablePrint' id='groupList'>";
+				for(var a=0; a<myArray.length;a++){
+					console.log(myArray[a]);
+					for(var key in myArray[a]){
+						console.log(myArray[a][key]);
+						myTable +="<tr class='collapsedRow'><td class='searchReturn'><a class='buttonInterior' href='groupPage?groupName="+myArray[a][key]+"'>"+myArray[a][key]+"</a></td></tr>";
+					}
+				}
+				myTable+="</table>";
+				document.getElementById('myGroups').innerHTML = myTable;
+			}
 		}
 	}
 	//creates the table from theoretical data returned from the database
 	function createTable(){
 		//Just a catch in case they've not logged in. Probably going to be replaced with serverside redirects using passport's session storage.
 		var bod = "game="+document.getElementById('Game').value+"&role="+document.getElementById('role').value+"&mode="+document.getElementById('mode').value;
-		shttp = new XMLHttpRequest();
-		shttp.onreadystatechange = populateTable; //will need to debug before posting.
-		shttp.open("POST", "http://localhost:3000/myGroupSearch", true); //currently a-synchronous iirc
-		shttp.send(bod);
+		http = new XMLHttpRequest();
+		http.onreadystatechange = populateTable; //will need to debug before posting.
+		http.open("POST", "http://localhost:3000/myGroupSearch", true); //currently a-synchronous iirc
+		http.send(bod);
 		//document.getElementById('tablePrint').innerHTML = 'Processing';
 		alert("sent");
 		return false;
 		
 	}
 	function populateTable(){
-		if(shttp.readyState==4){
-			var myArray = JSON.parse(shttp.responseText);
-			var myTable= "";
-			for(var b in myArray[0]){	
-				if (myArray[0][b] == "No results found"){
-					myTable = "<tr><td class='searchReturn'>"+myArray[0][b]+"</td></tr>";
-				}
-				else{
-					for(var a=0; a<myArray.length; a++){
-						for(var key in myArray[a]){
-							myTable +="<tr><td class='searchReturn'>"+myArray[a][key]+"</td> <td class='searchReturn'><button type='button' onclick='toGroupPage("+'"groupName='+myArray[a][key]+'"'+");'>View Group</button></td></tr>";
+		if(http.readyState==4){
+			if(http.responseText=="You're not logged in"){
+				document.getElementById('tablePrint').innerHTML ="<tr><td class='searchReturn'>Log in to see that!</td></tr>";
+			}
+			else{
+				var myArray = JSON.parse(http.responseText);
+				var myTable= "";
+				for(var b in myArray[0]){	
+					if (myArray[0][b] == "No results found"){
+						myTable = "<tr><td class='searchReturn'>"+myArray[0][b]+"</td></tr>";
+					}
+					else{
+						for(var a=0; a<myArray.length; a++){
+							for(var key in myArray[a]){
+								myTable +="<tr><td class='searchReturn'>"+myArray[a][key]+"</td> <td class='searchReturn'><button type='button' onclick='toGroupPage("+'"groupName='+myArray[a][key]+'"'+");'>View Group</button></td></tr>";
+							}
 						}
 					}
+				document.getElementById('tablePrint').innerHTML = myTable;
 				}
-			document.getElementById('tablePrint').innerHTML = myTable;
 			}
+			
 		}
 	}
 	//For if they don't log in

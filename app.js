@@ -93,7 +93,10 @@ var SSOcheck = function(req, res, next){
 	if (req.isAuthenticated()){
 		return next();
 	}
-	return null; //might want to make iterations for this, so that various pages/requests can have their own response to un-signed in individuals.
+	res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.ContentType=('text/plain');
+	res.send("You're not logged in");
 }
 
 
