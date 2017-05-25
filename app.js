@@ -189,8 +189,9 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 			console.log("NO GROUP");
 			res.redirect('groupCreate');
 		}
+		//================================================= HERE's the broken bit ============
 		else{
-			console.log("ELSE");
+			console.log("ELSE"); // This is where it's exploding.
 			var playerlist = [];
 			console.log (playerlist);
 			console.log(doc.players.length);
