@@ -29,18 +29,18 @@
         <hr>
         <h1>Create a Group</h1>
 
-        <form id="groupCreate">
+        <form id="groupCreate" method='post'>
             <table id="groupCreateBox" class="formBox">
                 <tr> 
 			    	<td>
 			    		<label for="groupName">Group Name</label>
-			    		<input type="text" id="groupName" name="groupName" class="groupInput" placeholder="Name Your Group">
+			    		<input type="text" id="groupName" name="name" class="groupInput" placeholder="Name Your Group">
 			    	</td>
 			    </tr>
 			    <tr>
 				    <td>
 				    	<label for="groupGame">Choose your battlefield</label>
-				    	<select id="groupGame" name="groupGame" class="groupInput">
+				    	<select id="groupGame" name="game" class="groupInput">
 				    		<option value="LOL">League of Legends</option>
 				    		<option value="DOTA">DotA 2</option>
 				    		<option value="HOTS">Heroes of the Storm</option>
@@ -50,7 +50,7 @@
                 <tr>
 				    <td>
 				    	<label for="groupMode">Select game mode</label>
-				    	<select id="groupMode" name="groupMode" class="groupInput">
+				    	<select id="groupMode" name="mode" class="groupInput">
 				    		<option value="Ranked">Ranked</option>
 				    		<option value="Casual">Normal</option>
 				    		<option value="Both">Mix of both</option>
@@ -60,21 +60,23 @@
                 <tr>
 				    <td>
 				    	<label for="groupPlace">Group HQ Location</label>
-				    	<select id="groupPlace" name="groupPlace" class="groupInput">
-				    		<option value="ANZ">Australia/New Zealand</option>
-				    		<option value="NA">USA/Canada</option>
-				    		<option value="BRIT">UK/Ireland</option>
+				    	<select id="groupPlace" name="region" class="groupInput">
+				    		<option value="OCE">Oceana</option>
+							<option value="NA">North America</option>
+							<option value="EU">Europe</option>
+							<option value="LA">Las Angales</option>
+							<option value="CK">China</option>
 				    	</select>
 				    </td>
 				</tr>
                 <tr>
 				    <td>
-					    <input type="submit" class="submit" value="Submit">
+					    <input type="submit" class="submit" value="Submit" onsubmit>
 				    </td>
 			    </tr>
             </table>
         </form>
-
+		<div id='myGroups'></div>
         <footer>
 		    <div>
 			    <a href='Logout' id='logoutLink'></a>

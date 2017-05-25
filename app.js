@@ -183,6 +183,12 @@ app.get('/groupCreate', function(req, res){
 		console.log('someone is being "clever" with groupCreate');
 	}
 });
+app.post('/groupCreate', function(req, res){
+	if(req.isAuthenticate){
+		//if(Group.findOne(req.query)
+			res.redirect('Home'); // this is just a stand in for now. I need to get the group-page up before this can really work.
+	}
+});
 app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 	var theUser = req.user;
 	console.log(theUser);

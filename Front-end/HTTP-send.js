@@ -1,5 +1,5 @@
 var http = null;
-
+	
 	function validate(){  // This validates the shape of a login request. Not a particularly in-depth validation, but better than nought.
 		var Pass = document.getElementById("Password").value;
 		var mail = document.getElementById("Email").value;
@@ -61,7 +61,7 @@ var http = null;
 	}
 	
 	function toGroupPage(group){ //navigates to the a group's page on request.
-		var whereTo ="groupPage.html?"+group;
+		var whereTo ="groupPage/"+group;
 		alert(whereTo);
 		window.location = whereTo;
 	}
