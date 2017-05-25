@@ -176,7 +176,51 @@ app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will servi
 		}
 	});
 });
-
+app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will service interactions with specific groups.
+	console.log(req.url);
+	Group.findOne({'name': req.query.groupName, 'players': req.user.id}).lean().exec(function(err, doc){
+		console.log(doc);
+		console.log('this Thing');
+		if(err){
+			console.log(err);
+			res.send([{'message': err}]);
+		}
+		if(doc.length == 0){
+			console.log("NO GROUP");
+			res.redirect('groupCreate');
+		}
+		else{
+			console.log("ELSE");
+			var playerlist = [];
+			console.log (playerlist);
+			console.log(doc.players.length);
+			console.log(doc.players);
+			console.log("DIAGNOSTIC");
+			
+			doc.players.forEach(function(pid){
+				User.findById(pid, function(err, user){
+					console.log(user);
+					console.log("HUH?");
+					if(err){
+						console.log(err);
+					}
+					else if(!user){
+						console.log("user no longer exists");
+						console.log(doc.players[i]);
+					}
+					else{
+						console.log(playerlist);
+						playerlist.append(user.username)
+						console.log("AAAGH");
+					}
+				});
+			});
+			console.log(playerlist);
+			console.log("ASDFASDFASDF");
+			res.send(playerlist);
+		}
+	});
+});
 app.get('/about', (req, res)=>{  //landing home page
 	res.render("about");
 	console.log("aboutpage There");

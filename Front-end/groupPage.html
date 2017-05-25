@@ -16,6 +16,7 @@
 	
 	<script type="text/javascript">
 	<!--
+	var http=null;
 	function sayMyGroupName(){
 		//next bit is still moderately similar to
 		//Peter Leow, (2014)
@@ -26,21 +27,28 @@
 		queries = queries[1].split('&');		
 		document.getElementById('groupNameHere').innerHTML = queries[0];
 	}
-	
-	//this will get the list of groups the user is subscribed to, and be a list of followable links.
-	function showMyTeam(anArray){
-		var myArray = anArray;
-
-		var myTable= "<table class='tablePrint' id='currentGroup'>";
-		for(var a=0; a<myArray.length; a++){
-			myTable+="<tr class='collapsedRow'>";
-			for(var b=0; b<myArray[a].length; b++){
-				myTable+="<td class='searchReturn'>"+myArray[a][b]+"</td>";
+	function displayT(){
+		if(http.readyState==4){
+			console.log(http);
+			var myArray = JSON.parse(http.responseText);
+			var myTable= "<table class='tablePrint' id='currentGroup'>";
+			for(var a=0; a<myArray.length; a++){
+				myTable+="<tr class='collapsedRow'>";
+				for(var b in myArray[a]){
+					myTable+="<td class='searchReturn'>"+myArray[a][b]+"</td>";
+				}
+				myTable+="</tr>";
 			}
-			myTable+="</tr>";
+			myTable+='</table>';
+			document.getElementById('MMsearch').innerHTML = myTable;
 		}
-		myTable+='</table><form id="joingroup"><input id="actbutton" class="submit" type="submit" value="Join Team"></form>';
-		document.getElementById('MMsearch').innerHTML = myTable;
+	}
+	//this will get the list of groups the user is subscribed to, and be a list of followable links.
+	function showMyTeam(){
+		http  = new XMLHttpRequest();
+		http.onreadystatechange = displayT;
+		http.open("POST", window.location.search, true);
+		http.send();
 	}
 	function fetchMyTeams(){
 		http = new XMLHttpRequest();
@@ -74,11 +82,10 @@
 	function windowLoad(){
 		var time = new Date();
 		document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "    Last updated on: 10/4/17" ;
-		
-			document.getElementById('logoutLink').innerHTML = 'Logout';
-			sayMyGroupName();
-			fetchMyTeams();
-			showMyTeam([["Player1 Fitzusername", "ADC", "ExampleEmail@fakesite.com"],["player2 mcSurname", "Mid", "nota@realemail.com"],["player3 vonItzaNeihm", "Jungler", "Itza@dummyemail.com"]]);
+		document.getElementById('logoutLink').innerHTML = 'Logout';
+		sayMyGroupName();
+		fetchMyTeams();
+		showMyTeam();
 		
 	}
 	-->
@@ -90,13 +97,13 @@
 	<div id="menu">
 		<table id="quickLinks">
 			<tr>
-				<td><a class='header' href="Home.html">Home</a>  </td>
-				<td><a class='header' href="groupSearch.html">MatchMaker</a>  </td>
-				<td><a class='header' href="about.html">About us</a>	</td>	
+				<td><a class='header' href="Home">Home</a>  </td>
+				<td><a class='header' href="groupSearch.">MatchMaker</a>  </td>
+				<td><a class='header' href="about">About us</a>	</td>	
 				<td id="login">
 					<table id="subtable">
-						<tr> <td><a class="sign" href="login.html">login</a></td></tr>
-						<tr> <td> <a class="sign" href="newUser.html" >sign up</a></td></tr> 
+						<tr> <td><a class="sign" href="login">login</a></td></tr>
+						<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr> 
 					</table>
 				</td>
 			</tr>
@@ -113,7 +120,7 @@
 	</div>
 	<footer>
 		<div>
-			<a href='Logout.html' id='logoutLink'></a>
+			<a href='Logout' id='logoutLink'></a>
 			Written by <a href='mailto:mfitzay@gmail.com'> Matthew Fitzpatrick</a>.<br>
 			Student number/Email: <a href='mailto:21297239@student.uwa.edu.au'>21297239</a>
 			<p id='footTime'></p>
