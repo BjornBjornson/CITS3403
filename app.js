@@ -30,7 +30,7 @@ passport.use('login', new LocalStrategy({ //how to handle login routines
   }, 
   function(req, email, password, done) { //remember to encrypt the password at some point
     User.findOne({'email': email},function(err, user) {
-		if (err) { throw(err); }
+		if (err) { return done(err); }
 		if (!user) { //add in some sort of hashing function here.
 			return done(null, false);
 		}
@@ -70,7 +70,7 @@ passport.use('newUser', new LocalStrategy({ //how to handle login routines
 		user.active = req.body.active;
 		user.save(function(err){
 			if(err){
-				throw(err);
+				return done(err);
 			}
 			return done(null, user);
 		});
@@ -161,8 +161,20 @@ app.post('/myGroupSearch',
 });
 
 app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will service interactions with specific groups.
-	res.render("groupPage");
-	console.log("GrouPage There");
+	console.log(req.query.groupName);
+	Group.findOne({'name': req.query.groupName, 'players': req.user.id}).exec(function(err, doc){
+		if(err){
+			console.log(err);
+			res.redirect("Home");
+		}
+		if(!doc){
+			res.redirect('groupCreate');
+		}
+		else{
+			res.render("groupPage");
+			console.log("GrouPage There");
+		}
+	});
 });
 
 app.get('/about', (req, res)=>{  //landing home page
@@ -184,9 +196,27 @@ app.get('/groupCreate', function(req, res){
 	}
 });
 app.post('/groupCreate', function(req, res){
-	if(req.isAuthenticate){
-		//if(Group.findOne(req.query)
-			res.redirect('Home'); // this is just a stand in for now. I need to get the group-page up before this can really work.
+	if(req.isAuthenticated){
+		if(Group.findOne({'name': req.body.name}).doc){
+			res.redirect('groupCreate?name=alreadyexists');
+		}
+		else{
+			console.log(req.body);
+			var group = new Group();
+			group.name= req.body.name;
+			group.game = req.body.game;
+			group.mode = req.body.mode;
+			group.region = req.body.region;
+			group.players = [req.user.id];
+			group.save(function(err){
+				if(err){
+					res.redirect('groupCreate?Error:'+err);
+				}
+				else{
+					res.redirect('groupPage?groupName='+req.body.name);
+				}
+			})
+		}
 	}
 });
 app.get('/mygroups', SSOcheck, function(req, res){  //landing home page

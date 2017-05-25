@@ -61,7 +61,7 @@ var http = null;
 	}
 	
 	function toGroupPage(group){ //navigates to the a group's page on request.
-		var whereTo ="groupPage/"+group;
+		var whereTo ="groupPage?"+group;
 		alert(whereTo);
 		window.location = whereTo;
 	}

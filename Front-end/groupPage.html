@@ -28,16 +28,6 @@
 	}
 	
 	//this will get the list of groups the user is subscribed to, and be a list of followable links.
-	function fetchMyTeams(){
-		var myArray = ["this is a team", "this is a different team", "third team here", "the womble's official Auz Team", "genereal purpose team stand-in", "the WHO", "the WHAT", "the WHERE"	];
-		var myTable = "<table class='tablePrint' id='groupList'>";
-		for(var a=0; a<myArray.length;a++){
-			myTable +="<tr class='collapsedRow'><td class='searchReturn'><a class='buttonInterior' href='groupPage.html?groupName="+myArray[a]+"'>"+myArray[a]+"</a></td></tr>";
-		}
-		myTable+="</table>";
-		document.getElementById('myGroups').innerHTML = myTable;
-		
-	}
 	function showMyTeam(anArray){
 		var myArray = anArray;
 
@@ -51,21 +41,45 @@
 		}
 		myTable+='</table><form id="joingroup"><input id="actbutton" class="submit" type="submit" value="Join Team"></form>';
 		document.getElementById('MMsearch').innerHTML = myTable;
+	}
+	function fetchMyTeams(){
+		http = new XMLHttpRequest();
+		http.onreadystatechange = showTeams; //will need to debug before posting.
+		http.open("GET", "http://localhost:3000/mygroups", true); //currently a-synchronous iirc, also limited to self hosted servers.
+		http.send();
+		//document.getElementById('myGroups').innerHTML = "<table><tr><td>'This could take a moment, please wait'</td></tr></table>"; // optional loading text.
+	}
+	function showTeams(){ // if the user is logged in, this will show their groups.
+		if (http.readyState==4) {
+			if(http.responseText=="You're not logged in"){
+				document.getElementById('myGroups').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>";
+			}
+			else{
+				document.getElementById('logoutLink').innerHTML = 'Logout'; //it also triggers the display of the logout link.
+				var myArray = JSON.parse(http.responseText);
+				console.log(myArray);
+				var myTable = "<table class='tablePrint' id='groupList'>";
+				for(var a=0; a<myArray.length;a++){
+					console.log(myArray[a]);
+					for(var key in myArray[a]){
+						console.log(myArray[a][key]);
+						myTable +="<tr class='collapsedRow'><td class='searchReturn'><a class='buttonInterior' href='groupPage?groupName="+myArray[a][key]+"'>"+myArray[a][key]+"</a></td></tr>";
+					}
+				}
+				myTable+="<tr class='collapsedRow'><td class='searchReturn'><a class='buttonInterior' href='groupCreate'>Start a new group</a></td></tr></table>";
+				document.getElementById('myGroups').innerHTML = myTable;
+			}
 		}
+	}
 	function windowLoad(){
 		var time = new Date();
 		document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "    Last updated on: 10/4/17" ;
-		if (sessionStorage.getItem('longString') == null){
-			document.getElementById('groupNameHere').innerHTML = "Go and Log In";
-			document.getElementById('myGroups').innerHTML = 'Login to see more!';
-			document.getElementById('MMsearch').innerHTML = 'Login to see more!';
-		}
-		else{
+		
 			document.getElementById('logoutLink').innerHTML = 'Logout';
 			sayMyGroupName();
 			fetchMyTeams();
 			showMyTeam([["Player1 Fitzusername", "ADC", "ExampleEmail@fakesite.com"],["player2 mcSurname", "Mid", "nota@realemail.com"],["player3 vonItzaNeihm", "Jungler", "Itza@dummyemail.com"]]);
-		}	
+		
 	}
 	-->
 	</script>
