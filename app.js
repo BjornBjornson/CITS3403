@@ -32,7 +32,7 @@ passport.use('login', new LocalStrategy({ //how to handle login routines
     User.findOne({'email': email},function(err, user) {
 		if (err) { throw(err); }
 		if (!user) { //add in some sort of hashing function here.
-			throw(err);
+			return done(null, false);
 		}
 		if (user.password != password) { //add in some sort of hashing function here.
 			return done(null, false);
