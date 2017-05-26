@@ -32,12 +32,15 @@
 			console.log(http);
 			var myArray = JSON.parse(http.responseText);
 			var myTable= "<table class='tablePrint' id='currentGroup'>";
-			for(var a=0; a<myArray.length; a++){
+			for(var a=1; a<myArray.length; a++){
 				myTable+="<tr class='collapsedRow'>";
 				for(var b in myArray[a]){
 					myTable+="<td class='searchReturn'>"+myArray[a][b]+"</td>";
 				}
 				myTable+="</tr>";
+			}
+			if(myArray[0][user] && myArray.length<6){
+				myTable+="<tr><form method='PUT' onsubmit='"+window.location.search+"'><input type='submit' class='submit' value='Join Group'></form></tr>
 			}
 			myTable+='</table>';
 			document.getElementById('MMsearch').innerHTML = myTable;

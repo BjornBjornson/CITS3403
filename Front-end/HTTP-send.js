@@ -82,6 +82,8 @@ var http = null;
 			}
 			else{
 				document.getElementById('logoutLink').innerHTML = 'Logout'; //it also triggers the display of the logout link.
+				console.log(http.responseText);
+				console.log("here sir");
 				var myArray = JSON.parse(http.responseText);
 				console.log(myArray);
 				var myTable = "<table class='tablePrint' id='groupList'>";
