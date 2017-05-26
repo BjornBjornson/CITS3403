@@ -140,6 +140,7 @@ input.submit, #generalButton{
 }
 
 #reply {
+	overflow-y: hidden;
 	height: 20%;
 }
 
