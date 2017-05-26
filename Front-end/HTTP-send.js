@@ -145,30 +145,29 @@ var http = null;
 	/*-----------------------------------------------------------------------------------------------
 							messaging stuff
 	----------------------------------------------------------------------------------------------*/
+//will need this later
 var globalConvId = ''
 
+//
 function toLoadMail() {
 	findChats()
 	var time = new Date()
 	document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "     Last updated on: 10/4/17" 
 }
 
+//find all conversations the logged in user is participating in
 function findChats() {
-	console.log('check1')
     var xhttp = new XMLHttpRequest()
     xhttp.onreadystatechange = function () {
-		console.log('check2')
         if(xhttp.readyState == 4) {
-			console.log('check3')
             if(xhttp.responseText=="You're not logged in") {
 				document.getElementById('mailbox').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>"
 
 			} else if( xhttp.responseText == "No conversations") {	
-				console.log('nochat')
-            		document.getElementById('inbox').innerHTML = 'No chats to display'
+          		document.getElementById('inbox').innerHTML = 'No chats to display'
 
         	} else {
-				console.log('check4')
+				//create a table of buttons, one for each conversation
                 document.getElementById('logoutLink').innerHTML = 'Logout'
 				var chatArray = JSON.parse(xhttp.responseText)
                 var chatTable = document.createElement('TABLE')
@@ -184,6 +183,7 @@ function findChats() {
 					btn.style.padding = '10px'
 					btn.style.borderStyle = 'solid'
 					console.log(btn.id)
+					//when you press a conversation button, the chat history shows up in the div next door
                     btn.addEventListener("click", function () {
 						findHistory(btn.id)
 					})
@@ -204,9 +204,10 @@ function findChats() {
     xhttp.send()
 }
 
+//hit up the server and get the chat history from the db
 function findHistory( convId ) {
+	//probably not best to do but easy way to pass this to next func
 	globalConvId = convId
-	console.log('check5')
     var xhttp = new XMLHttpRequest()
     xhttp.onreadystatechange = function () {
         if(xhttp.readyState == 4) {
@@ -215,6 +216,7 @@ function findHistory( convId ) {
 			} else if( xhttp.responseText == "No messages" ) {
 				document.getElementById('conversation').innerHTML = 'You have no messages'
 			} else {
+				//make a basic table to emulate a chat window, populate it with previous messages
 				var msgArray = JSON.parse(xhttp.responseText)
 				var msgTable = document.createElement('TABLE')
 				msgTable.id = 'history'
@@ -230,6 +232,7 @@ function findHistory( convId ) {
 				}
 				document.getElementById('conversation').innerHTML = ''
 				document.getElementById('conversation').appendChild(msgTable)
+				//cant refresh automatically when another user sends a message, so give em a button to hit every few seconds
 				document.getElementById('refresh').addEventListener('click', function () {
 					findHistory(convId)
 				})
@@ -241,6 +244,7 @@ function findHistory( convId ) {
     xhttp.send(params)
 }
 
+//send a message to be stored
 function sendReply() {
 	console.log('check6')
 	var xhttp = new XMLHttpRequest()
@@ -249,6 +253,7 @@ function sendReply() {
 			if(xhttp.responseText=="You're not logged in") {
 				document.getElementById('mailbox').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>"
 			} else {
+				//when message is sent, refresh chat window
 				findHistory(globalConvId)
 			}
 		}

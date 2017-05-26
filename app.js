@@ -502,6 +502,7 @@ app.post('/mail/conversation', SSOcheck, (req, res) => {
 	})
 })
 
+//add a new conversation
 app.post('/mail/chats', SSOcheck, (req, res) => {
 	var conv = new Conversation()
 	var users = req.body.newChat
@@ -509,6 +510,7 @@ app.post('/mail/chats', SSOcheck, (req, res) => {
 		return item.trim()
 	})
 	userArray.push(req.user.username)
+	//find all users this user wants to talk to
 	User.find({ username: { $in: userArray } }, '_id').lean().exec(function (err, uIdArray) {
 		conv.participants = uIdArray
 		conv.save(function (err) {
