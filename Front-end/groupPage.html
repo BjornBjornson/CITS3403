@@ -27,6 +27,24 @@
 		queries = queries[1].split('&');		
 		document.getElementById('groupNameHere').innerHTML = queries[0];
 	}
+	function joinGroup(){
+		http= new XMLHttpRequest();
+		http.onreadystatechange = followredirect;
+		http.open('PUT', window.location.search, true);
+		http.send('"hello":"world"');
+	}
+	function leaveGroup(){
+		http=new XMLHttpRequest();
+		http.onreadystatechange = followredirect;
+		http.open('DELETE', window.location.search, true);
+		http.send('"hello":"world"');
+	}
+	function followredirect(){
+		if(http.readyState==4){
+			console.log(http);
+		}
+	}
+			
 	function displayT(){
 		if(http.readyState==4){
 			console.log(http);
@@ -44,10 +62,10 @@
 				console.log(c);
 				console.log(myArray[0][c]);
 				if((myArray[0][c]== 'false') && myArray.length<6){
-					myTable+="<tr><td><form method='PUT' onsubmit='"+window.location.search+"'><input type='submit' class='submit' value='Join Group'></form></td></tr>";
+					myTable+="<tr><td><button class='submit' onclick='joinGroup();'>Join Group</button></td></tr>";
 				}
 				if(myArray[0][c] == 'true'){
-					myTable+="<tr><td><form method='DELETE' onsubmit='"+window.location.search+"'><input type='submit' class='submit' value='Leave Group'></form></td></tr>";
+					myTable+="<tr><td><button class='submit' onclick='leaveGroup();'>Leave Group</button></td></tr>";
 				}
 			}
 			

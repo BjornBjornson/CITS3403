@@ -203,7 +203,7 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 		console.log("ELSE");
 		User.find({_id: {$in: doc['players']}}, 'username -_id', function(err, names){
 			console.log(doc['players']);
-			var userThere= [];
+			var userThere= [{'user': 'false'},{'NOTE':'There are no players here'}];
 			if(err){
 				res.send(err);
 				console.log(err);
@@ -224,23 +224,23 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 		});
 	});
 });
-app.put('/groupPage', SSOcheck, (res, req)=>{
+app.put('/groupPage', SSOcheck, (req, res)=>{
 	Group.findOneAndUpdate({
 		'name': req.query.groupName, 
-		$where: "this.players.length < 5",
 		'players': {$ne: req.user.id}
 	}, 
 	{$push: {'players': req.user.id}},
-	{returnNewDocument: true},
 	(err, group)=>{
+		console.log(req.query.groupName);
 		if(err){
 			console.log(err);
 			res.redirect('groupPage?Error='+err);
 			return false;
 		}
 		if(!group){
-			console.log("double-join attempt");
-			res.redirect('groupPage?Error=already_a_member');
+			console.log("Success?");
+			//res.redirect('groupPage?'+req.query.groupName);
+			//return true;
 		}
 		console.log(group);
 		User.findByIdAndUpdate(req.user.id, {$push: {grouplist: group._id}},
@@ -248,36 +248,45 @@ app.put('/groupPage', SSOcheck, (res, req)=>{
 			if(err){
 				res.redirect('groupPage?Error='+err);
 			}
-			res.redirect('groupPage?groupName='+req.query.groupName);
+			res.status = 301;
+			res.redirect('home');
 		});
 	});
 });
-app.delete('/groupPage', SSOcheck, (res, req)=>{
-	User.findByIdAndUpdate(req.user.id,
-		{$pull: {grouplist: group.id}},
-		(err, user)=>{
-			if(err){
-				res.redirect('groupPage?Error='+err);
-			}
-			Group.findOneAndUpdate({
-				'name': req.query.groupName, 
-				'players':  user.id
-				},
-				{$pull:{ players: req.user.id}},
-				{returnNewDocument: true},
-				(err, group)=>{
-					if(err){
-						res.redirect('groupPage?Error='+err);
-					}
-					if(group.players.length==0){
-						Group.removeById(group.id, (err, group)=>{
+//app.delete('/', (req,res)=>{console.log('byebye');});
+app.delete('/groupPage', SSOcheck, (req, res)=>{
+	console.log('delete');
+	var checker = null;
+	Group.findOneAndUpdate({
+		'name': req.query.groupName,
+		'players': req.user._id
+		},
+		{$pull:{ 'players': req.user._id}},
+		{returnNewDocument: false},
+			(err, group)=>{
+				console.log(req.user)
+				if(err){
+					res.redirect('groupPage?Error='+err);
+				}
+				console.log(group);
+				checker=group;
+				User.findByIdAndUpdate(req.user.id,
+					{$pull: {'grouplist': group._id}},
+					(err, user)=>{
+						console.log(user);
+						if(err){
+							res.redirect('groupPage?Error='+err);
+						}
+						if(group.players.length==1){
+							Group.findByIdAndRemove(group._id, (err, group)=>{
 							if(err){
 								console.log(err);
 							}
+							console.log('end delete');
+							res.status = 304;
 							res.redirect('Home');
 						});
 					}
-		
 				}
 			);
 		}
@@ -286,6 +295,7 @@ app.delete('/groupPage', SSOcheck, (res, req)=>{
 
 
 app.get('/about', (req, res)=>{  //landing home page
+	console.log(req.user);
 	res.render("about");
 	console.log("aboutpage There");
 });
