@@ -25,12 +25,15 @@ app.set('views', path.join(__dirname,'Front-end')); //telling it where to find t
 app.set('view engine', 'html'); //telling it to use the tool I defined two lines above
 
 //Passport
-passport.use('login', new LocalStrategy({ //how to handle login routines
+passport.use('login', new LocalStrategy({
+	//how to handle login routines
 	usernameField : 'email',
     passwordField : 'password',
-	passReqToCallback : true //To pass the request to this function
+	passReqToCallback : true 
+	//To pass the request to this function
   },
-  function(req, email, password, done) { //remember to encrypt the password at some point
+  function(req, email, password, done) { 
+  //remember to encrypt the password at some point
     User.findOne({'email': email},function(err, user) {
 		if (err) { return done(err); }
 		if (!user) { //add in some sort of hashing function here.
@@ -45,16 +48,18 @@ passport.use('login', new LocalStrategy({ //how to handle login routines
 }));
 
 
-passport.use('newUser', new LocalStrategy({ //how to handle login routines
-    passReqToCallback : true, //To pass the request to this function
+passport.use('newUser', new LocalStrategy({ 
+//how to handle login routines
+    passReqToCallback : true,
+	//To pass the request to this function
 	usernameField : 'email',
   },
   function(req, email, password, done){ //
-		//return false;
-		User.findOne({'email': email},function(err, user) {
+		User.findOne({'email': email},function(err, user) { 
+		//finds a user by their email address, original intent was to allow for changing one, or both of the email address or username.
 			if (err) { return done(err); }
-			if (user) { //add in some sort of hashing function here.
-			return done(null, false);
+			if (user) { 
+			return done(null, false); 
 			}
 		});
 		/*User.findOne({'username':	username},function(err, user) {
@@ -63,10 +68,11 @@ passport.use('newUser', new LocalStrategy({ //how to handle login routines
 			return done(null, false, { message: 'Username already exists' });
 			}
 		});*/
-		var user = new User();
+		var user = new User(); //defining a new user object.
 		user.username= req.body.username;
 		user.email = email;
 		user.password = user.generateHash(password);
+		//passes to hashing function in schemas.js
 		/*user.generateHash(password, (err, hash)=>{
 			if(err){
 				return done(err);
@@ -75,7 +81,8 @@ passport.use('newUser', new LocalStrategy({ //how to handle login routines
 		});*/
 		user.region = req.body.country;
 		user.active = req.body.active;
-		user.save(function(err){
+		user.save(function(err){ 
+		//attempts to save said user to the database
 			if(err){
 				return done(err);
 			}
@@ -85,7 +92,7 @@ passport.use('newUser', new LocalStrategy({ //how to handle login routines
 	}
 ));
 
-
+//these next two are used by passport to track users through cookies.
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -96,57 +103,73 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
+//this checks if passport knows the cookie they hold, then sends a generalised failure message. 
+//Said message is interpreted by the client-side JS to fulfil a variety of functions, but since it is a blank (and final) return,
+//it doesn't present a serious security issue.
 var SSOcheck = function(req, res, next){
 	console.log(req.body);
 	if (req.isAuthenticated()){
 		return next();
 	}
-	res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
+	res.header("Access-Control-Allow-Origin", "*"); 
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	res.ContentType=('text/plain');
 	res.send("You're not logged in");
 }
-app.post('/logout', SSOcheck, function(req, res){
+app.post('/logout', SSOcheck, function(req, res){ 
+//removes Express' memory of the cookie. making it invalid.
 	req.session.destroy(function(err){
 		res.redirect("/Home");
 	});
 });
 app.get('/logout', function(req, res){
+	//displays the logout page.
 	res.render("logout");
 });
-app.get('/login', (req, res)=>{ //when a request for the login page is heard:
-	res.render("login"); //show them the login page
-	console.log("Login There"); //tell serveradmin about it.
+app.get('/login', (req, res)=>{ 
+//when a request for the login page is heard:
+	res.render("login"); 
+	//show them the login page
+	console.log("Login There"); 
+	//tell serveradmin about it.
 });
 
-app.post('/login', passport.authenticate('login', { //login attempt here
+app.post('/login', passport.authenticate('login', {
+	//login attempt, passport uses the 'login' strategy defined at the top to try check their credentials
 	successRedirect: '/Home',
-	failureRedirect: '/login'
+	failureRedirect: '/login' 
+	//bounces their request on failure.
 }));
 
-app.get('/newUser', (req, res)=>{ // Usercreate page. Holds the forms
+app.get('/newUser', (req, res)=>{ 
+// Usercreate page. Holds the forms, displays the page.
 	res.render("newUser");
 	console.log("NewUser There");
 });
 
 app.post('/newUser',
-	passport.authenticate('newUser', { // endpoint for making a new user
+	passport.authenticate('newUser', { 
+	// endpoint for making a new user, uses 'newUser' strategy.
 		successRedirect: '/Home',
-		failureRedirect: '/newUser'
+		failureRedirect: '/newUser' 
+		//bounces if there's an issue.
 	}));
 
-app.get('/groupSearch', (req, res)=>{ // for searching for groups
+app.get('/groupSearch', (req, res)=>{
+	// for searching for groups
 	res.render("groupSearch");
 	console.log("GroupSearch There");
 });
 
 
-app.post('/myGroupSearch',
+app.post('/myGroupSearch', 
 	SSOcheck,
-	function(req, res){ // for searching for groups
+	function(req, res){ 
+	// for searching for groups using form data
 	console.log("Searching for group");
 	console.log(req.body);
 	Group.find({
+		//finding a group that matches the desired specifications.
 		'game': req.body.game,
 		'region': req.user.region,
 		'players': {$ne: req.user.id},
@@ -155,9 +178,11 @@ app.post('/myGroupSearch',
 	},'name -_id', function(err, doc){
 		console.log(doc);
 		res.ContentType =('application/json');
+		// seting a header.
 		if(err){
 			console.log(err);
-			res.send([{"message": "Sorry, something went wrong. Please try again."}]);
+			res.send([{"message": "Sorry, something went wrong. Please try again."}]); 
+			//error message
 		}
 		if(doc.length==0){
 			res.send([{"message": "No results found"}]);
@@ -169,7 +194,9 @@ app.post('/myGroupSearch',
 
 app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will service interactions with specific groups.
 	console.log(req.query.groupName);
-	Group.findOne({'name': req.query.groupName}).exec(function(err, doc){
+	Group.findOne({'name': req.query.groupName}).exec(function(err, doc){ 
+	//searching for group defined in query string. 
+	//Not a huge security problem, so leaving it url should be fine. also allows for easier dynamic page construction.
 		if(err){
 			console.log(err);
 			res.redirect("Home");
@@ -185,9 +212,10 @@ app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will servi
 });
 //note: using a chain of asynchronous calls, but the success variable happens at the bottom of the chain,
 //so it only gets called at the end.
-app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will service interactions with specific groups.
+app.post('/groupPage', SSOcheck, (req, res)=>{ 
+// group Page template, will service interactions with specific groups.
 	console.log(req.url);
-	Group.findOne({'name': req.query.groupName}, 'players -_id', function(err, doc){
+	Group.findOne({'name': req.query.groupName}, 'players -_id', function(err, doc){ //getting a list of player's ID's
 		console.log(doc);
 		console.log('this group');
 		if(err){
@@ -195,21 +223,25 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 			return false;
 		}
 		if(!doc){
-			console.log("NO GROUP");
+			console.log("NO GROUP"); 
+			//if the group doesn't exist, helpfully sends them to a page where they can create one.
 			res.render('groupCreate');
 			return false;
 		}
 		console.log("ELSE");
-		User.find({'_id': {$in: doc['players']}}, 'username -_id', function(err, names){
+		User.find({'_id': {$in: doc['players']}}, 'username -_id', function(err, names){ 
+		//gets corresponding names for the IDs
 			console.log(doc['players']);
 			console.log(names);
-			var userThere= [{'user': 'false'},{'NOTE':'There are no players here'}];
+			var userThere= [{'user': 'false'},{'NOTE':'There are no players here'}]; 
+			//in case it's empty. shouldn't happen, but in case it somehow happens.
+			//shouldn't happen, because leaving a group triggers a delete event if there are no users remaining in it.
 			if(err){
 				res.send(err);
 				console.log(err);
 			}
 			for(var a in names){
-				if(names[a].username.localeCompare(req.user.username)!=0){
+				if(names[a].username.localeCompare(req.user.username)!=0){ 	
 					userThere= [{'user': 'false'}];
 				}
 				else{
