@@ -4,8 +4,12 @@
    Home.html
 
    Copyright 2017 Bjorn <Bjorn@BERTHA>
-   something like: Pass me the group number, and I'll pass you the details.
-   usernameAPI:password (hash64) and boom. we're laughing. and/or ssl on, send user&pass, then return some value or another to maintain login status.
+   
+   This one page hasn't been migrated to the JS file due to time constraints.
+   Motto motto *motto* gomenasorry.
+   
+   XML httpRequest has this foible of not redirecting.
+   had to institute followredirect in order to handle that problem.
 -->
 
 <head>
@@ -39,7 +43,7 @@
 		http.open('DELETE', window.location.search, true);
 		http.send('"hello":"world"');
 	}
-	function followredirect(){
+	function followredirect(){ 
 		if(http.readyState==4){
 			console.log(http);
 			window.open(http.responseText);

@@ -77,18 +77,14 @@ var http = null;
 	
 	function showTeams(){ // if the user is logged in, this will show their groups.
 		if (http.readyState==4) {
-			if(http.responseText=="You're not logged in"){
+			if(http.responseText=="You're not logged in"){ //general no-session response.
 				document.getElementById('myGroups').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>";
 			}
 			else{
 				document.getElementById('logoutLink').innerHTML = 'Logout'; //it also triggers the display of the logout link.
-				console.log(http.responseText);
-				console.log("here sir");
 				var myArray = JSON.parse(http.responseText);
-				console.log(myArray);
 				var myTable = "<table class='tablePrint' id='groupList'>";
 				for(var a=0; a<myArray.length;a++){
-					console.log(myArray[a]);
 					for(var key in myArray[a]){
 						console.log(myArray[a][key]);
 						myTable +="<tr class='collapsedRow'><td class='searchReturn'><a class='buttonInterior' href='groupPage?groupName="+myArray[a][key]+"'>"+myArray[a][key]+"</a></td></tr>";
