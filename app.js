@@ -205,17 +205,16 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 				res.send(err);
 				console.log(err);
 			}
-			else{
-				console.log(names);
-				var userThere = []
-				if(names.indexOf(req.user.username) == -1){
-				userThere += "{user: false}";
-				}
-				else{
-					userThere += "{user: true}"
-				}
-				res.send(userThere.concat(names));
+			
+			if(names[a].username == req.user.username){
+				userThere.push( "{'user': 'false'}");
 			}
+			else{
+				userThere.push("{'user': 'true'}");
+			}
+			console.log(userThere);
+			res.send(userThere.concat(names));
+			
 		});
 	});
 });
