@@ -197,12 +197,13 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 		}
 		if(!doc){
 			console.log("NO GROUP");
-			res.redirect('groupCreate');
+			res.render('groupCreate');
 			return false;
 		}
 		console.log("ELSE");
-		User.find({_id: {$in: doc['players']}}, 'username -_id', function(err, names){
+		User.find({'_id': {$in: doc['players']}}, 'username -_id', function(err, names){
 			console.log(doc['players']);
+			console.log(names);
 			var userThere= [{'user': 'false'},{'NOTE':'There are no players here'}];
 			if(err){
 				res.send(err);
@@ -214,6 +215,8 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 				}
 				else{
 					userThere=[{'user': 'true'}];
+					console.log("HELLO WORLD");
+					console.log(userThere.concat(names));
 					res.send(userThere.concat(names));
 					return true;
 				}
@@ -225,11 +228,11 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 	});
 });
 app.put('/groupPage', SSOcheck, (req, res)=>{
+	
 	Group.findOneAndUpdate({
-		'name': req.query.groupName, 
-		'players': {$ne: req.user.id}
+		'name': req.query.groupName
 	}, 
-	{$push: {'players': req.user.id}},
+	{$addToSet: {'players': req.user.id}},
 	(err, group)=>{
 		console.log(req.query.groupName);
 		if(err){
@@ -243,33 +246,35 @@ app.put('/groupPage', SSOcheck, (req, res)=>{
 			//return true;
 		}
 		console.log(group);
-		User.findByIdAndUpdate(req.user.id, {$push: {grouplist: group._id}},
+		User.findByIdAndUpdate(req.user.id, {$addToSet: {grouplist: group._id}},
 		(err, user)=>{
 			if(err){
 				res.redirect('groupPage?Error='+err);
 			}
 			
-			res.render('home');
+			res.send('Home');
 		});
 	});
 });
 //app.delete('/', (req,res)=>{console.log('byebye');});
 app.delete('/groupPage', SSOcheck, (req, res)=>{
 	console.log('delete');
-	var checker = null;
+	Group.findOne({'name': req.query.groupName}, (err, groupd)=>{
+		if(err){res.send('Home'); return false;}
+		if(!groupd){ res.send('Home'); return false;}
+	});
 	Group.findOneAndUpdate({
 		'name': req.query.groupName,
-		'players': req.user._id
 		},
 		{$pull:{ 'players': req.user._id}},
 		{returnNewDocument: false},
 			(err, group)=>{
+				console.log(group);
 				console.log(req.user)
 				if(err){
 					res.redirect('groupPage?Error='+err);
 				}
 				console.log(group);
-				checker=group;
 				User.findByIdAndUpdate(req.user.id,
 					{$pull: {'grouplist': group._id}},
 					(err, user)=>{
@@ -283,8 +288,7 @@ app.delete('/groupPage', SSOcheck, (req, res)=>{
 								console.log(err);
 							}
 							console.log('end delete');
-							res.status = 304;
-							res.redirect('Home');
+							res.send('Home');
 						});
 					}
 				}

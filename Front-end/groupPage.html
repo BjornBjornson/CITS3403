@@ -42,6 +42,7 @@
 	function followredirect(){
 		if(http.readyState==4){
 			console.log(http);
+			window.open(http.responseText);
 		}
 	}
 			
