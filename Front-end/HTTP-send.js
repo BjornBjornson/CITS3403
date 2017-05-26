@@ -143,11 +143,18 @@ var http = null;
 	/*-----------------------------------------------------------------------------------------------
 							messaging stuff
 	----------------------------------------------------------------------------------------------*/
-	
+
+function toLoadMail() {
+	findChats()
+	var time = new Date()
+	document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "     Last updated on: 10/4/17" 
+}
+
 function findChats() {
+	console.log('check')
     var xhttp = new XMLHttpRequest()
     xhttp.onreadystatechange = function () {
-        if(this.readyState == 4 && this.status == 200) {
+        if(xhttp.readyState == 4 && xhttp.response.status == 200) {
             if(xhttp.responseText=="You're not logged in") {
 				document.getElementById('mailbox').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>"
 			} else {
@@ -155,7 +162,7 @@ function findChats() {
 				var chatArray = JSON.parse(http.responseText)
                 var chatTable = document.createElement('TABLE')
                 chatTable.id = 'inboxList'
-                chatTable.class = 'mail'
+                chatTable.class = 'jsmail'
 				for(var i = 0 ; i < chatArray.length ; i++) {
 					console.log(chatArray[i]);
                     var tr = document.createElement('TR')
@@ -170,13 +177,10 @@ function findChats() {
                     tr.appendChild(td)
                     chatTable.appendChild(tr)
 				}
-				chatTable.innerHTML += "<tr><td>Start a new chat</td></tr>"
-                chatTable.innerHTML += "<tr><td><form id='newChatForm' action='http://localhost:3000/mail' method='POST'><input type='text' id='newChat' name='newChat' placeholder='Enter usernames'></input></td>"
-                chatTable.innerHTML += "<td><input type='submit' value='Submit'></input></form></td></tr>"
                 document.getElementById('inbox').innerHTML = ''
 				document.getElementById('inbox').appendChild(chatTable)
             }
-        } else if( this.status == 204) {
+        } else if( xhttp.response.status == 204) {
             document.getElementById('inbox').innerHTML = 'No chats to display'
         }
 
@@ -189,14 +193,14 @@ function findHistory( convId ) {
     document.getElementById('replyForm').action = 'http://localhost:3000/mail/:' + convId
     var xhttp = new XMLHttpRequest()
     xhttp.onreadystatechange = function () {
-        if(this.readyState == 4 && this.status == 200) {
+        if(xhttp.readyState == 4 && xhttp.response.status == 200) {
 			if(xhttp.responseText=="You're not logged in") {
 				document.getElementById('mailbox').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>"
 			} else {
 				var msgArray = JSON.parse(http.responseText)
 				var msgTable = document.createElement('TABLE')
 				msgTable.id = 'history'
-				msgTable.class = 'mail'
+				msgTable.class = 'jsmail'
 				for(var i = 0 ; i < msgArray.length ; i++) {
 							
 						console.log(msgArray[i])
@@ -210,7 +214,7 @@ function findHistory( convId ) {
 				document.getElementById('conversation').appendChild(msgTable)
 				document.getElementById('refresh').addEventListener('click', findHistory(convId))
 			}
-		} else if( this.status == 204 ) {
+		} else if( xhttp.response.status == 204 ) {
 			document.getElementById('conversation').innerHTML = 'You have no messages'
 		}
     }

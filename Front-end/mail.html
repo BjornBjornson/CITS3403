@@ -6,10 +6,10 @@
 	    <meta name="groupSearch" content="Information" />
 	    <link rel="stylesheet" href="Style1.css" />
     
-	    <script src="HTTP-messaging.js"></script>
+	    <script src="HTTP-send.js"></script>
     </head>
 
-    <body onload='toLoad();'>
+    <body onload='toLoadMail();'>
 	
 	    <div id="menu">
 	    	<table id="quickLinks">
@@ -43,8 +43,7 @@
                     Display conversation history
                 -->
             </div>
-            <button onclick='' value='Refresh' id='refresh'></button>
-
+            
             <div id="reply" class="mail">
                 <form method='POST' id='replyForm' action=''>
                     <input type='text' id='replyText' name='replyText'></input>
@@ -52,10 +51,15 @@
                 </form>
             </div>
 
-            <div id="send" class="mail">
-                <input class="mail" id="sendButton" type="Button" value="Send"></input>
+            <div id="newChat">
+                <h3>Start a New Chat</h3>
+                <form id='newChatForm' onsubmit='findChats()' action='http://localhost:3000/mail' method='POST'>
+                    <input type='text' id='newChatText' name='newChat' placeholder='Enter usernames'></input>
+                    <input id="sendButton" type="Submit" value="Add"></input>
+                </form>
             </div>
         </div>
+        <button onclick='' value="Refresh" id='refresh'>Refresh</button>
 
         <footer>
             <div>
@@ -67,7 +71,6 @@
     </body>
     <script type='text/javascript'>
         document.getElementById('mailbox').addEventListener('load', findChats())
-        document.getElementById('newChatForm').addEventListener('submit', findChats())
     </script>
 
 </html>
