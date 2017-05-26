@@ -74,7 +74,6 @@ passport.use('newUser', new LocalStrategy({ //how to handle login routines
 			user.password=hash;
 		});*/
 		user.region = req.body.country;
-		user.ageGroup='13-18';
 		user.active = req.body.active;
 		user.save(function(err){
 			if(err){
@@ -98,6 +97,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 var SSOcheck = function(req, res, next){
+	console.log(req.body);
 	if (req.isAuthenticated()){
 		return next();
 	}
@@ -145,17 +145,16 @@ app.post('/myGroupSearch',
 	SSOcheck,
 	function(req, res){ // for searching for groups
 	console.log("Searching for group");
+	console.log(req.body);
 	Group.find({
-		game: req.body.game,
-		region: req.user.region,
-		players: {$ne: req.user.id},
-		roles: {$ne: req.body.role},
-		mode: {$in: req.body.mode}
-	},'name').lean().exec(function(err, doc){
-		res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		'game': req.body.game,
+		'region': req.user.region,
+		'players': {$ne: req.user.id},
+		'roles': {$ne: req.body.role},
+		'mode':  req.body.mode
+	},'name -_id', function(err, doc){
+		console.log(doc);
 		res.ContentType =('application/json');
-		res.status = 200;
 		if(err){
 			console.log(err);
 			res.send([{"message": "Sorry, something went wrong. Please try again."}]);
@@ -419,7 +418,7 @@ app.get('/mail/list', SSOcheck, (req, res) => {
 			res.send([{ 'message': 'Sorry. Something went wrong' }])
 		} else if(doc.length == 0) {
 			res.status = 204
-			res.send("No conversations")
+			res.send([{ 'message': 'No conversations' }])
 		} else {
 			res.status = 200
 			res.send(doc)
@@ -430,6 +429,7 @@ app.get('/mail/list', SSOcheck, (req, res) => {
 //populate chat history
 app.get('/mail/:convId', SSOcheck, (req, res) => {
 	var convId = req.params.convId
+	console.log(theUser)
 	Message.find({ conversation: convId }, 'author message timestamp').lean().populate('author').exec(function (err, doc) {
 		res.header("Access-Control-Allow-Origin", "*")
 		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
@@ -440,7 +440,7 @@ app.get('/mail/:convId', SSOcheck, (req, res) => {
 			res.send([{ 'message': 'Sorry. Something went wrong' }])
 		} else if(doc.length == 0) {
 			res.status = 204
-			res.send('No messages')
+			res.send([{ 'message': 'No messages' }])
 		} else {
 			res.status = 200
 			res.send(doc)
@@ -472,7 +472,6 @@ app.post('/mail/:convId', SSOcheck, (req, res) => {
 	})
 })
 
-//start new conversation
 app.post('/mail', SSOcheck, (req, res) => {
 	var conv = new Conversation()
 	var users = req.body.newChat

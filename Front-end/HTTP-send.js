@@ -106,10 +106,12 @@ var http = null;
 		//Just a catch in case they've not logged in. Probably going to be replaced with serverside redirects using passport's session storage.
 		var bod = "game="+document.getElementById('Game').value+"&role="+document.getElementById('role').value+"&mode="+document.getElementById('mode').value;
 		http = new XMLHttpRequest();
+		
 		http.onreadystatechange = populateTable; 
 		http.open("POST", "http://localhost:3000/myGroupSearch", true); //currently a-synchronous iirc
+		http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		http.send(bod);
-		alert("sent");
+		alert(bod);
 		return false;
 	}
 	
