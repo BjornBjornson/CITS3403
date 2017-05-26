@@ -175,15 +175,22 @@ function findChats() {
                 chatTable.class = 'jsmail'
 				for(var i = 0 ; i < chatArray.length ; i++) {
 					console.log(chatArray[i]);
-                    var tr = document.createElement('TR')
+                    var tr = document.createElement('TR')	
                     var td = document.createElement('TD')
-                    td.innerHTML = ''
-                    td.id = toString(chatArray[i]._id)
-                    td.onclick = 'findHistory('+td.id+')'
-					for(var j = 0 ; j < chatArray[i].length ; j++){
-						console.log(chatArray[i][j])
-                        td.innerHTML += '- ' + chatArray[i][j].username
+					var btn = document.createElement('BUTTON')
+                    btn.innerHTML = ''
+                    btn.id = chatArray[i]._id.toString()
+					btn.style.padding = '10px'
+					btn.style.borderStyle = 'solid'
+					console.log(btn.id)
+                    btn.addEventListener("click", function () {
+						findHistory(btn.id)
+					})
+					for(var j = 0 ; j < chatArray[i].participants.length ; j++){
+						console.log(chatArray[i].participants[j])
+                        btn.innerHTML += '- ' + chatArray[i].participants[j].username + ' 	'
                     }
+					td.appendChild(btn)
                     tr.appendChild(td)
                     chatTable.appendChild(tr)
 				}
@@ -197,7 +204,8 @@ function findChats() {
 }
 
 function findHistory( convId ) {
-    document.getElementById('replyForm').action = 'http://localhost:3000/mail/:' + convId
+	console.log('check5')
+    document.getElementById('replyForm').action = 'http://localhost:3000/mail/conversation'
     var xhttp = new XMLHttpRequest()
     xhttp.onreadystatechange = function () {
         if(xhttp.readyState == 4 && xhttp.response.status == 200) {
@@ -225,9 +233,9 @@ function findHistory( convId ) {
 			}
 		}
     }
-
-    xhttp.open('GET', 'http://localhost:3000/mail/:'+convId)
-    xhttp.send()
+	var params = JSON.stringify({ convId: convId })
+    xhttp.open('GET', 'http://localhost:3000/mail/conversation')
+    xhttp.send(params)
 }
 
 
