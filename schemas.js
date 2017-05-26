@@ -33,22 +33,29 @@ var groupSchema = new Schema(
     }
 )
 
-var mailSchema = new Schema(
+var conversationSchema = new Schema(
     {
-        from: { type: Schema.ObjectId, ref: 'users' },
-        to: [{ type: Schema.ObjectId, ref: 'users' }], //Turning this into an array should allow for groupchat.
-        message: String,
-        timestamp: Date
+        participants: [( type: Schema.ObjectId, ref: 'users')]
+    }
+)
+var msgSchema = new Schema(
+    {
+        author: { type: Schema.ObjectId, ref: 'users' },
+        conversation: { type: Schema.ObjectId, ref: 'conversations' }, //Turning this into an array should allow for groupchat.
+        message: { type: String },
+        timestamp: { type: Date }
     }
 )
 
 mongoose.model('users', userSchema)
 mongoose.model('groups', groupSchema)
-mongoose.model('mails', mailSchema)
+mongoose.model('conversations', conversationSchema)
+mongoose.model('msgs', msgSchema)
 
 //exporting for testing purpose
 module.exports = {
   User : mongoose.model('users',userSchema),
   Group : mongoose.model('groups',groupSchema),
-  Mail : mongoose.model('mails',mailSchema)
+  Conversation : mongoose.model('conversations', conversationSchema),
+  Message : mongoose.model('msgs', msgSchema)
 }
