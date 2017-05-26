@@ -248,8 +248,8 @@ app.put('/groupPage', SSOcheck, (req, res)=>{
 			if(err){
 				res.redirect('groupPage?Error='+err);
 			}
-			res.status = 301;
-			res.redirect('home');
+			
+			res.render('home');
 		});
 	});
 });
