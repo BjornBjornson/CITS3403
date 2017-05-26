@@ -176,9 +176,21 @@ app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will servi
 		}
 	});
 });
+function returnDB(query){
+	var out = [];
+	query.exec(function(err, answers){
+		if(err){
+			console.log(err);
+			return(err);
+		}
+		out.push(answers);
+	});
+	return out;
+}
 app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will service interactions with specific groups.
 	console.log(req.url);
-	Group.findOne({'name': req.query.groupName, 'players': req.user.id}).lean().exec(function(err, doc){
+	var query = Group.findOne({'name': req.query.groupName, 'players': req.user.id});
+	var doc = returnDB(query);
 		console.log(doc);
 		console.log('this Thing');
 		if(err){
@@ -220,7 +232,7 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 			console.log("ASDFASDFASDF");
 			res.send(playerlist);
 		}
-	});
+
 });
 app.get('/about', (req, res)=>{  //landing home page
 	res.render("about");
@@ -260,7 +272,9 @@ app.post('/groupCreate', function(req, res){
 				else{
 					res.redirect('groupPage?groupName='+req.body.name);
 				}
-			})
+			});
+			var newlist = user.grouplist.push(group.id);
+			User.update({id: req.user.id}, {$set: {'grouplist': newlist}});
 		}
 	}
 });
@@ -274,10 +288,13 @@ app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 	if(theUser.grouplist.length==0){res.send([{'message': 'you have no groups'}]);}
 	else{
 		var groups =theUser.grouplist;
+		console.log("<Groups>")
+		console.log(groups);
+		console.log("</Groups>");
 		var sendlist = [];
 		for(var i=0; i<groups.length; i++){
 			var out = Group.findById(groups[i]);
-			sendlist.append(out.name);
+			sendlist.push(out.name);
 		}
 		res.send(sendlist);
 	}
