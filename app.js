@@ -292,7 +292,7 @@ app.put('/groupPage', SSOcheck, (req, res)=>{ //if a user wants to join the grou
 
 app.delete('/groupPage', SSOcheck, (req, res)=>{ // when a user wants to leave a group.
 	console.log('delete');
-	Group.findOne({'name': req.query.groupNamem, 'players': req.user.id}, (err, groupd)=>{ 
+	Group.findOne({'name': req.query.groupName}, (err, groupd)=>{ 
 	//checks to see if the group exists, redirects if they're playing silly buggers.
 		if(err){res.send('groupPage?Error='+err); return false;}
 		if(!groupd){ res.send('Home'); return false;}
@@ -323,8 +323,7 @@ app.delete('/groupPage', SSOcheck, (req, res)=>{ // when a user wants to leave a
 							if(err){
 								console.log(err);
 							}
-							console.log('end delete');
-							res.send('Home');
+							console.log('end delete'), res.send('Home');
 						});
 					}
 				}
@@ -332,8 +331,10 @@ app.delete('/groupPage', SSOcheck, (req, res)=>{ // when a user wants to leave a
 		}
 	);
 });
-
-
+app.delete('/Home', (req, res)=>{  //landing home page
+	res.render("Home");
+	console.log("Homepage There");
+});
 app.get('/about', (req, res)=>{  //landing home page
 	console.log(req.user);
 	res.render("about");
