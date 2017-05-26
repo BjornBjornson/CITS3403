@@ -176,11 +176,12 @@ app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will servi
 		}
 	});
 });
-function returnDB(query){
+function returnDB(query){ 
 	var out = [];
 	query.exec(function(err, answers){
 		if(err){
 			console.log(err);
+			console.log('hello');
 			return(err);
 		}
 		out.push(answers);
@@ -254,30 +255,38 @@ app.get('/groupCreate', function(req, res){
 });
 app.post('/groupCreate', function(req, res){
 	if(req.isAuthenticated){
-		if(Group.findOne({'name': req.body.name}).doc){
-			res.redirect('groupCreate?name=alreadyexists');
+		Group.findOne({'name': req.body.name}).exec(function(err, doc){
+			if(err){
+				res.redirect("groupCreate?error="+err);
+			}
+			if(doc){
+				res.redirect('groupCreate?name=alreadyexists');
+			}
+			
+			else{
+				console.log(req.body);
+				var group = new Group();
+				group.name= req.body.name;
+				group.game = req.body.game;
+				group.mode = req.body.mode;
+				group.region = req.body.region;
+				group.players = [req.user.id];
+				group.save(function(err){
+					if(err){
+						res.redirect('groupCreate?Error:'+err);
+					}
+					else{
+						res.redirect('groupPage?groupName='+req.body.name);
+					}
+				});
+			
+			console.log("updating user");
+			console.log(req.user.id);
+			var query = Group.findOne({'name': req.body.name}, 'name');
+			User.update({'_id': req.user._id}, {$push: {'grouplist': returnDB(query)}});
 		}
-		else{
-			console.log(req.body);
-			var group = new Group();
-			group.name= req.body.name;
-			group.game = req.body.game;
-			group.mode = req.body.mode;
-			group.region = req.body.region;
-			group.players = [req.user.id];
-			group.save(function(err){
-				if(err){
-					res.redirect('groupCreate?Error:'+err);
-				}
-				else{
-					res.redirect('groupPage?groupName='+req.body.name);
-				}
-			});
-			var newlist = user.grouplist.push(group.id);
-			User.update({id: req.user.id}, {$set: {'grouplist': newlist}});
-		}
-	}
-});
+	});
+}});
 app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 	var theUser = req.user;
 	console.log(theUser);
