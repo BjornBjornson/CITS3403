@@ -98,6 +98,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 var SSOcheck = function(req, res, next){
+	console.log(req.body);
 	if (req.isAuthenticated()){
 		return next();
 	}
@@ -145,17 +146,16 @@ app.post('/myGroupSearch',
 	SSOcheck,
 	function(req, res){ // for searching for groups
 	console.log("Searching for group");
+	console.log(req.body);
 	Group.find({
-		game: req.body.game,
-		region: req.user.region,
-		players: {$ne: req.user.id},
-		roles: {$ne: req.body.role},
-		mode: {$in: req.body.mode}
-	},'name').lean().exec(function(err, doc){
-		res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		'game': req.body.game,
+		'region': req.user.region,
+		'players': {$ne: req.user.id},
+		'roles': {$ne: req.body.role},
+		'mode':  req.body.mode
+	},'name -_id', function(err, doc){
+		console.log(doc);
 		res.ContentType =('application/json');
-		res.status = 200;
 		if(err){
 			console.log(err);
 			res.send([{"message": "Sorry, something went wrong. Please try again."}]);
