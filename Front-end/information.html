@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+   about.html
+
+   Copyright 2017 Bjorn <Bjorn@BERTHA>
+
+-->
+
+<head>
+	<meta charset="utf-8" />
+	<title>Information</title>
+	<meta name="infoPage" content="Information" />
+	<link rel="stylesheet" href="Style1.css" />
+	<script type="text/javascript">
+		<!--
+	function toLoad(){
+		if(sessionStorage.getItem('longString') == "0"){
+			document.getElementById('logoutLink').innerHTML = 'Logout';
+		}
+		var time = new Date();
+		document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "    Last updated on: 10/4/17" ;
+	}
+		//-->
+	</script>
+</head>
+<body onload='toLoad();'>
+
+
+	<div id="menu">
+		<table id="quickLinks">
+			<tr>
+				<td><a class='header' href="Home">Home</a>  </td>
+				<td><a class='header' href="groupSearch">MatchMaker</a>  </td>
+				<td><a class='header' href="about">About us</a>	</td>
+				<td><a class='header' href="Information">Information</a>	</td>
+
+				<td><a class='header' href='mail'>Messages</a></td>
+				<td id="login">
+					<table id="subtable">
+						<tr> <td><a class="sign" href="login">login</a></td></tr>
+						<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<HR>
+	<h1> Information<br /> <br /></h1>
+	<h2>Matchmaking</h2>
+	<p>Rather than a traditional dating matchmaking app, we decided to go down
+		the route of matching gamers together. Although a lot of games do automatic
+		matchmaking, players prefer to play with friends and/or people they know. They
+		are less likely to be 'toxic' and more likely to have an enjoyable experience
+		and return to the game.Our app functions almost as a pre-lobby lobby and so
+	we aimed to provide similar funcitonality.</p>
+		<p>Our initial target games were MOBA's due to their in-game systems that
+			push players, no matter what skill level, to work as a team, each with a
+			different role. Metting players outside of the game through our app could
+			potentially provide them with the same connection as a dating app would.
+		</p>
+		<p> A big difference with our approach compared to a traditional approach is
+			that we are matching up to five people at once where as most apps would be a
+			one-to-one match. Our main conditions are play area and time available, latency
+			is a huge deal in online video games and in a large country such as Australia,
+			timezones also play a big part. We also aimed to have a kick feature in, something
+			present in most multiplayer games lobby systems. Another matching criteria is age-range,
+			we delibrately kept this broad to protect children and would keep this information private
+			as so to try and avoid a situation like <a href = "http://www.abc.net.au/news/2017-02-22/cyber-expert-warning-gaming-app-roblox-children/8292712">Roblox</a>.
+			
+		</p>
+
+
+
+		<footer>
+		<div>
+			<a href='Logout' id='logoutLink'></a>
+			Written by <a href='mailto:mfitzay@gmail.com'> Matthew Fitzpatrick</a>.<br>
+			Student number/Email: <a href='mailto:21297239@student.uwa.edu.au'>21297239</a>
+			<p id='footTime'></p>
+		</div>
+	</footer>
+</body>
+
+</html>
