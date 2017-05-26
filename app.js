@@ -203,16 +203,20 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 		console.log("ELSE");
 		User.find({_id: {$in: doc['players']}}, 'username -_id', function(err, names){
 			console.log(doc['players']);
+			var userThere= [];
 			if(err){
 				res.send(err);
 				console.log(err);
 			}
-			
-			if(names[a].username == req.user.username){
-				userThere.push( "{'user': 'false'}");
-			}
-			else{
-				userThere.push("{'user': 'true'}");
+			for(var a in names){
+				if(names[a].username.localeCompare(req.user.username)!=0){
+					userThere= [{'user': 'false'}];
+				}
+				else{
+					userThere=[{'user': 'true'}];
+					res.send(userThere.concat(names));
+					return true;
+				}
 			}
 			console.log(userThere);
 			res.send(userThere.concat(names));

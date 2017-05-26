@@ -41,10 +41,12 @@
 			}
 			console.log(myArray[0]);
 			for(var c in myArray[0]){
-				if((myArray[0][c]==false) && myArray.length<6){
+				console.log(c);
+				console.log(myArray[0][c]);
+				if((myArray[0][c]== 'false') && myArray.length<6){
 					myTable+="<tr><td><form method='PUT' onsubmit='"+window.location.search+"'><input type='submit' class='submit' value='Join Group'></form></td></tr>";
 				}
-				if(myArray[0][c] == true){
+				if(myArray[0][c] == 'true'){
 					myTable+="<tr><td><form method='DELETE' onsubmit='"+window.location.search+"'><input type='submit' class='submit' value='Leave Group'></form></td></tr>";
 				}
 			}
