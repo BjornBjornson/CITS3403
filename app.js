@@ -233,43 +233,44 @@ app.post('/groupPage', SSOcheck, (req, res)=>{
 		//gets corresponding names for the IDs
 			console.log(doc['players']);
 			console.log(names);
-			var userThere= [{'user': 'false'},{'NOTE':'There are no players here'}]; 
+			var userThere= [{'user': 'false'},{'NOTE':'There are no players here'}];  //default to expecting empty.
 			//in case it's empty. shouldn't happen, but in case it somehow happens.
 			//shouldn't happen, because leaving a group triggers a delete event if there are no users remaining in it.
 			if(err){
 				res.send(err);
 				console.log(err);
 			}
-			for(var a in names){
+			for(var a in names){ // for each name in the list, if the current user appears, then send a flag to allow leaving the group.
 				if(names[a].username.localeCompare(req.user.username)!=0){ 	
-					userThere= [{'user': 'false'}];
+					userThere= [{'user': 'false'}];//otherwise, don't.
 				}
 				else{
 					userThere=[{'user': 'true'}];
 					console.log("HELLO WORLD");
 					console.log(userThere.concat(names));
-					res.send(userThere.concat(names));
+					res.send(userThere.concat(names)); //if the user is there,  send list of flag, plus list of names.
 					return true;
 				}
 			}
 			console.log(userThere);
-			res.send(userThere.concat(names));
+			res.send(userThere.concat(names)); // Case: names is empty, or the user isn't present in list.
 
 		});
 	});
 });
-app.put('/groupPage', SSOcheck, (req, res)=>{
+app.put('/groupPage', SSOcheck, (req, res)=>{ //if a user wants to join the group.
 	
 	Group.findOneAndUpdate({
-
 		'name': req.query.groupName
 	}, 
-	{$addToSet: {'players': req.user.id}},
+	{$addToSet: {'players': req.user.id}}, //adds if user they don't already exist.
 	(err, group)=>{
 		console.log(req.query.groupName);
 		if(err){
 			console.log(err);
-			res.redirect('groupPage?Error='+err);
+			res.redirect('groupPage?Error='+err); 
+			// if an error, tells the user what went wrong.
+			//that way they can get tech support.
 			return false;
 		}
 		if(!group){
@@ -278,23 +279,26 @@ app.put('/groupPage', SSOcheck, (req, res)=>{
 			//return true;
 		}
 		console.log(group);
-		User.findByIdAndUpdate(req.user.id, {$addToSet: {grouplist: group._id}},
+		User.findByIdAndUpdate(req.user.id, {$addToSet: {grouplist: group._id}}, 
+		//adds the group to theuser's list of groups if it doesn't exist already.
 		(err, user)=>{
 			if(err){
 				res.redirect('groupPage?Error='+err);
 			}
-			res.send('Home');
+			res.send('Home'); //returns them home if it all worked out.
 		});
 	});
 });
-//app.delete('/', (req,res)=>{console.log('byebye');});
-app.delete('/groupPage', SSOcheck, (req, res)=>{
+
+app.delete('/groupPage', SSOcheck, (req, res)=>{ // when a user wants to leave a group.
 	console.log('delete');
-	Group.findOne({'name': req.query.groupName}, (err, groupd)=>{
-		if(err){res.send('Home'); return false;}
+	Group.findOne({'name': req.query.groupNamem, 'players': req.user.id}, (err, groupd)=>{ 
+	//checks to see if the group exists, redirects if they're playing silly buggers.
+		if(err){res.send('groupPage?Error='+err); return false;}
 		if(!groupd){ res.send('Home'); return false;}
 	});
 	Group.findOneAndUpdate({
+		//finds the group, 
 		'name': req.query.groupName,
 		},
 		{$pull:{ 'players': req.user._id}},
@@ -306,14 +310,15 @@ app.delete('/groupPage', SSOcheck, (req, res)=>{
 					res.redirect('groupPage?Error='+err);
 				}
 				console.log(group);
-				User.findByIdAndUpdate(req.user.id,
+				User.findByIdAndUpdate(req.user.id,// removes the group reference from the user's object
 					{$pull: {'grouplist': group._id}},
 					(err, user)=>{
 						console.log(user);
 						if(err){
 							res.redirect('groupPage?Error='+err);
 						}
-						if(group.players.length==1){
+						if(group.players.length==1){ 
+						//if that was the last player: delete the group.
 							Group.findByIdAndRemove(group._id, (err, group)=>{
 							if(err){
 								console.log(err);
@@ -344,7 +349,7 @@ app.get('/', (req, res)=>{  //landing home page
 	res.render("Home");
 	console.log("Homepage There");
 });
-app.get('/groupCreate', function(req, res){
+app.get('/groupCreate', function(req, res){ // display group creation page.
 	if(req.isAuthenticated){
 		res.render('groupCreate');
 	}
@@ -353,25 +358,25 @@ app.get('/groupCreate', function(req, res){
 		console.log('someone is being "clever" with groupCreate');
 	}
 });
-app.post('/groupCreate', function(req, res){
+app.post('/groupCreate', function(req, res){ //creating a group
 	console.log("Creating group");
 	if(req.isAuthenticated){
-		var wegood = Group.findOne({'name': req.body.name}).exec(function(err, doc){
+		var wegood = Group.findOne({'name': req.body.name}).exec(function(err, doc){ //seeing if the group exists already
 			if(err){
 				console.log(err);
-				res.redirect("groupCreate?error="+err);
+				res.redirect("groupCreate?Error="+err);
 				return false;
 			}
 			if(doc){
 				console.log(doc);
 				console.log("doc");
-				res.redirect('groupCreate?name=alreadyexists');
+				res.redirect('groupCreate?name=alreadyexists'); //bad luck, group already exists.
 				return false;
 			}
 
-			else{
+			else{//lucky, you got to that name first.
 				console.log(req.body);
-				var group = new Group();
+				var group = new Group(); //filling out details from a form.
 				group.name= req.body.name;
 				group.game = req.body.game;
 				group.mode = req.body.mode;
@@ -380,10 +385,12 @@ app.post('/groupCreate', function(req, res){
 				group.save(function(err, group, num){
 					if(err){
 						res.redirect('groupCreate?Error:'+err);
+						//something went wrong!
 					}
 					console.log(group.name);
 					console.log(group._id);
 					console.log("updating user");
+					//putting in the user's link to their shiny new group.
 					console.log(req.user.id);
 					User.findByIdAndUpdate(req.user._id, {$push: {grouplist: group._id}}, function(err, doc){
 						console.log('updating user');
@@ -395,24 +402,24 @@ app.post('/groupCreate', function(req, res){
 		});
 	}
 });
-app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
+app.get('/mygroups', SSOcheck, function(req, res){  // getting the list of groups that a user is subscribed to.
 	var theUser = req.user;
 	console.log(theUser.grouplist.length);
-	res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
+	res.header("Access-Control-Allow-Origin", "*"); //currently sorting out an issue with same domain requests during testing.
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	res.ContentType =('application/json');
 	res.status = 200;
-	if(theUser.grouplist.length==0){res.send([{'message': 'you have no groups'}]);}
+	if(theUser.grouplist.length==0){res.send([{'message': 'you have no groups'}]);} //Well, better make some then buddy!
 	else{
 		var groups =theUser.grouplist;
-		console.log("<Groups>")
+		console.log("<Groups>")//little diagnostic readout segment.
 		console.log(groups);
 		Group.findById(groups[0], function(err, doc){
 			console.log(doc);
 		});
 		console.log("</Groups>");
 		var sendlist = [];
-		Group.find({_id: {$in: groups}}, 'name -_id', function(err, found){
+		Group.find({_id: {$in: groups}}, 'name -_id', function(err, found){ //getting the names of the groups. Nice and human readable.
 			if(err){
 				res.send(err);
 			}
