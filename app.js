@@ -386,10 +386,20 @@ app.get('/Home', (req, res)=>{// in case they get tricky, or I want to redirect 
 	console.log("Home There");
 });
 
+app.get('/mail', (req, res) => {
+	if(req.isAuthenticated){
+		res.render('mail')
+	}
+	else{
+		res.redirect('login');
+		console.log('not logged in')
+	}
+})
+
 //populate list of conversations
-app.get('/mail', SSOcheck, (req, res) => {
-	var theUser = req.user;
-	console.log(theUser);
+app.get('/mail/list', SSOcheck, (req, res) => {
+	var theUser = req.user
+	console.log(theUser)
 	Conversation.find({ participants: theUser._id }).lean().populate('participants').exec(function (err, doc) {
 		res.header("Access-Control-Allow-Origin", "*");
 		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -440,6 +450,9 @@ app.post('/mail/:convId', SSOcheck, (req, res) => {
 	msg.message = req.body.replyText
 	msg.timestamp = new Date()
 	msg.save(function (err) {
+		res.header("Access-Control-Allow-Origin", "*") 
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+		res.ContentType =('application/json')
 		if(err) {
 			console.error(err)
 			res.status = 401
@@ -450,9 +463,30 @@ app.post('/mail/:convId', SSOcheck, (req, res) => {
 		}
 	})
 })
-/*
-app.delete('/mail', SSOcheck, (req, res) => {
-})*/
+
+app.post('/mail', SSOcheck, (req, res) => {
+	var conv = new Conversation()
+	var users = req.body.newChat
+	var userArray = users.split(',').map( (item) => {
+		return item.trim()
+	})
+	userArray.push(req.user.username)
+	var uIdArray = User.find({ username: { $in: userArray } }, '_id').lean()
+	conv.participants = uIdArray
+	conv.save(function (err) {
+		res.header("Access-Control-Allow-Origin", "*") 
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+		res.ContentType =('application/json')
+		if(err) {
+			console.error(err)
+			res.status = 401
+			res.send([{ 'message': 'Sorry. Something went wrong' }])
+		} else {
+			res.status = 200
+		}
+	})
+})
+
 
 
 /*(req, res)=>{ //hold onto this. might not be useful for login, but might be useful for other functions.

@@ -41,7 +41,7 @@ var conversationSchema = new Schema(
 var msgSchema = new Schema(
     {
         author: { type: Schema.ObjectId, ref: 'users' },
-        conversation: { type: Schema.ObjectId, ref: 'conversations' }, //Turning this into an array should allow for groupchat.
+        conversation: { type: Schema.ObjectId, ref: 'conversations' }, 
         message: { type: String },
         timestamp: { type: Date }
     }

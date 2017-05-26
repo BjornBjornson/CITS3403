@@ -25,9 +25,9 @@ function findChats() {
                     tr.appendChild(td)
                     chatTable.appendChild(tr)
 				}
-				/*chatTable+="<tr class='collapsedRow'><td class='searchReturn'>Start a new chat</a></td></tr></table>"
-                chatTable+="<tr class='collapsedRow'><td><input type='text' id='newChat' placeholder='Enter usernames'></input></td>"
-                chatTable+="<td><input type='button' onsubmit='" */
+				chatTable.innerHTML += "<tr><td>Start a new chat</td></tr>"
+                chatTable.innerHTML += "<tr><td><form id='newChatForm' action='http://localhost:3000/mail' method='POST'><input type='text' id='newChat' name='newChat' placeholder='Enter usernames'></input></td>"
+                chatTable.innerHTML += "<td><input type='submit' value='Submit'></input></form></td></tr>"
                 document.getElementById('inbox').innerHTML = ''
 				document.getElementById('inbox').appendChild(chatTable)
             }
