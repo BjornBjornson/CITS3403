@@ -2,9 +2,9 @@
 <html lang="en">
 <!--
    about.html
-   
+
    Copyright 2017 Bjorn <Bjorn@BERTHA>
-   
+
 -->
 
 <head>
@@ -12,7 +12,7 @@
 	<title>"I'm an about page"</title>
 	<meta name="aboutPage" content="Information" />
 	<link rel="stylesheet" href="Style1.css" />
-	<script type="text/javascript"> 
+	<script type="text/javascript">
 		<!--
 	function toLoad(){
 		if(sessionStorage.getItem('longString') == "0"){
@@ -25,7 +25,7 @@
 	</script>
 </head>
 <body onload='toLoad();'>
-	
+
 
 	<div id="menu">
 		<table id="quickLinks">
@@ -33,11 +33,11 @@
 				<td><a class='header' href="Home">Home</a>  </td>
 				<td><a class='header' href="groupSearch">MatchMaker</a>  </td>
 				<td><a class='header' href="about">About us</a>	</td>
-				<td><a class='header' href='mail'>Messages</a></td>	
+				<td><a class='header' href='mail'>Messages</a></td>
 				<td id="login">
 					<table id="subtable">
 						<tr> <td><a class="sign" href="login">login</a></td></tr>
-						<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr> 
+						<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr>
 					</table>
 				</td>
 			</tr>
@@ -52,8 +52,36 @@
 	<h3><a href='https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Traversing_an_HTML_table_with_JavaScript_and_DOM_Interfaces'>Mozilla, for giving me a start on tables</a></h3>
 	<p id='Sprook'> ++MOBA is a term for a variety of online multiplayer game. The communities are gernerally considered to be quite toxic,<br />
 		As such, having an external platform to act as a gatekeeper operation of sorts would probably serve at least some of them well.++</p>
+		<h3>Architecture</h3>
+		<h2>"Hardware"</h2>
+		<p>Most of the work was completed on windows machines. Mean is pretty good at
+			cross platform compatability when compared with some other frameworks/languages.
+			The start commands are different due to environment varaibles being used but
+			that is about the only difference. This issue only became slightly problamatic when
+			uploaded to our server setup heroku as it is unix based and automatically attempted
+			to run the server. There were also a few hiccups with heroku needing to control
+			additional information such as port numbers.
 
-	<footer>
+		<h2>Packages</h2>
+		<p>
+		On top of the regular Mean stack, our biggest use package was passport.js. Having heard
+		a lot of good things about this package from industry developers on the podcast Shoptalkshow,
+		it was suggested and works pretty well. It handles a lot of the session information
+		for us aswell as keeping tracks of user data. It can also be expanded easily to
+		allow login through things such as facebook or github. In our usecase a steamid link
+		would probably be the next logical step in our user database.</p>
+
+		<p>
+			Although we all hope that our university projects are completely secure and
+			potential users would be smart about the information they leave on our servers,
+			it is important and ethical that we, as software engineers, keep the privacy
+			or our users as the number one priority. We used BCRYPT to salt and hash our passwords
+			so that even if a hacker was to access our database, they would not be able to
+			determine the passwords from that alone.
+		</p>
+		
+
+		<footer>
 		<div>
 			<a href='Logout' id='logoutLink'></a>
 			Written by <a href='mailto:mfitzay@gmail.com'> Matthew Fitzpatrick</a>.<br>
