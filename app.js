@@ -492,6 +492,7 @@ app.post('/mail', SSOcheck, (req, res) => {
 				res.send([{ 'message': 'Sorry. Something went wrong' }])
 			} else {
 				res.status = 200
+				res.send()
 			}
 		})
 	})

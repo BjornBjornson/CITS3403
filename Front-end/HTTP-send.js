@@ -165,6 +165,7 @@ function findChats() {
             		document.getElementById('inbox').innerHTML = 'No chats to display'
 
         	} else {
+				console.log('check4')
                 document.getElementById('logoutLink').innerHTML = 'Logout'
 				var chatArray = JSON.parse(xhttp.responseText)
                 var chatTable = document.createElement('TABLE')
