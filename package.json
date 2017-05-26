@@ -16,7 +16,8 @@
     "express-session":"*",
     "mongoose": "*",
     "passport": "*",
-    "passport-local": "*"
+    "passport-local": "*",
+    "bcrypt-nodejs":"*"
   },
   "author": "Matthew Fitzpatrick",
   "license": "GPL",

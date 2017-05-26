@@ -44,6 +44,4 @@ function createEntry(data,modelName){
 }
 
 
-module.exports = {
-	createEntry
-}
+module.exports = createEntry;

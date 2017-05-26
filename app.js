@@ -34,7 +34,7 @@ passport.use('login', new LocalStrategy({ //how to handle login routines
 		if (!user) { //add in some sort of hashing function here.
 			return done(null, false);
 		}
-		if (user.password != password) { //add in some sort of hashing function here.
+		if (!user.validPassword(password)) {
 			return done(null, false);
 		}
 		return done(null, user);
@@ -64,7 +64,7 @@ passport.use('newUser', new LocalStrategy({ //how to handle login routines
 		var user = new User();
 		user.username= req.body.username;
 		user.email = email;
-		user.password = password;
+		user.password = user.generateHash(password);
 		user.region = req.body.country;
 		user.ageGroup='13-18';
 		user.active = req.body.active;
