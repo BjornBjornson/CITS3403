@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-var bcrypt = require('bcrypt-nodejs');
+
 var userSchema = new Schema(
     {
         username: { type: String, required: true, unique: true },
@@ -14,14 +14,6 @@ var userSchema = new Schema(
     }
 )
 
-userSchema.methods.generateHash = function(password){
-  return bcrypt.hashSync(password,bcrypt.genSaltSync(8),null);
-}
-
-userSchema.methods.validPassword = function(password){
-  return bcrypt.compareSync(password, this.password);
-}
-
 var groupSchema = new Schema(
     {
         name: { type: String, required: true, unique: true },
@@ -33,22 +25,29 @@ var groupSchema = new Schema(
     }
 )
 
-var mailSchema = new Schema(
+var conversationSchema = new Schema(
     {
-        from: { type: Schema.ObjectId, ref: 'users' },
-        to: [{ type: Schema.ObjectId, ref: 'users' }], //Turning this into an array should allow for groupchat.
-        message: String,
-        timestamp: Date
+        participants: [( type: Schema.ObjectId, ref: 'users')]
+    }
+)
+var msgSchema = new Schema(
+    {
+        author: { type: Schema.ObjectId, ref: 'users' },
+        conversation: { type: Schema.ObjectId, ref: 'conversations' }, //Turning this into an array should allow for groupchat.
+        message: { type: String },
+        timestamp: { type: Date }
     }
 )
 
 mongoose.model('users', userSchema)
 mongoose.model('groups', groupSchema)
-mongoose.model('mails', mailSchema)
+mongoose.model('conversations', conversationSchema)
+mongoose.model('msgs', msgSchema)
 
 //exporting for testing purpose
 module.exports = {
   User : mongoose.model('users',userSchema),
   Group : mongoose.model('groups',groupSchema),
-  Mail : mongoose.model('mails',mailSchema)
+  Conversation : mongoose.model('conversations', conversationSchema),
+  Message : mongoose.model('msgs', msgSchema)
 }

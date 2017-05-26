@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	    <meta charset="utf-8" />
+	    <title>Find a Group</title>
+	    <meta name="groupSearch" content="Information" />
+	    <link rel="stylesheet" href="Style1.css" />
+    
+	    <script src="http-getmail.js"></script>
+    </head>
+
+    <body onload='toLoad();'>
+	
+	    <div id="menu">
+	    	<table id="quickLinks">
+	    		<tr>
+	    			<td><a class='header' href="Home">Home</a>  </td>
+	    			<td><a class='header' href="groupSearch">MatchMaker</a>  </td>
+	    			<td><a class='header' href="about">About us</a>	</td>	
+	    			<td id="login">
+	    				<table id="subtable">
+	    					<tr> <td><a class="sign" href="login">login</a></td></tr>
+	    					<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr> 
+	    				</table>
+	    			</td>
+	    		</tr>
+	    	</table>
+	    </div>
+
+	    <hr>
+	    <h1> Your Inbox <br /> <br /></h1>
+
+        <div id="mailbox" class="mail">
+            <div id="inbox" class="mail">
+                <!-- 
+                    Put in a table with conversations
+                -->
+            </div>
+
+            <div id="conversation" class="mail">
+                <!-- 
+                    Display conversation history
+                -->
+            </div>
+
+            <div id="reply" class="mail">
+                <form action='http://localhost:3000/mail/:convId' method='POST'>
+                    <input type='text' id='replyText'></input>
+                </form>
+            </div>
+
+            <div id="send" class="mail">
+                <input class="mail" id="sendButton" type="Button" value="Send"></input>
+            </div>
+        </div>
+
+        <footer>
+            <div>
+                <a href='Logout' id='logoutLink'></a>
+                <p id='footTime'></p>
+            </div>
+        </footer>
+
+    </body>
+
+</html>

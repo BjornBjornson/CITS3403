@@ -1,0 +1,98 @@
+body {
+    background-color: lightblue;
+}
+footer{
+	position: fixed;
+	bottom: 0%;
+	left: 30%;
+}
+a{
+	color: blue;
+}
+a.header{
+	color: blue;
+	font-size: 28px;
+	font-weight: bold;
+}
+a.sign{
+	font-size: 18px;
+}
+a.buttonInterior{
+	color: black;
+}
+a.littletext{
+	font-size: 12px;
+}
+h1,h2,h3, #Sprook{
+    color: darkblue;
+    text-align: center;
+}
+div {
+    border-radius: 5px;
+    /*background-color: #f2f2f2;*/
+    padding: 10px;
+}
+table.tablePrint{
+	border-collapse: collapse;
+}
+tr.collapsedRow, td.searchReturn{
+	border: 2px solid black;
+	border-collapse: collapse;
+	
+}
+#subtable{
+	text-align: left;
+}
+#login {
+	position: relative;
+	left: 30%;
+}
+
+#quickLinks {
+	border-collapse: collapse;
+	position: relative;
+	/*table-layout: fixed;
+	/*border: 2px solid black; /* change colour to something nice*/
+	left: 22%;
+	width: 60%;
+	text-align: right;
+}
+#myGroups{
+	width: 15%;
+	top: 25%;
+	position: absolute;
+	left: 80%;
+	border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 10px;
+}
+table.formBox{
+	width: 40%;
+	position: relative;
+	left: 30%;
+	border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+.userInput, .groupInput{
+	width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+/* I found a few claims that this is way of phrasing it is compatible with more browsers*/
+input.submit, #generalButton{
+	width: 100%;
+	background-color: lightgray;
+	border: 2px solid darkgray;
+	padding: 12px 20px;
+    margin: 8px 0;
+	border-radius: 4px;
+}
+
+.mail {
+	overflow-y: scroll
+}
