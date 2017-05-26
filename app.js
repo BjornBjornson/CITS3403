@@ -15,19 +15,19 @@ const port = process.env.PORT || 3000;
 var dbConnect = ('./dataparser.js')
 app.use(bodyParser.urlencoded({ extended: true })); //someone figure out what the extended refers to.
 app.use(expressSession({secret: '<Put a secret key here>'})); //setting up a secret key, also setting up express' session library.
-app.use(passport.initialize());  
+app.use(passport.initialize());
 app.use(passport.session()); //passport piggybacks off express' library, adding the ability to quietly append session tokens.
 app.use(express.static(__dirname + '/Front-end')); //telling express to treat all public files as if 'Front-end' were their root directory.
 app.engine('html', ejs.renderFile); //defining the an engine I'm calling 'html' to use the ejs middleware
 app.set('views', path.join(__dirname,'Front-end')); //telling it where to find the html files
 app.set('view engine', 'html'); //telling it to use the tool I defined two lines above
 
-//Passport 
+//Passport
 passport.use('login', new LocalStrategy({ //how to handle login routines
 	usernameField : 'email',
     passwordField : 'password',
 	passReqToCallback : true //To pass the request to this function
-  }, 
+  },
   function(req, email, password, done) { //remember to encrypt the password at some point
     User.findOne({'email': email},function(err, user) {
 		if (err) { return done(err); }
@@ -46,7 +46,7 @@ passport.use('login', new LocalStrategy({ //how to handle login routines
 passport.use('newUser', new LocalStrategy({ //how to handle login routines
     passReqToCallback : true, //To pass the request to this function
 	usernameField : 'email',
-  }, 
+  },
   function(req, email, password, done){ //
 		//return false;
 		User.findOne({'email': email},function(err, user) {
@@ -74,7 +74,7 @@ passport.use('newUser', new LocalStrategy({ //how to handle login routines
 			}
 			return done(null, user);
 		});
-		
+
 	}
 ));
 
@@ -121,7 +121,7 @@ app.get('/newUser', (req, res)=>{ // Usercreate page. Holds the forms
 	console.log("NewUser There");
 });
 
-app.post('/newUser', 
+app.post('/newUser',
 	passport.authenticate('newUser', { // endpoint for making a new user
 		successRedirect: '/Home',
 		failureRedirect: '/newUser'
@@ -209,7 +209,7 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 			console.log(doc.players.length);
 			console.log(doc.players);
 			console.log("DIAGNOSTIC");
-			
+
 			doc.players.forEach(function(pid){
 				User.findById(pid, function(err, user){
 					console.log(user);
@@ -223,7 +223,7 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 					}
 					else{
 						console.log(playerlist);
-						playerlist.append(user.username)
+						playerlist.push(user.username)
 						console.log("AAAGH");
 					}
 				});
@@ -319,7 +319,7 @@ app.get('/Home', (req, res)=>{// in case they get tricky, or I want to redirect 
 	res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	res.send(tosend); //must institure some variety of redirect on success/failure.
-	
+
 });*/
 app.listen(port, () => {
   console.log('Server start on port ' +port);
