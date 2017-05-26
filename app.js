@@ -449,10 +449,9 @@ app.get('/mail/conversation', SSOcheck, (req, res) => {
 
 //send new message
 app.post('/mail/conversation', SSOcheck, (req, res) => {
-	console.log(convId)
 	var msg = new Message()
 	msg.author = req.user._id
-	msg.conversation = req.params.convI
+	msg.conversation = req.params.convId
 	msg.message = req.params.newMsg
 	msg.timestamp = new Date()
 	msg.save(function (err) {
@@ -465,7 +464,7 @@ app.post('/mail/conversation', SSOcheck, (req, res) => {
 			res.send([{ 'message': 'Sorry. Something went wrong' }])
 		} else {
 			res.status = 200
-			res.send()
+			res.send('no worries m9')
 			//res.render('mail')
 		}
 	})

@@ -145,7 +145,7 @@ var http = null;
 	/*-----------------------------------------------------------------------------------------------
 							messaging stuff
 	----------------------------------------------------------------------------------------------*/
-var globalConvId;
+var globalConvId = ''
 
 function toLoadMail() {
 	findChats()
@@ -224,7 +224,7 @@ function findHistory( convId ) {
 						console.log(msgArray[i])
 						var tr = document.createElement('TR')
 						var td = document.createElement('TD')
-						td.innerHTML = 'From: ' + msgArray[i].author.username + '</ br>' + msgArray[i].message + '</br>' + msgArray[i].timestamp.toString()
+						td.innerHTML = 'From: ' + msgArray[i].author.username + '</br>' + msgArray[i].message + '</br>' + msgArray[i].timestamp.toString()
 						tr.appendChild(td)
 						msgTable.appendChild(tr)
 				}
@@ -233,7 +233,8 @@ function findHistory( convId ) {
 				document.getElementById('refresh').addEventListener('click', function () {
 					findHistory(convId)
 				})
-		}
+			}
+		}	
     }
 	var params = JSON.stringify({ convId: convId })
     xhttp.open('GET', 'http://localhost:3000/mail/conversation')
@@ -250,8 +251,9 @@ function sendReply() {
 			} else {
 				findHistory(globalConvId)
 			}
+		}
 	}
-	var msg = document.querySelector('#newChatText').value
+	var msg = document.querySelector('#replyText').value
 	var params = JSON.stringify({ convId: globalConvId, newMsg: msg })
 	xhttp.open('POST', 'http://localhost:3000/mail/conversation')
 	xhttp.send(params)
