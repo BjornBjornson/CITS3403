@@ -176,7 +176,7 @@ app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will servi
 		}
 	});
 });
-function returnDB(query){
+function returnDB(query){ 
 	var out = [];
 	query.exec(function(err, answers){
 		if(err){
@@ -273,7 +273,8 @@ app.post('/groupCreate', function(req, res){
 					res.redirect('groupPage?groupName='+req.body.name);
 				}
 			});
-			var newlist = user.grouplist.push(group.id);
+			var newlist = req.user.grouplist;
+			newlist.push(group.id);
 			User.update({id: req.user.id}, {$set: {'grouplist': newlist}});
 		}
 	}
