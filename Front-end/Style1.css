@@ -5,12 +5,16 @@ html {
 body {
     background-color: lightblue;
 	min-height: 100%;
+	padding-left: 10%;
+	padding-right: 10%;
+
 }
 footer{
 	position: fixed;
 	bottom: 0%;
 	left: 30%;
 }
+
 a{
 	color: blue;
 }
@@ -43,7 +47,7 @@ table.tablePrint{
 tr.collapsedRow, td.searchReturn{
 	border: 2px solid black;
 	border-collapse: collapse;
-	
+
 }
 #subtable{
 	text-align: left;

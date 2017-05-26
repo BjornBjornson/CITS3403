@@ -197,12 +197,13 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 		}
 		if(!doc){
 			console.log("NO GROUP");
-			res.redirect('groupCreate');
+			res.render('groupCreate');
 			return false;
 		}
 		console.log("ELSE");
-		User.find({_id: {$in: doc['players']}}, 'username -_id', function(err, names){
+		User.find({'_id': {$in: doc['players']}}, 'username -_id', function(err, names){
 			console.log(doc['players']);
+			console.log(names);
 			var userThere= [{'user': 'false'},{'NOTE':'There are no players here'}];
 			if(err){
 				res.send(err);
@@ -214,22 +215,25 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 				}
 				else{
 					userThere=[{'user': 'true'}];
+					console.log("HELLO WORLD");
+					console.log(userThere.concat(names));
 					res.send(userThere.concat(names));
 					return true;
 				}
 			}
 			console.log(userThere);
 			res.send(userThere.concat(names));
-			
+
 		});
 	});
 });
 app.put('/groupPage', SSOcheck, (req, res)=>{
+	
 	Group.findOneAndUpdate({
-		'name': req.query.groupName, 
-		'players': {$ne: req.user.id}
+
+		'name': req.query.groupName
 	}, 
-	{$push: {'players': req.user.id}},
+	{$addToSet: {'players': req.user.id}},
 	(err, group)=>{
 		console.log(req.query.groupName);
 		if(err){
@@ -243,33 +247,34 @@ app.put('/groupPage', SSOcheck, (req, res)=>{
 			//return true;
 		}
 		console.log(group);
-		User.findByIdAndUpdate(req.user.id, {$push: {grouplist: group._id}},
+		User.findByIdAndUpdate(req.user.id, {$addToSet: {grouplist: group._id}},
 		(err, user)=>{
 			if(err){
 				res.redirect('groupPage?Error='+err);
 			}
-			
-			res.render('home');
+			res.send('Home');
 		});
 	});
 });
 //app.delete('/', (req,res)=>{console.log('byebye');});
 app.delete('/groupPage', SSOcheck, (req, res)=>{
 	console.log('delete');
-	var checker = null;
+	Group.findOne({'name': req.query.groupName}, (err, groupd)=>{
+		if(err){res.send('Home'); return false;}
+		if(!groupd){ res.send('Home'); return false;}
+	});
 	Group.findOneAndUpdate({
 		'name': req.query.groupName,
-		'players': req.user._id
 		},
 		{$pull:{ 'players': req.user._id}},
 		{returnNewDocument: false},
 			(err, group)=>{
+				console.log(group);
 				console.log(req.user)
 				if(err){
 					res.redirect('groupPage?Error='+err);
 				}
 				console.log(group);
-				checker=group;
 				User.findByIdAndUpdate(req.user.id,
 					{$pull: {'grouplist': group._id}},
 					(err, user)=>{
@@ -283,8 +288,7 @@ app.delete('/groupPage', SSOcheck, (req, res)=>{
 								console.log(err);
 							}
 							console.log('end delete');
-							res.status = 304;
-							res.redirect('Home');
+							res.send('Home');
 						});
 					}
 				}
@@ -298,6 +302,11 @@ app.get('/about', (req, res)=>{  //landing home page
 	console.log(req.user);
 	res.render("about");
 	console.log("aboutpage There");
+});
+app.get('/information', (req, res)=>{  //landing home page
+	console.log(req.user);
+	res.render("information");
+	console.log("infopage There");
 });
 
 app.get('/', (req, res)=>{  //landing home page
@@ -328,7 +337,7 @@ app.post('/groupCreate', function(req, res){
 				res.redirect('groupCreate?name=alreadyexists');
 				return false;
 			}
-			
+
 			else{
 				console.log(req.body);
 				var group = new Group();
@@ -375,7 +384,7 @@ app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 		Group.find({_id: {$in: groups}}, 'name -_id', function(err, found){
 			if(err){
 				res.send(err);
-			}	
+			}
 			res.send(found);
 		});
 	}
@@ -422,7 +431,7 @@ app.get('/mail/list', SSOcheck, (req, res) => {
 app.get('/mail/:convId', SSOcheck, (req, res) => {
 	var convId = req.params.convId
 	Message.find({ conversation: convId }, 'author message timestamp').lean().populate('author').exec(function (err, doc) {
-		res.header("Access-Control-Allow-Origin", "*") 
+		res.header("Access-Control-Allow-Origin", "*")
 		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 		res.ContentType =('application/json')
 		if(err) {
@@ -449,7 +458,7 @@ app.post('/mail/:convId', SSOcheck, (req, res) => {
 	msg.message = req.body.replyText
 	msg.timestamp = new Date()
 	msg.save(function (err) {
-		res.header("Access-Control-Allow-Origin", "*") 
+		res.header("Access-Control-Allow-Origin", "*")
 		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 		res.ContentType =('application/json')
 		if(err) {
