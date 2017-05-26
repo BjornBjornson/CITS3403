@@ -5,3 +5,6 @@ Remember to include commentary in your code while you work.
 
 To run on windows use npm start
 To run on unix run NODE_ENV=PRODUCTION node app
+
+the app is deployed on heroku where it is updated with git through the
+heroku cli
