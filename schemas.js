@@ -35,7 +35,7 @@ var groupSchema = new Schema(
 
 var conversationSchema = new Schema(
     {
-        participants: [( type: Schema.ObjectId, ref: 'users')]
+	participants: [{ type: Schema.ObjectId, ref: 'users'}]
     }
 )
 var msgSchema = new Schema(

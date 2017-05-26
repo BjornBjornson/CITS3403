@@ -39,11 +39,22 @@
 				}
 				myTable+="</tr>";
 			}
-			if(myArray[0][user] && myArray.length<6){
-				myTable+="<tr><form method='PUT' onsubmit='"+window.location.search+"'><input type='submit' class='submit' value='Join Group'></form></tr>
+			console.log(myArray[0]);
+			for(var c in myArray[0]){
+				console.log(c);
+				console.log(myArray[0][c]);
+				if((myArray[0][c]== 'false') && myArray.length<6){
+					myTable+="<tr><td><form method='PUT' onsubmit='"+window.location.search+"'><input type='submit' class='submit' value='Join Group'></form></td></tr>";
+				}
+				if(myArray[0][c] == 'true'){
+					myTable+="<tr><td><form method='DELETE' onsubmit='"+window.location.search+"'><input type='submit' class='submit' value='Leave Group'></form></td></tr>";
+				}
 			}
+			
 			myTable+='</table>';
 			document.getElementById('MMsearch').innerHTML = myTable;
+			fetchMyTeams();
+			
 		}
 	}
 	//this will get the list of groups the user is subscribed to, and be a list of followable links.
@@ -62,6 +73,7 @@
 	}
 	function showTeams(){ // if the user is logged in, this will show their groups.
 		if (http.readyState==4) {
+			console.log(http);
 			if(http.responseText=="You're not logged in"){
 				document.getElementById('myGroups').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>";
 			}
@@ -85,9 +97,7 @@
 	function windowLoad(){
 		var time = new Date();
 		document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "    Last updated on: 10/4/17" ;
-		document.getElementById('logoutLink').innerHTML = 'Logout';
 		sayMyGroupName();
-		fetchMyTeams();
 		showMyTeam();
 		
 	}
