@@ -470,7 +470,7 @@ app.post('/mail/conversation', SSOcheck, (req, res) => {
 	})
 })
 
-app.post('/mail', SSOcheck, (req, res) => {
+app.post('/mail/chats', SSOcheck, (req, res) => {
 	var conv = new Conversation()
 	var users = req.body.newChat
 	var userArray = users.split(',').map( (item) => {
