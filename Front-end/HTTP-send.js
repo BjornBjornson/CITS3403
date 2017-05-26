@@ -145,6 +145,7 @@ var http = null;
 	/*-----------------------------------------------------------------------------------------------
 							messaging stuff
 	----------------------------------------------------------------------------------------------*/
+var globalConvId = ''
 
 function toLoadMail() {
 	findChats()
@@ -204,11 +205,11 @@ function findChats() {
 }
 
 function findHistory( convId ) {
+	globalConvId = convId
 	console.log('check5')
-    document.getElementById('replyForm').action = 'http://localhost:3000/mail/conversation'
     var xhttp = new XMLHttpRequest()
     xhttp.onreadystatechange = function () {
-        if(xhttp.readyState == 4 && xhttp.response.status == 200) {
+        if(xhttp.readyState == 4) {
 			if(xhttp.responseText=="You're not logged in") {
 				document.getElementById('mailbox').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>"
 			} else if( xhttp.responseText == "No messages" ) {
@@ -223,22 +224,37 @@ function findHistory( convId ) {
 						console.log(msgArray[i])
 						var tr = document.createElement('TR')
 						var td = document.createElement('TD')
-						td.innerHTML = 'From: ' + msgArray[i].author.username + '</ br>' + msgArray[i].message + '</br>' + msgArray[i].timestamp.toString()
+						td.innerHTML = 'From: ' + msgArray[i].author.username + '</br>' + msgArray[i].message + '</br>' + msgArray[i].timestamp.toString()
 						tr.appendChild(td)
 						msgTable.appendChild(tr)
 				}
 				document.getElementById('conversation').innerHTML = ''
 				document.getElementById('conversation').appendChild(msgTable)
-				document.getElementById('refresh').addEventListener('click', findHistory(convId))
+				document.getElementById('refresh').addEventListener('click', function () {
+					findHistory(convId)
+				})
 			}
-		}
+		}	
     }
 	var params = JSON.stringify({ convId: convId })
     xhttp.open('GET', 'http://localhost:3000/mail/conversation')
     xhttp.send(params)
 }
 
-
-
-
-//document.getElementById('sendButton').addEventListener('click', sendReply())
+function sendReply() {
+	console.log('check6')
+	var xhttp = new XMLHttpRequest()
+	xhttp.onreadystatechange = function () {
+		if(xhttp.readyState == 4) {
+			if(xhttp.responseText=="You're not logged in") {
+				document.getElementById('mailbox').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>"
+			} else {
+				findHistory(globalConvId)
+			}
+		}
+	}
+	var msg = document.querySelector('#replyText').value
+	var params = JSON.stringify({ convId: globalConvId, newMsg: msg })
+	xhttp.open('POST', 'http://localhost:3000/mail/conversation')
+	xhttp.send(params)
+}

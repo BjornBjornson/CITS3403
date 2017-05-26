@@ -471,7 +471,7 @@ app.get('/mail/conversation', SSOcheck, (req, res) => {
 			res.send([{ 'message': 'Sorry. Something went wrong' }])
 		} else if(doc.length == 0) {
 			res.status = 204
-			res.send([{ 'message': 'No messages' }])
+			res.send('No messages')
 		} else {
 			res.status = 200
 			res.send(doc)
@@ -480,13 +480,11 @@ app.get('/mail/conversation', SSOcheck, (req, res) => {
 });
 
 //send new message
-app.post('/mail/:convId', SSOcheck, (req, res) => {
-	var convId = req.params.convId
-	console.log(convId)
+app.post('/mail/conversation', SSOcheck, (req, res) => {
 	var msg = new Message()
 	msg.author = req.user._id
-	msg.conversation = convId
-	msg.message = req.body.replyText
+	msg.conversation = req.params.convId
+	msg.message = req.params.newMsg
 	msg.timestamp = new Date()
 	msg.save(function (err) {
 		res.header("Access-Control-Allow-Origin", "*")
@@ -498,6 +496,7 @@ app.post('/mail/:convId', SSOcheck, (req, res) => {
 			res.send([{ 'message': 'Sorry. Something went wrong' }])
 		} else {
 			res.status = 200
+			res.send('no worries m9')
 			//res.render('mail')
 		}
 	})
