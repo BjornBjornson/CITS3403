@@ -1,3 +1,5 @@
+//this script was for testing purposes.
+
 var handler = require('./dataparser');
 process.env.NODE_ENV = "PRODUCTION";
 var mongoose = require('mongoose');

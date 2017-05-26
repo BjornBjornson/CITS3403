@@ -2,7 +2,7 @@
 <html lang="en">
 <!--
    Home.html
-   
+
    Copyright 2017 Bjorn <Bjorn@BERTHA>
    something like: Pass me the group number, and I'll pass you the details.
    usernameAPI:password (hash64) and boom. we're laughing. and/or ssl on, send user&pass, then return some value or another to maintain login status.
@@ -13,7 +13,7 @@
 	<title>Your Groups</title>
 	<meta name="HomePage" content="Information" />
 	<link rel="stylesheet" href="Style1.css" />
-	
+
 	<script type="text/javascript">
 	<!--
 	var http=null;
@@ -24,7 +24,7 @@
 		var queryString = decodeURIComponent(window.location.search);
 		queryString = queryString.substring(1);
 		var queries = queryString.split('groupName=');
-		queries = queries[1].split('&');		
+		queries = queries[1].split('&');
 		document.getElementById('groupNameHere').innerHTML = queries[0];
 	}
 	function joinGroup(){
@@ -45,7 +45,7 @@
 			window.open(http.responseText);
 		}
 	}
-			
+
 	function displayT(){
 		if(http.readyState==4){
 			console.log(http);
@@ -69,11 +69,11 @@
 					myTable+="<tr><td><button class='submit' onclick='leaveGroup();'>Leave Group</button></td></tr>";
 				}
 			}
-			
+
 			myTable+='</table>';
 			document.getElementById('MMsearch').innerHTML = myTable;
 			fetchMyTeams();
-			
+
 		}
 	}
 	//this will get the list of groups the user is subscribed to, and be a list of followable links.
@@ -118,7 +118,7 @@
 		document.getElementById('footTime').innerHTML = "It is now: " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+ "    Last updated on: 10/4/17" ;
 		sayMyGroupName();
 		showMyTeam();
-		
+
 	}
 	-->
 	</script>
@@ -132,24 +132,26 @@
 				<td><a class='header' href="Home">Home</a>  </td>
 				<td><a class='header' href="groupSearch">MatchMaker</a>  </td>
 				<td><a class='header' href="about">About us</a>	</td>
-				<td><a class='header' href='mail'>Messages</a></td>	
+				<td><a class='header' href="Information">Information</a>	</td>
+
+				<td><a class='header' href='mail'>Messages</a></td>
 				<td id="login">
 					<table id="subtable">
 						<tr> <td><a class="sign" href="login">login</a></td></tr>
-						<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr> 
+						<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr>
 					</table>
 				</td>
 			</tr>
 		</table>
 	</div>
-		
+
 
 	<HR>
 	<h1 id='groupNameHere'><!-- Yes, this should be an empty header, I'm going to fill it on page load --></h1>
 	<div id='MMsearch'><!-- Yes, this should be empty, It gets filled on search request -->
 	</div>
 	<div id='myGroups'>
-		
+
 	</div>
 	<footer>
 		<div>

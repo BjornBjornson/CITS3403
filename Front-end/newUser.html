@@ -2,9 +2,9 @@
 <html lang="en">
 <!--
    newUser.html
-   
+
    Copyright 2017 Bjorn <Bjorn@BERTHA>
-   
+
 -->
 
 <head>
@@ -15,9 +15,9 @@
 
 
 <script src='HTTP-send.js'> </script>
-	
-	
-	
+
+
+
 </head>
 <body onload='toLoad();'>
 	<div id="menu">
@@ -26,11 +26,13 @@
 				<td><a class='header' href="Home">Home</a>  </td>
 				<td><a class='header' href="groupSearch">MatchMaker</a>  </td>
 				<td><a class='header' href="about">About us</a>	</td>
-				<td><a class='header' href='mail'>Messages</a></td>	
+				<td><a class='header' href="Information">Information</a>	</td>
+
+				<td><a class='header' href='mail'>Messages</a></td>
 				<td id="login">
 					<table id="subtable">
 						<tr> <td><a class="sign" href="login">login</a></td></tr>
-						<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr> 
+						<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr>
 					</table>
 				</td>
 			</tr>
@@ -40,13 +42,13 @@
 	<h1> Sign Up <br /> <br /></h1>
 	<form id='myForm' name='myForm' method='post' onsubmit='validateSignup();'> <!-- to the correct node spot -->
 		<table id="usercreatebox" class="formBox">
-			<tr> 
+			<tr>
 				<td>
 					<label for="Email">Email</label>
 					<input type="text" id="Email" name="email" class="userInput" placeholder="Your Email">
 				</td>
 			</tr>
-			<tr> 
+			<tr>
 				<td>
 					<label for="Username">Username</label>
 					<input type="text" name='username' id="Username" class="userInput" placeholder="The name seen by other users">
@@ -63,10 +65,10 @@
 
 					<label for="country">Region</label>
 					<select id="country" class="userInput" name="country">
-						<option value="OCE">Oceana</option>
+						<option value="OCE">Oceania</option>
 						<option value="NA">North America</option>
 						<option value="EU">Europe</option>
-						<option value="LA">Las Angales</option>
+						<option value="LA">Latin America</option>
 						<option value="CK">China</option>
 					</select>
 				</td>
@@ -78,7 +80,7 @@
 						<option value="Morning">Morning</option>
 						<option value="Afternoon">Afternoon</option>
 						<option value="Night">Evening</option>
-						<option value="Nocturnal"></option>
+						<option value="Nocturnal">Late</option>
 					</select>
 				</td>
 			</tr>
@@ -88,9 +90,9 @@
 				</td>
 			</tr>
 		</table>
-		
+
 	</form>
-	
+
 	<footer>
 		<div>
 			<a href='Logout' id='logoutLink'></a>

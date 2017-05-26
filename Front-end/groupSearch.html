@@ -3,9 +3,9 @@
 <html lang="en">
 <!--
    groupPage.html
-   
+
    Copyright 2017 Bjorn <Bjorn@BERTHA>
-   
+
 -->
 
 <!--
@@ -19,22 +19,24 @@ Planned JS insert area functionality:
 	<title>Find a Group</title>
 	<meta name="groupSearch" content="Information" />
 	<link rel="stylesheet" href="Style1.css" />
-	
+
 	<script src="HTTP-send.js"></script>
 </head>
 <body onload='toLoad();'>
-	
+
 	<div id="menu">
 		<table id="quickLinks">
 			<tr>
 				<td><a class='header' href="Home">Home</a>  </td>
 				<td><a class='header' href="groupSearch">MatchMaker</a>  </td>
 				<td><a class='header' href="about">About us</a>	</td>
-				<td><a class='header' href='mail'>Messages</a></td>	
+				<td><a class='header' href="Information">Information</a>	</td>
+
+				<td><a class='header' href='mail'>Messages</a></td>
 				<td id="login">
 					<table id="subtable">
 						<tr> <td><a class="sign" href="login">login</a></td></tr>
-						<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr> 
+						<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr>
 					</table>
 				</td>
 			</tr>
@@ -43,12 +45,12 @@ Planned JS insert area functionality:
 
 	<HR>
 	<h1> Find a Team <br /> <br /></h1>
-	
+
 
 	<form id='MMS'> <!-- to the correct node spot -->
 		<table id="MMsearch" class="formBox">
 
-			<tr> 
+			<tr>
 				<td>
 					<label for="Game">Game</label>
 					<select id="Game" name="game">
@@ -72,7 +74,7 @@ Planned JS insert area functionality:
 						<option value=["Casual"]>Casual</option>
 						<option value=["Both"]>Both</option>
 					</select>
-					<!-- possible to refine down to character level, would have to have a search/term thing going down, 
+					<!-- possible to refine down to character level, would have to have a search/term thing going down,
 					ugh... would look like a string with no strange characters, I suppose.-->
 				</td>
 			<tr>
@@ -86,16 +88,16 @@ Planned JS insert area functionality:
 				</td>
 			</tr><!---->
 		</table>
-		
+
 	</form>
 
-		
+
 	<div id='myGroups'></div>
-		<!-- 
+		<!--
 			Puts in a table window of sorts. defined size, eventually with scroll option?
 			populated by database query.
 		-->
-	
+
 	</div>
 	<footer>
 		<div>
@@ -108,4 +110,3 @@ Planned JS insert area functionality:
 </body>
 
 </html>
-

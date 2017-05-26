@@ -5,23 +5,25 @@
 	    <title>Find a Group</title>
 	    <meta name="groupSearch" content="Information" />
 	    <link rel="stylesheet" href="Style1.css" />
-    
-	    <script src="HTTP-messaging.js"></script>
+
+	    <script src="HTTP-send.js"></script>
     </head>
 
-    <body onload='toLoad();'>
-	
+    <body onload='toLoadMail();'>
+
 	    <div id="menu">
 	    	<table id="quickLinks">
 	    		<tr>
 	    			<td><a class='header' href="Home">Home</a>  </td>
 	    			<td><a class='header' href="groupSearch">MatchMaker</a>  </td>
-	    			<td><a class='header' href="about">About us</a>	</td>	
+	    			<td><a class='header' href="about">About us</a>	</td>
+            <td><a class='header' href="Information">Information</a>	</td>
+
                     <td><a class='header' href='mail'>Messages</a></td>
 	    			<td id="login">
 	    				<table id="subtable">
 	    					<tr> <td><a class="sign" href="login">login</a></td></tr>
-	    					<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr> 
+	    					<tr> <td> <a class="sign" href="newUser" >sign up</a></td></tr>
 	    				</table>
 	    			</td>
 	    		</tr>
@@ -33,17 +35,16 @@
 
         <div id="mailbox" class="mail">
             <div id="inbox" class="mail">
-                <!-- 
+                <!--
                     Put in a table with conversations
                 -->
             </div>
 
             <div id="conversation" class="mail">
-                <!-- 
+                <!--
                     Display conversation history
                 -->
             </div>
-            <button onclick='' value='Refresh' id='refresh'></button>
 
             <div id="reply" class="mail">
                 <form method='POST' id='replyForm' action=''>
@@ -52,10 +53,15 @@
                 </form>
             </div>
 
-            <div id="send" class="mail">
-                <input class="mail" id="sendButton" type="Button" value="Send"></input>
+            <div id="newChat">
+                <h3>Start a New Chat</h3>
+                <form id='newChatForm' onsubmit='findChats()' action='http://localhost:3000/mail' method='POST'>
+                    <input type='text' id='newChatText' name='newChat' placeholder='Enter usernames'></input>
+                    <input id="sendButton" type="Submit" value="Add"></input>
+                </form>
             </div>
         </div>
+        <button onclick='' value="Refresh" id='refresh'>Refresh</button>
 
         <footer>
             <div>
@@ -67,7 +73,6 @@
     </body>
     <script type='text/javascript'>
         document.getElementById('mailbox').addEventListener('load', findChats())
-        document.getElementById('newChatForm').addEventListener('submit', findChats())
     </script>
 
 </html>
