@@ -181,7 +181,7 @@ function findChats() {
         }
 
     }
-    xhttp.open('GET', 'http://localhost:3000/mail', true)
+    xhttp.open('GET', 'http://localhost:3000/mail/list', true)
     xhttp.send()
 }
 
@@ -190,25 +190,29 @@ function findHistory( convId ) {
     var xhttp = new XMLHttpRequest()
     xhttp.onreadystatechange = function () {
         if(this.readyState == 4 && this.status == 200) {
-            var msgArray = JSON.parse(http.responseText)
-            var msgTable = document.createElement('TABLE')
-            msgTable.id = 'history'
-            msgTable.class = 'mail'
-            for(var i = 0 ; i < msgArray.length ; i++) {
-                        
-                    console.log(msgArray[i])
-                    var tr = document.createElement('TR')
-                    var td = document.createElement('TD')
-                    td.innerHTML = 'From: ' + msgArray[i].author.username + '</ br>' + msgArray[i].message + '</br>' + msgArray[i].timestamp.toString()
-                    tr.appendChild(td)
-                    msgTable.appendChild(tr)
-            }
-            document.getElementById('conversation').innerHTML = ''
-            document.getElementById('conversation').appendChild(msgTable)
-            document.getElementById('refresh').addEventListener('click', findHistory(convId))
-        } else if( this.status == 204 ) {
-            document.getElementById('conversation').innerHTML = 'You have no messages'
-        }
+			if(xhttp.responseText=="You're not logged in") {
+				document.getElementById('mailbox').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>"
+			} else {
+				var msgArray = JSON.parse(http.responseText)
+				var msgTable = document.createElement('TABLE')
+				msgTable.id = 'history'
+				msgTable.class = 'mail'
+				for(var i = 0 ; i < msgArray.length ; i++) {
+							
+						console.log(msgArray[i])
+						var tr = document.createElement('TR')
+						var td = document.createElement('TD')
+						td.innerHTML = 'From: ' + msgArray[i].author.username + '</ br>' + msgArray[i].message + '</br>' + msgArray[i].timestamp.toString()
+						tr.appendChild(td)
+						msgTable.appendChild(tr)
+				}
+				document.getElementById('conversation').innerHTML = ''
+				document.getElementById('conversation').appendChild(msgTable)
+				document.getElementById('refresh').addEventListener('click', findHistory(convId))
+			}
+		} else if( this.status == 204 ) {
+			document.getElementById('conversation').innerHTML = 'You have no messages'
+		}
     }
 
     xhttp.open('GET', 'http://localhost:3000/mail/:'+convId)

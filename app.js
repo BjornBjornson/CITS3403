@@ -320,8 +320,18 @@ app.get('/Home', (req, res)=>{// in case they get tricky, or I want to redirect 
 	console.log("Home There");
 });
 
+app.get('/mail', (req, res) => {
+	if(req.isAuthenticated){
+		res.render('mail')
+	}
+	else{
+		res.redirect('login');
+		console.log('not logged in')
+	}
+})
+
 //populate list of conversations
-app.get('/mail', SSOcheck, (req, res) => {
+app.get('/mail/list', SSOcheck, (req, res) => {
 	var theUser = req.user
 	console.log(theUser)
 	Conversation.find({ participants: theUser._id }).lean().populate('participants').exec(function (err, doc) {
