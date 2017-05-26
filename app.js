@@ -194,17 +194,13 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 	var doc = returnDB(query);
 		console.log(doc);
 		console.log('this Thing');
-		if(err){
-			console.log(err);
-			res.send([{'message': err}]);
-		}
 		if(doc.length == 0){
 			console.log("NO GROUP");
 			res.redirect('groupCreate');
 		}
-		//================================================= HERE's the broken bit ============
+		
 		else{
-			console.log("ELSE"); // This is where it's exploding.
+			console.log("ELSE"); 
 			var playerlist = [];
 			console.log (playerlist);
 			console.log(doc.players.length);
@@ -283,7 +279,10 @@ app.post('/groupCreate', function(req, res){
 			console.log("updating user");
 			console.log(req.user.id);
 			var query = Group.findOne({'name': req.body.name}, 'name');
-			User.update({'_id': req.user._id}, {$push: {'grouplist': returnDB(query)}});
+			// -------------------------------- FLAG -------------------------------------------
+			//=============================Trying to make it put in the group's id, but it ain't. =======
+			User.update({'id': req.user.id}, {$push: {'grouplist': returnDB(query)}}
+			, function(err, doc){console.log(err); console.log(doc);}); 
 		}
 	});
 }});
