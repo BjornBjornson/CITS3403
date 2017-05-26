@@ -65,6 +65,12 @@ passport.use('newUser', new LocalStrategy({ //how to handle login routines
 		user.username= req.body.username;
 		user.email = email;
 		user.password = user.generateHash(password);
+		/*user.generateHash(password, (err, hash)=>{
+			if(err){
+				return done(err);
+			}
+			user.password=hash;
+		});*/
 		user.region = req.body.country;
 		user.ageGroup='13-18';
 		user.active = req.body.active;
@@ -177,20 +183,19 @@ app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will servi
 	});
 });
 function returnDB(query){ 
-	var out = [];
 	query.exec(function(err, answers){
 		if(err){
 			console.log(err);
 			console.log('hello');
 			return(err);
 		}
-		out.push(answers);
+		return answers;
 	});
-	return out;
+	
 }
 app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will service interactions with specific groups.
 	console.log(req.url);
-	var query = Group.findOne({'name': req.query.groupName, 'players': req.user.id});
+	var query = Group.findOne({'name': req.query.groupName});
 	var doc = returnDB(query);
 		console.log(doc);
 		console.log('this Thing');
@@ -250,13 +255,19 @@ app.get('/groupCreate', function(req, res){
 	}
 });
 app.post('/groupCreate', function(req, res){
+	console.log("Creating group");
 	if(req.isAuthenticated){
-		Group.findOne({'name': req.body.name}).exec(function(err, doc){
+		var wegood = Group.findOne({'name': req.body.name}).exec(function(err, doc){
 			if(err){
+				console.log(err);
 				res.redirect("groupCreate?error="+err);
+				return false;
 			}
 			if(doc){
+				console.log(doc);
+				console.log("doc");
 				res.redirect('groupCreate?name=alreadyexists');
+				return false;
 			}
 			
 			else{
@@ -267,25 +278,26 @@ app.post('/groupCreate', function(req, res){
 				group.mode = req.body.mode;
 				group.region = req.body.region;
 				group.players = [req.user.id];
-				group.save(function(err){
+				group.save(function(err, group, num){
 					if(err){
 						res.redirect('groupCreate?Error:'+err);
 					}
-					else{
-						res.redirect('groupPage?groupName='+req.body.name);
-					}
+					console.log(group.name);
+					console.log(group._id);
+					console.log("updating user");
+					console.log(req.user.id);
+					User.findByIdAndUpdate(req.user._id, {$push: {grouplist: group._id}}, function(err, doc){
+						console.log('updating user');
+						console.log(doc);});
+					//User.findByIdAndUpdate(req.user._id, {$push: {'grouplist': group.id}});
+					res.redirect('groupPage?groupName='+group.name);
 				});
-			
-			console.log("updating user");
-			console.log(req.user.id);
-			var query = Group.findOne({'name': req.body.name}, 'name');
+			}
+		});
 			// -------------------------------- FLAG -------------------------------------------
 			//=============================Trying to make it put in the group's id, but it ain't. =======
-			User.update({'id': req.user.id}, {$push: {'grouplist': returnDB(query)}}
-			, function(err, doc){console.log(err); console.log(doc);}); 
-		}
-	});
-}});
+	}
+});
 app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 	var theUser = req.user;
 	console.log(theUser);
@@ -306,7 +318,7 @@ app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 		}
 		res.send(sendlist);
 	}
-	console.log("grouppage There");
+	
 });
 
 app.get('/Home', (req, res)=>{// in case they get tricky, or I want to redirect them
