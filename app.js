@@ -372,6 +372,9 @@ app.post('/mail/:convId', SSOcheck, (req, res) => {
 	msg.message = req.body.replyText
 	msg.timestamp = new Date()
 	msg.save(function (err) {
+		res.header("Access-Control-Allow-Origin", "*") 
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+		res.ContentType =('application/json')
 		if(err) {
 			console.error(err)
 			res.status = 401
@@ -382,9 +385,30 @@ app.post('/mail/:convId', SSOcheck, (req, res) => {
 		}
 	})
 })
-/*
-app.delete('/mail', SSOcheck, (req, res) => {
-})*/
+
+app.post('/mail', SSOcheck, (req, res) => {
+	var conv = new Conversation()
+	var users = req.body.newChat
+	var userArray = users.split(',').map( (item) => {
+		return item.trim()
+	})
+	userArray.push(req.user.username)
+	var uIdArray = User.find({ username: { $in: userArray } }, '_id').lean()
+	conv.participants = uIdArray
+	conv.save(function (err) {
+		res.header("Access-Control-Allow-Origin", "*") 
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+		res.ContentType =('application/json')
+		if(err) {
+			console.error(err)
+			res.status = 401
+			res.send([{ 'message': 'Sorry. Something went wrong' }])
+		} else {
+			res.status = 200
+		}
+	})
+})
+
 
 
 /*(req, res)=>{ //hold onto this. might not be useful for login, but might be useful for other functions.

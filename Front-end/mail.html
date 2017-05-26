@@ -6,7 +6,7 @@
 	    <meta name="groupSearch" content="Information" />
 	    <link rel="stylesheet" href="Style1.css" />
     
-	    <script src="HTTP-messaging.js"></script>
+	    <script src="HTTP-send.js"></script>
     </head>
 
     <body onload='toLoad();'>
@@ -66,6 +66,7 @@
     </body>
     <script type='text/javascript'>
         document.getElementById('mailbox').addEventListener('load', findChats())
+        document.getElementById('newChatForm').addEventListener('submit', findChats())
     </script>
 
 </html>
