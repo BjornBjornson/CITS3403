@@ -225,7 +225,63 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 	});
 });
 app.put('/groupPage', SSOcheck, (res, req)=>{
-	
+	Group.findOneAndUpdate({
+		'name': req.query.groupName, 
+		$where: "this.players.length < 5",
+		'players': {$ne: req.user.id}
+	}, 
+	{$push: {'players': req.user.id}},
+	{returnNewDocument: true},
+	(err, group)=>{
+		if(err){
+			console.log(err);
+			res.redirect('groupPage?Error='+err);
+			return false;
+		}
+		if(!group){
+			console.log("double-join attempt");
+			res.redirect('groupPage?Error=already_a_member');
+		}
+		console.log(group);
+		User.findByIdAndUpdate(req.user.id, {$push: {grouplist: group._id}},
+		(err, user)=>{
+			if(err){
+				res.redirect('groupPage?Error='+err);
+			}
+			res.redirect('groupPage?groupName='+req.query.groupName);
+		});
+	});
+});
+app.delete('/groupPage', SSOcheck, (res, req)=>{
+	User.findByIdAndUpdate(req.user.id,
+		{$pull: {grouplist: group.id}},
+		(err, user)=>{
+			if(err){
+				res.redirect('groupPage?Error='+err);
+			}
+			Group.findOneAndUpdate({
+				'name': req.query.groupName, 
+				'players':  user.id
+				},
+				{$pull:{ players: req.user.id}},
+				{returnNewDocument: true},
+				(err, group)=>{
+					if(err){
+						res.redirect('groupPage?Error='+err);
+					}
+					if(group.players.length==0){
+						Group.removeById(group.id, (err, group)=>{
+							if(err){
+								console.log(err);
+							}
+							res.redirect('Home');
+						});
+					}
+		
+				}
+			);
+		}
+	);
 });
 
 
@@ -316,18 +372,18 @@ app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 });
 
 app.get('/Home', (req, res)=>{// in case they get tricky, or I want to redirect them
-	res.render("Home"),
+	res.render("Home");
 	console.log("Home There");
 });
 
 //populate list of conversations
 app.get('/mail', SSOcheck, (req, res) => {
-	var theUser = req.user
-	console.log(theUser)
+	var theUser = req.user;
+	console.log(theUser);
 	Conversation.find({ participants: theUser._id }).lean().populate('participants').exec(function (err, doc) {
-		res.header("Access-Control-Allow-Origin", "*")
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-		res.ContentType =('application/json')
+		res.header("Access-Control-Allow-Origin", "*");
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		res.ContentType =('application/json');
 		if(err) {
 			res.status = 401
 			console.error(err)
@@ -339,12 +395,12 @@ app.get('/mail', SSOcheck, (req, res) => {
 			res.status = 200
 			res.send(doc)
 		}
-	})
-})
+	});
+});
 
 //populate chat history
 app.get('/mail/:convId', SSOcheck, (req, res) => {
-	convId = req.params.convId
+	var convId = req.params.convId
 	console.log(theUser)
 	Message.find({ conversation: convId }, 'author message timestamp').lean().populate('author').exec(function (err, doc) {
 		res.header("Access-Control-Allow-Origin", "*") 
@@ -361,13 +417,12 @@ app.get('/mail/:convId', SSOcheck, (req, res) => {
 			res.status = 200
 			res.send(doc)
 		}
-	})
-
-})
+	});
+});
 
 //send new message
 app.post('/mail/:convId', SSOcheck, (req, res) => {
-	convId = req.params.convId
+	var convId = req.params.convId
 	console.log(convId)
 	var msg = new Message()
 	msg.author = req.user._id
