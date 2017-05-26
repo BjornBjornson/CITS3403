@@ -153,15 +153,22 @@ function toLoadMail() {
 }
 
 function findChats() {
-	console.log('check')
+	console.log('check1')
     var xhttp = new XMLHttpRequest()
     xhttp.onreadystatechange = function () {
-        if(xhttp.readyState == 4 && xhttp.response.status == 200) {
+		console.log('check2')
+        if(xhttp.readyState == 4) {
+			console.log('check3')
             if(xhttp.responseText=="You're not logged in") {
 				document.getElementById('mailbox').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>"
-			} else {
+
+			} else if( xhttp.responseText == "No conversations") {	
+				console.log('nochat')
+            		document.getElementById('inbox').innerHTML = 'No chats to display'
+
+        	} else {
                 document.getElementById('logoutLink').innerHTML = 'Logout'
-				var chatArray = JSON.parse(http.responseText)
+				var chatArray = JSON.parse(xhttp.responseText)
                 var chatTable = document.createElement('TABLE')
                 chatTable.id = 'inboxList'
                 chatTable.class = 'jsmail'
@@ -182,10 +189,7 @@ function findChats() {
                 document.getElementById('inbox').innerHTML = ''
 				document.getElementById('inbox').appendChild(chatTable)
             }
-        } else if( xhttp.response.status == 204) {
-            document.getElementById('inbox').innerHTML = 'No chats to display'
-        }
-
+		}
     }
     xhttp.open('GET', 'http://localhost:3000/mail/list', true)
     xhttp.send()
@@ -198,8 +202,10 @@ function findHistory( convId ) {
         if(xhttp.readyState == 4 && xhttp.response.status == 200) {
 			if(xhttp.responseText=="You're not logged in") {
 				document.getElementById('mailbox').innerHTML ="<tr><td class='searchReturn'>Log in to see more!</td></tr>"
+			} else if( xhttp.responseText == "No messages" ) {
+				document.getElementById('conversation').innerHTML = 'You have no messages'
 			} else {
-				var msgArray = JSON.parse(http.responseText)
+				var msgArray = JSON.parse(xhttp.responseText)
 				var msgTable = document.createElement('TABLE')
 				msgTable.id = 'history'
 				msgTable.class = 'jsmail'
@@ -216,8 +222,6 @@ function findHistory( convId ) {
 				document.getElementById('conversation').appendChild(msgTable)
 				document.getElementById('refresh').addEventListener('click', findHistory(convId))
 			}
-		} else if( xhttp.response.status == 204 ) {
-			document.getElementById('conversation').innerHTML = 'You have no messages'
 		}
     }
 
