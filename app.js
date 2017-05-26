@@ -6,6 +6,8 @@ var path = require('path');
 var mongoose = require('mongoose');
 var User = mongoose.model('users');
 var Group = mongoose.model('groups');
+var Conversation = mongoose.model('conversations')
+var Message = mongoose.model('msgs')
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
@@ -325,6 +327,75 @@ app.get('/Home', (req, res)=>{// in case they get tricky, or I want to redirect 
 	res.render("Home"),
 	console.log("Home There");
 });
+
+//populate list of conversations
+app.get('/mail', SSOcheck, (req, res) => {
+	var theUser = req.user
+	console.log(theUser)
+	Conversation.find({ participants: theUser._id }).lean().populate('participants').exec(function (err, doc) {
+		res.header("Access-Control-Allow-Origin", "*")
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+		res.ContentType =('application/json')
+		if(err) {
+			res.status = 401
+			console.error(err)
+			res.send([{ 'message': 'Sorry. Something went wrong' }])
+		} else if(doc.length == 0) {
+			res.status = 204
+			res.send([{ 'message': 'No conversations' }])
+		} else {
+			res.status = 200
+			res.send(doc)
+		}
+	})
+})
+
+//populate chat history
+app.get('/mail/:convId', SSOcheck, (req, res) => {
+	convId = req.params.convId
+	console.log(theUser)
+	Message.find({ conversation: convId }, 'author message timestamp').lean().populate('author').exec(function (err, doc) {
+		res.header("Access-Control-Allow-Origin", "*") 
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+		res.ContentType =('application/json')
+		if(err) {
+			res.status = 401
+			console.error(err)
+			res.send([{ 'message': 'Sorry. Something went wrong' }])
+		} else if(doc.length == 0) {
+			res.status = 204
+			res.send([{ 'message': 'No messages' }])
+		} else {
+			res.status = 200
+			res.send(doc)
+		}
+	})
+
+})
+
+//send new message
+app.post('/mail/:convId', SSOcheck, (req, res) => {
+	convId = req.params.convId
+	console.log(convId)
+	var msg = new Message()
+	msg.author = req.user._id
+	msg.conversation = convId
+	msg.message = req.body.replyText
+	msg.timestamp = new Date()
+	msg.save(function (err) {
+		if(err) {
+			console.error(err)
+			res.status = 401
+			res.send([{ 'message': 'Sorry. Something went wrong' }])
+		} else {
+			res.status = 200
+			//res.render('mail')
+		}
+	})
+})
+/*
+app.delete('/mail', SSOcheck, (req, res) => {
+})*/
 
 
 /*(req, res)=>{ //hold onto this. might not be useful for login, but might be useful for other functions.
