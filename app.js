@@ -182,59 +182,36 @@ app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will servi
 		}
 	});
 });
-function returnDB(query){ 
-	query.exec(function(err, answers){
-		if(err){
-			console.log(err);
-			console.log('hello');
-			return(err);
-		}
-		return answers;
-	});
-	
-}
+
 app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will service interactions with specific groups.
 	console.log(req.url);
-	var query = Group.findOne({'name': req.query.groupName});
-	var doc = returnDB(query);
+	Group.findOne({'name': req.query.groupName}, 'players -_id', function(err, doc){
 		console.log(doc);
-		console.log('this Thing');
-		if(doc.length == 0){
+		console.log('this group');
+		if(err){
+			res.send(err);
+			return false;
+		}
+		if(!doc){
 			console.log("NO GROUP");
 			res.redirect('groupCreate');
+			return false;
 		}
-		
-		else{
-			console.log("ELSE"); 
-			var playerlist = [];
-			console.log (playerlist);
-			console.log(doc.players.length);
+		console.log("ELSE");
+		User.find({_id: {$in: doc['players']}}, 'username -_id', function(err, names){
+			console.log(doc['players']);
 			console.log(doc.players);
-			console.log("DIAGNOSTIC");
-
-			doc.players.forEach(function(pid){
-				User.findById(pid, function(err, user){
-					console.log(user);
-					console.log("HUH?");
-					if(err){
-						console.log(err);
-					}
-					else if(!user){
-						console.log("user no longer exists");
-						console.log(doc.players[i]);
-					}
-					else{
-						console.log(playerlist);
-						playerlist.push(user.username)
-						console.log("AAAGH");
-					}
-				});
-			});
-			console.log(playerlist);
-			console.log("ASDFASDFASDF");
-			res.send(playerlist);
-		}
-
+			if(err){
+				res.send(err);
+				console.log(err);
+			}
+			else{
+				console.log(names);
+				console.log('AAAAAHG')
+				res.send(names);
+			}
+		});
+	});
 });
 app.get('/about', (req, res)=>{  //landing home page
 	res.render("about");
@@ -294,13 +271,11 @@ app.post('/groupCreate', function(req, res){
 				});
 			}
 		});
-			// -------------------------------- FLAG -------------------------------------------
-			//=============================Trying to make it put in the group's id, but it ain't. =======
 	}
 });
 app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 	var theUser = req.user;
-	console.log(theUser);
+	console.log(theUser.grouplist.length);
 	res.header("Access-Control-Allow-Origin", "*"); //currently neccesary
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	res.ContentType =('application/json');
@@ -310,15 +285,18 @@ app.get('/mygroups', SSOcheck, function(req, res){  //landing home page
 		var groups =theUser.grouplist;
 		console.log("<Groups>")
 		console.log(groups);
+		Group.findById(groups[0], function(err, doc){
+			console.log(doc);
+		});
 		console.log("</Groups>");
 		var sendlist = [];
-		for(var i=0; i<groups.length; i++){
-			var out = Group.findById(groups[i]);
-			sendlist.push(out.name);
-		}
-		res.send(sendlist);
+		Group.find({_id: {$in: groups}}, 'name -_id', function(err, found){
+			if(err){
+				res.send(err);
+			}	
+			res.send(found);
+		});
 	}
-	
 });
 
 app.get('/Home', (req, res)=>{// in case they get tricky, or I want to redirect them
