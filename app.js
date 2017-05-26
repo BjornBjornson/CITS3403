@@ -427,9 +427,8 @@ app.get('/mail/list', SSOcheck, (req, res) => {
 });
 
 //populate chat history
-app.get('/mail/:convId', SSOcheck, (req, res) => {
+app.get('/mail/conversation', SSOcheck, (req, res) => {
 	var convId = req.params.convId
-	console.log(theUser)
 	Message.find({ conversation: convId }, 'author message timestamp').lean().populate('author').exec(function (err, doc) {
 		res.header("Access-Control-Allow-Origin", "*")
 		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
