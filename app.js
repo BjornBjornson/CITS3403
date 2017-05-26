@@ -387,15 +387,9 @@ app.get('/mail', (req, res) => {
 })
 
 //populate list of conversations
-<<<<<<< HEAD
 app.get('/mail/list', SSOcheck, (req, res) => {
 	var theUser = req.user
 	console.log(theUser)
-=======
-app.get('/mail', SSOcheck, (req, res) => {
-	var theUser = req.user;
-	console.log(theUser);
->>>>>>> f4bfe270e35182ed7313fb76db50bf698d236e6f
 	Conversation.find({ participants: theUser._id }).lean().populate('participants').exec(function (err, doc) {
 		res.header("Access-Control-Allow-Origin", "*");
 		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
