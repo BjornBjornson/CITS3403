@@ -168,7 +168,7 @@ app.post('/myGroupSearch',
 
 app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will service interactions with specific groups.
 	console.log(req.query.groupName);
-	Group.findOne({'name': req.query.groupName, 'players': req.user.id}).exec(function(err, doc){
+	Group.findOne({'name': req.query.groupName}).exec(function(err, doc){
 		if(err){
 			console.log(err);
 			res.redirect("Home");
@@ -182,7 +182,8 @@ app.get('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will servi
 		}
 	});
 });
-
+//note: using a chain of asynchronous calls, but the success variable happens at the bottom of the chain,
+//so it only gets called at the end.
 app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will service interactions with specific groups.
 	console.log(req.url);
 	Group.findOne({'name': req.query.groupName}, 'players -_id', function(err, doc){
@@ -200,19 +201,29 @@ app.post('/groupPage', SSOcheck, (req, res)=>{ // group Page template, will serv
 		console.log("ELSE");
 		User.find({_id: {$in: doc['players']}}, 'username -_id', function(err, names){
 			console.log(doc['players']);
-			console.log(doc.players);
 			if(err){
 				res.send(err);
 				console.log(err);
 			}
 			else{
 				console.log(names);
-				console.log('AAAAAHG')
-				res.send(names);
+				var userThere = []
+				if(names.indexOf(req.user.username) == -1){
+				userThere += "{user: false}";
+				}
+				else{
+					userThere += "{user: true}"
+				}
+				res.send(userThere.concat(names));
 			}
 		});
 	});
 });
+app.put('/groupPage', SSOcheck, (res, req)=>{
+	
+});
+
+
 app.get('/about', (req, res)=>{  //landing home page
 	res.render("about");
 	console.log("aboutpage There");
